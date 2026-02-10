@@ -1,0 +1,123 @@
+{
+  "name": {
+    "bn": "Sarberia Pally Seba Samity",
+    "en": "Sarberia Pally Seba Samity"
+  },
+  "tagline": {
+    "bn": "১৯৩৮ সাল থেকে সেবায় নিয়োজিত",
+    "en": "Serving Since 1938"
+  },
+  "established": 1937,
+  "logo": "assets/images/common/logo.png",
+  "logoDark": "assets/images/common/logo-dark.png",
+  "heroImage": "assets/images/common/hero.jpg",
+  "history": {
+    "bn": "১৯৩৮ সালে প্রতিষ্ঠিত, আমাদের ক্লাব গত ৮৭ বছরে এলাকার যুবসমাজের বিকাশে এক গুরুত্বপূর্ণ ভূমিকা পালন করে আসছে। ক্রীড়া ও সাংস্কৃতিক কর্মকাণ্ডের মাধ্যমে আমরা হাজারো তরুণকে সুস্থ ও সৃজনশীল জীবনযাপনে উৎসাহিত করেছি। আমাদের নিজস্ব মাঠ ও ভবন রয়েছে যেখানে বছরজুড়ে বিভিন্ন প্রশিক্ষণ ও অনুষ্ঠান পরিচালিত হয়।",
+    "en": "Established in 1938, our club has played a vital role in the development of local youth for the past 87 years. Through sports and cultural activities, we have encouraged thousands of young people to live healthy and creative lives. We have our own playground and building where various training and events are conducted throughout the year."
+  },
+  "mission": {
+    "bn": "খেলাধুলা, সংস্কৃতি ও শিক্ষার মাধ্যমে সমাজের তরুণদের শারীরিক ও মানসিক বিকাশ ঘটানো এবং একটি সুস্থ, সচেতন ও দায়িত্বশীল প্রজন্ম গড়ে তোলা।",
+    "en": "To foster the physical and mental development of young people through sports, culture, and education, and to build a healthy, aware, and responsible generation."
+  },
+  "vision": {
+    "bn": "আমাদের ক্লাবকে এলাকার সর্বশ্রেষ্ঠ যুব উন্নয়ন কেন্দ্র হিসেবে প্রতিষ্ঠিত করা এবং প্রতিটি তরুণের মেধা ও প্রতিভা বিকাশের সুযোগ প্রদান করা।",
+    "en": "To establish our club as the leading youth development center in the area and provide opportunities for every young person to develop their skills and talents."
+  },
+  "facilities": [
+    {
+      "icon": "🏟️",
+      "name": {
+        "bn": "খেলার মাঠ",
+        "en": "Playground"
+      },
+      "description": {
+        "bn": "ফুটবল ও অন্যান্য খেলার জন্য প্রশস্ত মাঠ",
+        "en": "Spacious field for football and other sports"
+      }
+    },
+    {
+      "icon": "🏛️",
+      "name": {
+        "bn": "ক্লাব ভবন",
+        "en": "Club Building"
+      },
+      "description": {
+        "bn": "অনুষ্ঠান ও সভার জন্য প্রশস্ত হল",
+        "en": "Spacious hall for events and meetings"
+      }
+    },
+    {
+      "icon": "🏋️",
+      "name": {
+        "bn": "জিমনেসিয়াম",
+        "en": "Gymnasium"
+      },
+      "description": {
+        "bn": "আধুনিক যন্ত্রপাতি সহ ব্যায়ামাগার",
+        "en": "Gym with modern equipment"
+      }
+    },
+    {
+      "icon": "📚",
+      "name": {
+        "bn": "পাঠাগার",
+        "en": "Library"
+      },
+      "description": {
+        "bn": "বই ও পত্রিকা সংগ্রহ",
+        "en": "Collection of books and magazines"
+      }
+    }
+  ],
+  "contact": {
+    "phone": "+91 97755 18114",
+    "email": "sarberiapallysebasamity07@gmail.com",
+    "address": {
+      "bn": "Vill. + P.O. - Sarberia, P.S. - Joynagar, PIN - 743372 ,South 24 Parganas ",
+      "en": "Vill. + P.O. - Sarberia, P.S. - Joynagar, PIN - 743372 ,South 24 Parganas"
+    },
+    "mapEmbed": "https://www.google.com/maps/embed?pb=YOUR_MAP_EMBED_CODE"
+  },
+  "hours": {
+    "bn": "সোমবার - শনিবার: সন্ধ্যা ৫টা - রাত ৯টা",
+    "en": "Monday - Saturday: 5 PM - 9 PM"
+  },
+  "social": {
+    "facebook": "https://www.facebook.com/share/16y4WgEaqt/",
+    "instagram": "https://www.instagram.com/sarberia_pally_seba_samity?igsh=ZnUzMmV1MjJpMG44",
+    "twitter": "https://twitter.com/yourclub",
+    "youtube": "https://youtube.com/@sarberiapallysebasamity.?si=t_qogbn1IyGoNp3h"
+  },
+  "memberCount": 500,
+  "programCount": 5,
+  "stats": [
+    {
+      "value": "87+",
+      "label": {
+        "bn": "বছরের ঐতিহ্য",
+        "en": "Years of Heritage"
+      }
+    },
+    {
+      "value": "500+",
+      "label": {
+        "bn": "সক্রিয় সদস্য",
+        "en": "Active Members"
+      }
+    },
+    {
+      "value": "6+",
+      "label": {
+        "bn": "প্রশিক্ষণ কর্মসূচি",
+        "en": "Training Programs"
+      }
+    },
+    {
+      "value": "4+",
+      "label": {
+        "bn": "বার্ষিক উৎসব",
+        "en": "Annual Festivals"
+      }
+    }
+  ]
+}

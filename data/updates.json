@@ -1,0 +1,98 @@
+[
+  {
+    "id": "update-2025-06-15-001",
+    "date": "2025-06-15",
+    "title": {
+      "bn": "দুর্গা পূজা ২০২৫ প্রস্তুতি সভা",
+      "en": "Durga Puja 2025 Preparation Meeting"
+    },
+    "content": {
+      "bn": "আগামী ২০ জুন সন্ধ্যা ৬টায় ক্লাব হলে দুর্গা পূজা ২০২৫-এর প্রস্তুতি সভা অনুষ্ঠিত হবে। সকল সদস্যদের উপস্থিত থাকার জন্য অনুরোধ করা হচ্ছে।",
+      "en": "Durga Puja 2025 preparation meeting will be held at the club hall at 6 PM on June 20. All members are requested to be present."
+    },
+    "category": "event",
+    "image": null,
+    "isPinned": true,
+    "isActive": true
+  },
+  {
+    "id": "update-2025-06-10-001",
+    "date": "2025-06-10",
+    "title": {
+      "bn": "জিম সদস্যপদ নবীকরণ শুরু",
+      "en": "Gym Membership Renewal Started"
+    },
+    "content": {
+      "bn": "২০২৫-২৬ বছরের জন্য জিম সদস্যপদ নবীকরণ শুরু হয়েছে। বিশেষ ছাড়ে বার্ষিক সদস্যপদ নিন। ১৫ জুলাইয়ের মধ্যে নবীকরণ করলে ১০% ছাড় পাবেন।",
+      "en": "Gym membership renewal for 2025-26 has started. Get annual membership at a special discount. Renew by July 15 and get 10% off."
+    },
+    "category": "program",
+    "image": null,
+    "isPinned": false,
+    "isActive": true
+  },
+  {
+    "id": "update-2025-06-05-001",
+    "date": "2025-06-05",
+    "title": {
+      "bn": "পাঠাগার পুনর্নবীকরণ কাজ চলছে",
+      "en": "Library Renovation Work in Progress"
+    },
+    "content": {
+      "bn": "আমাদের ক্লাব পাঠাগারের পুনর্নবীকরণ ও আধুনিকীকরণ কাজ চলছে। নতুন বই, আসবাবপত্র ও পড়ার পরিবেশ উন্নত করা হচ্ছে। আগস্ট মাসে পুনরায় খোলার পরিকল্পনা রয়েছে।",
+      "en": "Renovation and modernization work of our club library is in progress. New books, furniture, and reading environment are being improved. Planning to reopen in August."
+    },
+    "category": "library",
+    "image": "assets/images/updates/library-renovation.jpg",
+    "isPinned": false,
+    "isActive": true
+  },
+  {
+    "id": "update-2025-05-28-001",
+    "date": "2025-05-28",
+    "title": {
+      "bn": "ফুটবল টুর্নামেন্টে চ্যাম্পিয়ন",
+      "en": "Champion in Football Tournament"
+    },
+    "content": {
+      "bn": "আমাদের ক্লাবের জুনিয়র ফুটবল টিম আন্তঃক্লাব টুর্নামেন্টে চ্যাম্পিয়ন হয়েছে। অভিনন্দন সকল খেলোয়াড় ও কোচকে!",
+      "en": "Our club's junior football team has become champions in the inter-club tournament. Congratulations to all players and coaches!"
+    },
+    "category": "program",
+    "image": "assets/images/updates/football-win.jpg",
+    "isPinned": false,
+    "isActive": false
+  },
+  {
+    "id": "update-2025-05-20-001",
+    "date": "2025-05-20",
+    "title": {
+      "bn": "নতুন ক্যারাটে ব্যাচ ভর্তি চলছে",
+      "en": "New Karate Batch Admission Open"
+    },
+    "content": {
+      "bn": "৮-১৮ বছর বয়সী ছেলেমেয়েদের জন্য নতুন ক্যারাটে ব্যাচ শুরু হচ্ছে জুলাই মাসে। সীমিত আসন। ৩০ জুনের মধ্যে ভর্তি হন।",
+      "en": "New karate batch for 8-18 years old boys and girls starting in July. Limited seats. Enroll by June 30."
+    },
+    "category": "program",
+    "image": null,
+    "isPinned": false,
+    "isActive": false
+  },
+  {
+    "id": "update-2025-05-15-001",
+    "date": "2025-05-15",
+    "title": {
+      "bn": "বসন্ত উৎসব ২০২৫ সফল সমাপ্তি",
+      "en": "Basanta Utsab 2025 Successfully Concluded"
+    },
+    "content": {
+      "bn": "গত ১২ মে অনুষ্ঠিত বসন্ত উৎসব অত্যন্ত জাঁকজমকপূর্ণভাবে সম্পন্ন হয়েছে। ৫০০+ অতিথির উপস্থিতিতে রঙিন অনুষ্ঠান ও সাংস্কৃতিক পরিবেশনা হয়।",
+      "en": "Basanta Utsab held on May 12 was successfully completed. Colorful program and cultural performances were held in the presence of 500+ guests."
+    },
+    "category": "event",
+    "image": "assets/images/updates/basanta-success.jpg",
+    "isPinned": false,
+    "isActive": false
+  }
+]

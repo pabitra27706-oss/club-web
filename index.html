@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="1938 সাল থেকে সেবায় নিয়োজিত ক্লাব - খেলাধুলা, সংস্কৃতি ও শিক্ষা">
+    <meta name="keywords" content="ক্লাব, খেলাধুলা, সংস্কৃতি, দুর্গা পূজা, জিম, ক্যারাটে">
+    <meta name="theme-color" content="#1a5f7a">
+    <title>Sarberia Pally Seba Samity</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/typography.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/utilities.css">
+    <link rel="stylesheet" href="css/pages.css">
+    
+    <link rel="icon" type="image/png" href="assets/images/common/logo.png">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">মূল বিষয়বস্তুতে যান</a>
+
+    <!-- HEADER -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="assets/images/common/logo.png" alt="Club Logo" class="logo-image">
+                <div class="logo-text">
+                    <span class="logo-name" id="club-name">Sarberia Pally<br> Seba Samity</span>
+                    <span class="logo-tagline" id="club-tagline">Since 1938</span>
+                </div>
+            </a>
+
+            <nav class="nav-desktop" aria-label="Main Navigation">
+                <a href="index.html" class="nav-link active">হোম</a>
+                <a href="pages/about.html" class="nav-link">আমাদের সম্পর্কে</a>
+                <a href="pages/programs.html" class="nav-link">প্রশিক্ষণ</a>
+                <a href="pages/events.html" class="nav-link">অনুষ্ঠান</a>
+                <a href="pages/library.html" class="nav-link">পাঠাগার</a>
+                <a href="pages/updates.html" class="nav-link">আপডেট</a>
+                <a href="pages/community.html" class="nav-link">সমিতি</a>
+                <a href="pages/contact.html" class="btn btn-primary btn-sm header-cta">যোগাযোগ</a>
+            </nav>
+
+            <div class="language-toggle">
+                <button class="lang-btn" data-lang="bn" title="বাংলা">বাং</button>
+                <button class="lang-btn" data-lang="en" title="English">EN</button>
+            </div>
+
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE NAVIGATION -->
+    <nav class="nav-mobile" id="nav-mobile" aria-label="Mobile Navigation">
+        <ul class="nav-mobile-list">
+            <li class="nav-mobile-item">
+                <a href="index.html" class="nav-mobile-link active">🏠 হোম</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="pages/about.html" class="nav-mobile-link">📖 আমাদের সম্পর্কে</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="pages/programs.html" class="nav-mobile-link">🏋️ প্রশিক্ষণ</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="pages/events.html" class="nav-mobile-link">🎉 অনুষ্ঠান</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="pages/library.html" class="nav-mobile-link">📚 পাঠাগার</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="pages/updates.html" class="nav-mobile-link">📢 আপডেট</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="pages/community.html" class="nav-mobile-link">👥 সমিতি</a>
+            </li>
+        </ul>
+        <div class="nav-mobile-cta">
+            <a href="pages/contact.html" class="btn btn-primary btn-block">যোগাযোগ করুন</a>
+        </div>
+        <div class="nav-mobile-language">
+            <button class="lang-btn" data-lang="bn" title="বাংলা">বাংলা</button>
+            <button class="lang-btn" data-lang="en" title="English">English</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content" class="main-content">
+        
+        <!-- ADVANCED WELCOME SECTION WITH TYPING ANIMATION -->
+        <section class="welcome-section">
+            <div class="welcome-background">
+                <div class="gradient-orb orb-1"></div>
+                <div class="gradient-orb orb-2"></div>
+                <div class="gradient-orb orb-3"></div>
+                <canvas id="particles-canvas"></canvas>
+            </div>
+            
+            <div class="welcome-content">
+                <div class="container">
+                    <div class="typing-container">
+                        <h1 class="typing-text">
+                            <span class="typed-line" id="typed-line-1"></span>
+                            <span class="typed-line" id="typed-line-2"></span>
+                            <span class="typed-line" id="typed-line-3"></span>
+                            <span class="cursor">|</span>
+                        </h1>
+                    </div>
+                    
+                    <div class="welcome-subtitle fade-in-up" id="welcome-subtitle">
+                        <p>খেলাধুলা, সংস্কৃতি ও শিক্ষায় ৮৫+ বছরের ঐতিহ্য</p>
+                    </div>
+                    
+                    <div class="welcome-stats-mini fade-in-up delay-1">
+                        <div class="stat-mini">
+                            <span class="stat-mini-number">1938</span>
+                            <span class="stat-mini-label">Established</span>
+                        </div>
+                        <div class="stat-mini">
+                            <span class="stat-mini-number">500+</span>
+                            <span class="stat-mini-label">Members</span>
+                        </div>
+                        <div class="stat-mini">
+                            <span class="stat-mini-number">10+</span>
+                            <span class="stat-mini-label">Programs</span>
+                        </div>
+                        <div class="stat-mini">
+                            <span class="stat-mini-number">85+</span>
+                            <span class="stat-mini-label">Years</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator">
+                <div class="mouse">
+                    <div class="wheel"></div>
+                </div>
+                <p>Scroll Down</p>
+            </div>
+        </section>
+
+        <!-- STATS SECTION -->
+        <section class="home-stats">
+            <div class="container">
+                <div class="stats-grid" id="stats-grid"></div>
+            </div>
+        </section>
+
+        <!-- PROGRAMS SECTION -->
+        <section class="section featured-programs">
+            <div class="container">
+                <h2 class="section-title text-center">আমাদের কার্যক্রম</h2>
+                <p class="section-subtitle text-center">বিভিন্ন বয়সের জন্য প্রশিক্ষণ কর্মসূচি</p>
+                
+                <div class="card-grid" id="featured-programs"></div>
+
+                <div class="programs-actions text-center mt-8">
+                    <a href="pages/programs.html" class="btn btn-primary btn-lg">
+                        <span>Explore All Programs</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="pages/contact.html" class="btn btn-outline btn-lg">
+                        <span>Enroll Now</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- EVENTS SECTION -->
+        <section class="section section-light">
+            <div class="container">
+                <h2 class="section-title text-center">আসন্ন অনুষ্ঠান</h2>
+                <p class="section-subtitle text-center">আমাদের বার্ষিক উৎসব ও প্রতিযোগিতা</p>
+                
+                <div class="events-timeline" id="upcoming-events"></div>
+
+                <div class="text-center mt-8">
+                    <a href="pages/events.html" class="btn btn-outline">সকল অনুষ্ঠান দেখুন →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- UPDATES SECTION -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title text-center">সাম্প্রতিক আপডেট</h2>
+                
+                <div class="updates-preview" id="latest-updates"></div>
+
+                <div class="text-center mt-8">
+                    <a href="pages/updates.html" class="btn btn-outline">সকল আপডেট দেখুন →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA SECTION -->
+        <section class="section">
+            <div class="container">
+                <div class="home-cta">
+                    <h2 class="home-cta-title">আমাদের সাথে যুক্ত হন</h2>
+                    <p class="mb-6">ক্লাবের সদস্য হয়ে খেলাধুলা ও সাংস্কৃতিক কর্মকাণ্ডে অংশগ্রহণ করুন</p>
+                    <a href="pages/contact.html" class="btn btn-white btn-lg">এখনই যোগাযোগ করুন</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="assets/images/common/logo.png" alt="Club Logo" class="footer-logo-image">
+                        <span class="footer-logo-text" id="footer-club-name">Sarberia Pally Seba Samity</span>
+                    </div>
+                    <p class="footer-about" id="footer-about">
+                        ১৯৩৭ সাল থেকে খেলাধুলা ও সংস্কৃতিতে সেবায় নিয়োজিত
+                    </p>
+                    <div class="social-links" id="social-links"></div>
+                </div>
+
+                <div>
+                    <h3 class="footer-section-title">লিংক</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">হোম</a></li>
+                        <li><a href="pages/about.html">আমাদের সম্পর্কে</a></li>
+                        <li><a href="pages/programs.html">প্রশিক্ষণ</a></li>
+                        <li><a href="pages/events.html">অনুষ্ঠান</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="footer-section-title">আরও</h3>
+                    <ul class="footer-links">
+                        <li><a href="pages/library.html">পাঠাগার</a></li>
+                        <li><a href="pages/updates.html">আপডেট</a></li>
+                        <li><a href="pages/community.html">সমিতি</a></li>
+                        <li><a href="pages/contact.html">যোগাযোগ</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="footer-section-title">যোগাযোগ</h3>
+                    <div id="footer-contact"></div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="footer-copyright">
+                        © <span id="current-year"></span> আমাদের ক্লাব. সর্বস্বত্ব সংরক্ষিত.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button class="back-to-top" id="back-to-top" aria-label="Back to Top">
+        <span class="back-to-top-icon">↑</span>
+    </button>
+
+    <!-- SCRIPTS -->
+    <script src="js/typing-animation.js"></script>
+    <script src="js/data-loader.js"></script>
+    <script src="js/language.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/renderer.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadAllData();
+            initLanguage();
+            renderHomePage();
+        });
+    </script>
+</body>
+</html>

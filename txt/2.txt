@@ -1,0 +1,331 @@
+# Complete File Structure & Explanation
+
+## 📁 Full File Structure
+
+```
+project-root/
+│
+├── .gitignore                 # Git ignore rules
+├── netlify.toml               # Netlify deployment config
+├── README.md                  # Project documentation
+├── manifest.json              # PWA configuration
+├── sw.js                      # Service Worker for offline
+├── index.html                 # Home page
+│
+├── pages/
+│   ├── about.html             # About club page
+│   ├── programs.html          # Training programs page
+│   ├── events.html            # Events & festivals page
+│   ├── library.html           # Library page
+│   ├── updates.html           # Updates/notices page
+│   ├── community.html         # Committee members page
+│   └── contact.html           # Contact form page
+│
+├── data/
+│   ├── club-info.json         # Club basic information
+│   ├── programs.json          # All training programs
+│   ├── events.json            # All events/festivals
+│   ├── library.json           # Library information
+│   ├── updates.json           # All updates/notices
+│   └── community.json         # Committee members
+│
+├── css/
+│   ├── reset.css              # Browser reset styles
+│   ├── variables.css          # Design tokens (colors, fonts)
+│   ├── typography.css         # Text & heading styles
+│   ├── layout.css             # Grid, flexbox, containers
+│   ├── components.css         # Cards, buttons, forms
+│   ├── navigation.css         # Header, footer, menus
+│   ├── utilities.css          # Helper classes
+│   └── pages.css              # Page-specific styles
+│
+├── js/
+│   ├── data-loader.js         # Fetch & manage JSON data
+│   ├── main.js                # Core functionality
+│   └── renderer.js            # Render data to HTML
+│
+├── pwa/
+│   └── offline.html           # Offline fallback page
+│
+└── assets/
+    ├── images/
+    │   ├── common/
+    │   │   ├── logo.png               # Club logo
+    │   │   ├── logo-dark.png          # Logo for light bg
+    │   │   ├── hero.jpg               # Home hero image
+    │   │   ├── about-history.jpg      # About page image
+    │   │   ├── club-building.jpg      # Building photo
+    │   │   ├── playground.jpg         # Playground photo
+    │   │   ├── icon-192.png           # PWA icon small
+    │   │   ├── icon-512.png           # PWA icon large
+    │   │   ├── president.jpg          # President photo
+    │   │   ├── secretary.jpg          # Secretary photo
+    │   │   └── treasurer.jpg          # Treasurer photo
+    │   │
+    │   ├── programs/
+    │   │   ├── gym.jpg                # Gym program image
+    │   │   ├── karate.jpg             # Karate image
+    │   │   ├── football.jpg           # Football image
+    │   │   ├── ncc.jpg                # NCC image
+    │   │   └── drawing.jpg            # Drawing class image
+    │   │
+    │   ├── events/
+    │   │   ├── durga-puja.jpg         # Durga Puja banner
+    │   │   ├── durga-puja-1.jpg       # Gallery image 1
+    │   │   ├── durga-puja-2.jpg       # Gallery image 2
+    │   │   ├── sports-day.jpg         # Sports Day banner
+    │   │   ├── basanta-utsab.jpg      # Basanta Utsab banner
+    │   │   └── saraswati-puja.jpg     # Saraswati Puja banner
+    │   │
+    │   ├── library/
+    │   │   └── library.jpg            # Library photo
+    │   │
+    │   └── updates/
+    │       └── (update images here)   # News/update images
+    │
+    └── fonts/
+        └── (custom fonts if needed)
+```
+
+---
+
+## 📄 File-by-File Explanation
+
+---
+
+### 🔧 ROOT FILES
+
+| File | Purpose |
+|------|---------|
+| `.gitignore` | Tells Git which files NOT to upload (system files, temp files, etc.) |
+| `netlify.toml` | Configuration for Netlify hosting - caching rules, security headers, URL redirects |
+| `README.md` | Project documentation for developers - how to edit content, add images |
+| `manifest.json` | PWA configuration - app name, icons, colors for "Add to Home Screen" |
+| `sw.js` | Service Worker - caches files for offline access, faster loading |
+| `index.html` | **Home Page** - hero section, stats, featured programs, updates preview |
+
+---
+
+### 📁 PAGES FOLDER
+
+| File | Purpose | Main Sections |
+|------|---------|---------------|
+| `about.html` | Club history & information | History, Mission, Vision, Facilities |
+| `programs.html` | All training programs | Program cards with schedule, age, status |
+| `events.html` | Annual events & festivals | Event details, dates, photo galleries |
+| `library.html` | Library information | Status badge, book categories, opening notice |
+| `updates.html` | All announcements | Filter buttons, update cards by category |
+| `community.html` | Committee members | Executive committee, Sub-committees |
+| `contact.html` | Contact information | Contact details, form, Google Maps |
+
+---
+
+### 📁 DATA FOLDER (JSON)
+
+These are your **content files** - edit these to change website content.
+
+| File | Contains | Key Fields |
+|------|----------|------------|
+| `club-info.json` | Basic club info | name, tagline, history, mission, contact, social links, stats |
+| `programs.json` | Array of programs | id, name, icon, image, schedule, ageGroup, status, enrollmentOpen |
+| `events.json` | Array of events | id, name, date, location, description, gallery images, isFlagship |
+| `library.json` | Library details | status (closed/open), categories, totalBooks, openingNotice |
+| `updates.json` | Array of notices | date, title, content, category, isPinned, isActive |
+| `community.json` | Committee data | executive members, subcommittees with members |
+
+#### Quick Edit Examples:
+
+**Add new update** → Edit `updates.json`, add object at TOP of array
+
+**Activate library** → Change `"status": "closed"` to `"status": "open"` in `library.json`
+
+**Add new program** → Add new object to `programs.json` array
+
+---
+
+### 📁 CSS FOLDER
+
+| File | Purpose | What It Contains |
+|------|---------|------------------|
+| `reset.css` | Browser normalization | Removes default margins, consistent box-sizing |
+| `variables.css` | Design tokens | Colors, fonts, spacing, shadows, z-index (change here to rebrand) |
+| `typography.css` | Text styling | Headings, paragraphs, links, Bengali font support |
+| `layout.css` | Page structure | Container, grid, flexbox, section spacing, hero layout |
+| `components.css` | UI elements | Buttons, cards, badges, forms, modals, alerts |
+| `navigation.css` | Navigation | Header, mobile menu, footer, back-to-top button |
+| `utilities.css` | Helper classes | Margins, padding, colors, animations, visibility |
+| `pages.css` | Page-specific | Home hero, about sections, program cards, event cards |
+
+#### CSS Loading Order (Important):
+```
+1. reset.css      → Clean slate
+2. variables.css  → Define design tokens
+3. typography.css → Text styles
+4. layout.css     → Structure
+5. components.css → UI components
+6. navigation.css → Header/footer
+7. utilities.css  → Helpers
+8. pages.css      → Page overrides
+```
+
+---
+
+### 📁 JS FOLDER
+
+| File | Purpose | Key Functions |
+|------|---------|---------------|
+| `data-loader.js` | Load JSON data | `loadAllData()`, `getPrograms()`, `getUpdates()`, `formatDateBengali()` |
+| `main.js` | Core functionality | Mobile menu, scroll effects, back-to-top, form handling, filter |
+| `renderer.js` | Display data | `renderHomePage()`, `renderProgramsPage()`, `createProgramCard()`, etc. |
+
+#### How They Work Together:
+
+```
+Page Loads
+    ↓
+data-loader.js → Fetches all JSON files
+    ↓
+main.js → Sets up navigation, scroll, menu
+    ↓
+renderer.js → Reads data, creates HTML, inserts into page
+```
+
+---
+
+### 📁 PWA FOLDER
+
+| File | Purpose |
+|------|---------|
+| `offline.html` | Shown when user is offline and page not cached |
+
+---
+
+### 📁 ASSETS/IMAGES FOLDER
+
+| Folder | Contains | Naming Convention |
+|--------|----------|-------------------|
+| `common/` | Logo, hero, building, committee photos | `logo.png`, `hero.jpg`, `president.jpg` |
+| `programs/` | Training program images | `gym.jpg`, `karate.jpg`, `football.jpg` |
+| `events/` | Event banners & gallery | `durga-puja.jpg`, `durga-puja-1.jpg` |
+| `library/` | Library photos | `library.jpg` |
+| `updates/` | News/announcement images | `update-image.jpg` |
+
+---
+
+## 🔄 Data Flow Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                         USER OPENS WEBSITE                       │
+└─────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        HTML PAGE LOADS                           │
+│                    (index.html or pages/*.html)                  │
+└─────────────────────────────────────────────────────────────────┘
+                                 │
+                    ┌────────────┼────────────┐
+                    ▼            ▼            ▼
+            ┌───────────┐  ┌───────────┐  ┌───────────┐
+            │  CSS      │  │    JS     │  │  Assets   │
+            │  Files    │  │  Files    │  │  Images   │
+            └───────────┘  └───────────┘  └───────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      data-loader.js                              │
+│                  Fetches JSON from /data/                        │
+└─────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                        renderer.js                               │
+│              Converts JSON data to HTML elements                 │
+└─────────────────────────────────────────────────────────────────┘
+                                 │
+                                 ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     CONTENT DISPLAYED                            │
+│            Programs, Events, Updates, Committee, etc.            │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📝 Content Update Workflow
+
+```
+YOU WANT TO ADD/CHANGE CONTENT
+            │
+            ▼
+    ┌───────────────────┐
+    │  Which content?   │
+    └───────────────────┘
+            │
+    ┌───────┼───────┬──────────┬──────────┬──────────┐
+    ▼       ▼       ▼          ▼          ▼          ▼
+┌───────┐┌───────┐┌─────────┐┌────────┐┌─────────┐┌─────────┐
+│Update ││Program││ Event   ││Library ││Committee││Club Info│
+└───────┘└───────┘└─────────┘└────────┘└─────────┘└─────────┘
+    │       │         │          │          │          │
+    ▼       ▼         ▼          ▼          ▼          ▼
+┌───────┐┌───────┐┌─────────┐┌────────┐┌─────────┐┌─────────┐
+│updates││programs││events   ││library ││community││club-info│
+│.json  ││.json   ││.json    ││.json   ││.json    ││.json    │
+└───────┘└───────┘└─────────┘└────────┘└─────────┘└─────────┘
+            │
+            ▼
+    ┌───────────────────┐
+    │ Add/Edit in JSON  │
+    │ Add image if any  │
+    └───────────────────┘
+            │
+            ▼
+    ┌───────────────────┐
+    │ Git push to GitHub│
+    └───────────────────┘
+            │
+            ▼
+    ┌───────────────────┐
+    │ Netlify auto      │
+    │ deploys changes   │
+    └───────────────────┘
+            │
+            ▼
+    ┌───────────────────┐
+    │ Website updated!  │
+    └───────────────────┘
+```
+
+---
+
+## 🎯 File Count Summary
+
+| Category | Files | 
+|----------|-------|
+| Root Files | 6 |
+| HTML Pages | 8 |
+| JSON Data | 6 |
+| CSS Files | 8 |
+| JS Files | 3 |
+| PWA Files | 1 |
+| **Total** | **32 files** |
+
+---
+
+## ✅ What Each Layer Does
+
+| Layer | Files | Responsibility |
+|-------|-------|----------------|
+| **Structure** | HTML files | Page skeleton, sections, placeholders |
+| **Data** | JSON files | Actual content (bilingual text, settings) |
+| **Style** | CSS files | How everything looks (colors, layout, spacing) |
+| **Logic** | JS files | Load data, render content, interactivity |
+| **Assets** | Images/Fonts | Visual media |
+| **PWA** | manifest, sw.js | Offline support, installable app |
+| **Deploy** | netlify.toml, .gitignore | Hosting configuration |
+
+---
+
+**Any questions about specific files? 🤔**

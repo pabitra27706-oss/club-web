@@ -1,0 +1,31 @@
+/**
+ * =====================================================
+ * MAIN STYLESHEET
+ * =====================================================
+ * This file imports all other CSS modules.
+ * Import order matters!
+ * =====================================================
+ */
+
+/* 1. Design Tokens */
+@import url('variables.css');
+
+/* 2. Reset & Base Styles */
+@import url('base.css');
+
+/* 3. Layout System */
+@import url('layout.css');
+
+/* 4. Components */
+@import url('components.css');
+
+/* 5. Utility Classes */
+@import url('utilities.css');
+
+/* =====================================================
+ * GOOGLE FONTS
+ * Bengali: Hind Siliguri
+ * English: Inter
+ * =====================================================
+ */
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');

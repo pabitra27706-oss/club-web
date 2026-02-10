@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ক্লাবের সাথে যোগাযোগ করুন">
+    <meta name="theme-color" content="#1a5f7a">
+    <title>যোগাযোগ - আমাদের ক্লাব</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/typography.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    
+    <link rel="icon" type="image/png" href="../assets/images/common/logo.png">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">মূল বিষয়বস্তুতে যান</a>
+
+    <header class="header" id="header">
+        <div class="header-container">
+            <a href="../index.html" class="logo">
+                <img src="../assets/images/common/logo.png" alt="Club Logo" class="logo-image">
+                <div class="logo-text">
+                    <span class="logo-name" id="club-name">আমাদের ক্লাব</span>
+                    <span class="logo-tagline">Since 1937</span>
+                </div>
+            </a>
+
+            <nav class="nav-desktop" aria-label="Main Navigation">
+                <a href="../index.html" class="nav-link">হোম</a>
+                <a href="about.html" class="nav-link">আমাদের সম্পর্কে</a>
+                <a href="programs.html" class="nav-link">প্রশিক্ষণ</a>
+                <a href="events.html" class="nav-link">অনুষ্ঠান</a>
+                <a href="library.html" class="nav-link">পাঠাগার</a>
+                <a href="updates.html" class="nav-link">আপডেট</a>
+                <a href="community.html" class="nav-link">সমিতি</a>
+                <a href="contact.html" class="btn btn-primary btn-sm header-cta active">যোগাযোগ</a>
+            </nav>
+
+            <div class="language-toggle">
+                <button class="lang-btn" data-lang="bn" title="বাংলা">বাং</button>
+                <button class="lang-btn" data-lang="en" title="English">EN</button>
+            </div>
+
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Menu">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
+
+    <nav class="nav-mobile" id="nav-mobile">
+        <ul class="nav-mobile-list">
+            <li class="nav-mobile-item"><a href="../index.html" class="nav-mobile-link">🏠 হোম</a></li>
+            <li class="nav-mobile-item"><a href="about.html" class="nav-mobile-link">📖 আমাদের সম্পর্কে</a></li>
+            <li class="nav-mobile-item"><a href="programs.html" class="nav-mobile-link">🏋️ প্রশিক্ষণ</a></li>
+            <li class="nav-mobile-item"><a href="events.html" class="nav-mobile-link">🎉 অনুষ্ঠান</a></li>
+            <li class="nav-mobile-item"><a href="library.html" class="nav-mobile-link">📚 পাঠাগার</a></li>
+            <li class="nav-mobile-item"><a href="updates.html" class="nav-mobile-link">📢 আপডেট</a></li>
+            <li class="nav-mobile-item"><a href="community.html" class="nav-mobile-link">👥 সমিতি</a></li>
+        </ul>
+        <div class="nav-mobile-cta">
+            <a href="contact.html" class="btn btn-primary btn-block active">যোগাযোগ করুন</a>
+        </div>
+        <div class="nav-mobile-language">
+            <button class="lang-btn" data-lang="bn" title="বাংলা">বাংলা</button>
+            <button class="lang-btn" data-lang="en" title="English">English</button>
+        </div>
+    </nav>
+
+    <main id="main-content" class="main-content">
+        
+        <section class="page-hero">
+            <div class="container">
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <span class="breadcrumb-item"><a href="../index.html">হোম</a></span>
+                    <span class="breadcrumb-item active">যোগাযোগ</span>
+                </nav>
+                <h1 class="page-hero-title">যোগাযোগ করুন</h1>
+                <p class="text-lead">আমাদের সাথে সংযুক্ত হন</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="contact-grid">
+                    
+                    <div>
+                        <h2 class="mb-6">যোগাযোগের তথ্য</h2>
+                        
+                        <div class="contact-info-card" id="contact-info-container"></div>
+
+                        <div class="card mt-6">
+                            <div class="card-body">
+                                <h3 class="mb-4">⏰ খোলার সময়</h3>
+                                <p id="opening-hours"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="contact-form-wrapper">
+                            <h2 class="mb-6">বার্তা পাঠান</h2>
+                            
+                            <form id="contact-form">
+                                <div class="form-group">
+                                    <label for="name" class="form-label form-label-required">নাম</label>
+                                    <input type="text" id="name" name="name" class="form-input" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone" class="form-label form-label-required">ফোন নম্বর</label>
+                                    <input type="tel" id="phone" name="phone" class="form-input" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email" class="form-label">ইমেইল (ঐচ্ছিক)</label>
+                                    <input type="email" id="email" name="email" class="form-input">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="subject" class="form-label form-label-required">বিষয়</label>
+                                    <select id="subject" name="subject" class="form-select" required>
+                                        <option value="">নির্বাচন করুন</option>
+                                        <option value="membership">সদস্যপদ</option>
+                                        <option value="program">প্রশিক্ষণ সম্পর্কে</option>
+                                        <option value="event">অনুষ্ঠান সম্পর্কে</option>
+                                        <option value="other">অন্যান্য</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="message" class="form-label form-label-required">বার্তা</label>
+                                    <textarea id="message" name="message" class="form-textarea" rows="5" required></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block">পাঠান</button>
+                            </form>
+
+                            <div id="form-response" class="mt-4" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="contact-map" id="contact-map"></div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="../assets/images/common/logo.png" alt="Club Logo" class="footer-logo-image">
+                        <span class="footer-logo-text" id="footer-club-name">আমাদের ক্লাব</span>
+                    </div>
+                    <p class="footer-about">১৯৩৭ সাল থেকে খেলাধুলা ও সংস্কৃতিতে সেবায় নিয়োজিত</p>
+                    <div class="social-links" id="social-links"></div>
+                </div>
+                <div>
+                    <h3 class="footer-section-title">লিংক</h3>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">হোম</a></li>
+                        <li><a href="about.html">আমাদের সম্পর্কে</a></li>
+                        <li><a href="programs.html">প্রশিক্ষণ</a></li>
+                        <li><a href="events.html">অনুষ্ঠান</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-section-title">আরও</h3>
+                    <ul class="footer-links">
+                        <li><a href="library.html">পাঠাগার</a></li>
+                        <li><a href="updates.html">আপডেট</a></li>
+                        <li><a href="community.html">সমিতি</a></li>
+                        <li><a href="contact.html">যোগাযোগ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-section-title">যোগাযোগ</h3>
+                    <div id="footer-contact"></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="footer-copyright">© <span id="current-year"></span> আমাদের ক্লাব. সর্বস্বত্ব সংরক্ষিত.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button class="back-to-top" id="back-to-top" aria-label="Back to Top">
+        <span class="back-to-top-icon">↑</span>
+    </button>
+
+    <script src="../js/data-loader.js"></script>
+    <script src="../js/language.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/renderer.js"></script>
+    <script src="../js/form.js"></script>
+    <script src="../js/form1.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadAllData();
+            initLanguage();
+            renderContactPage();
+        });
+    </script>
+</body>
+</html>

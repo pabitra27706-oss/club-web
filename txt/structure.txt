@@ -1,0 +1,82 @@
+project-root/
+│
+├── .gitignore # Git ignore rules
+├── netlify.toml # Netlify deployment config
+├── README.md # Project documentation
+├── manifest.json # PWA configuration
+├── sw.js # Service Worker for offline
+├── index.html # Home page
+│
+├── pages/
+│ ├── about.html # About club page
+│ ├── programs.html # Training programs page
+│ ├── events.html # Events & festivals page
+│ ├── library.html # Library page
+│ ├── updates.html # Updates/notices page
+│ ├── community.html # Committee members page
+│ └── contact.html # Contact form page
+│
+├── data/
+│ ├── club-info.json # Club basic information
+│ ├── programs.json # All training programs
+│ ├── events.json # All events/festivals
+│ ├── library.json # Library information
+│ ├── updates.json # All updates/notices
+│ └── community.json # Committee members
+│
+├── css/
+│ ├── reset.css # Browser reset styles
+│ ├── variables.css # Design tokens (colors, fonts)
+│ ├── typography.css # Text & heading styles
+│ ├── layout.css # Grid, flexbox, containers
+│ ├── components.css # Cards, buttons, forms
+│ ├── navigation.css # Header, footer, menus
+│ ├── utilities.css # Helper classes
+│ └── pages.css # Page-specific styles
+│
+├── js/
+│ ├── data-loader.js # Fetch & manage JSON data
+│ ├── main.js # Core functionality
+│ └── renderer.js # Render data to HTML
+│
+├── pwa/
+│ └── offline.html # Offline fallback page
+│
+└── assets/
+├── images/
+│ ├── common/
+│ │ ├── logo.png # Club logo
+│ │ ├── logo-dark.png # Logo for light bg
+│ │ ├── hero.jpg # Home hero image
+│ │ ├── about-history.jpg # About page image
+│ │ ├── club-building.jpg # Building photo
+│ │ ├── playground.jpg # Playground photo
+│ │ ├── icon-192.png # PWA icon small
+│ │ ├── icon-512.png # PWA icon large
+│ │ ├── president.jpg # President photo
+│ │ ├── secretary.jpg # Secretary photo
+│ │ └── treasurer.jpg # Treasurer photo
+│ │
+│ ├── programs/
+│ │ ├── gym.jpg # Gym program image
+│ │ ├── karate.jpg # Karate image
+│ │ ├── football.jpg # Football image
+│ │ ├── ncc.jpg # NCC image
+│ │ └── drawing.jpg # Drawing class image
+│ │
+│ ├── events/
+│ │ ├── durga-puja.jpg # Durga Puja banner
+│ │ ├── durga-puja-1.jpg # Gallery image 1
+│ │ ├── durga-puja-2.jpg # Gallery image 2
+│ │ ├── sports-day.jpg # Sports Day banner
+│ │ ├── basanta-utsab.jpg # Basanta Utsab banner
+│ │ └── saraswati-puja.jpg # Saraswati Puja banner
+│ │
+│ ├── library/
+│ │ └── library.jpg # Library photo
+│ │
+│ └── updates/
+│ └── (update images here) # News/update images
+│
+└── fonts/
+└── (custom fonts if needed)

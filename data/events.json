@@ -1,0 +1,133 @@
+[
+  {
+    "id": "durga-puja",
+    "name": {
+      "bn": "দুর্গা পূজা",
+      "en": "Durga Puja"
+    },
+    "icon": "🪔",
+    "image": "assets/images/events/durga-puja.jpg",
+    "description": {
+      "bn": "আমাদের ক্লাবের সবচেয়ে বড় ও জাঁকজমকপূর্ণ বার্ষিক উৎসব। চার দিনব্যাপী পূজা, সাংস্কৃতিক অনুষ্ঠান, খাবার স্টল ও প্রতিমা প্রদর্শনী। হাজারো ভক্ত ও দর্শক অংশগ্রহণ করেন।",
+      "en": "Our club's biggest and most grand annual festival. Four-day puja, cultural programs, food stalls, and idol exhibition. Thousands of devotees and visitors participate."
+    },
+    "date": {
+      "display": {
+        "bn": "অক্টোবর ২০২৫",
+        "en": "October 2025"
+      },
+      "iso": "2025-10"
+    },
+    "location": {
+      "bn": "ক্লাব প্রাঙ্গণ",
+      "en": "Club Premises"
+    },
+    "type": "annual",
+    "isFlagship": true,
+    "gallery": [
+      "assets/images/events/durga-puja-1.jpg",
+      "assets/images/events/durga-puja-2.jpg",
+      "assets/images/events/durga-puja-3.jpg",
+      "assets/images/events/durga-puja-4.jpg"
+    ],
+    "status": "upcoming",
+    "order": 1
+  },
+  {
+    "id": "sports-day",
+    "name": {
+      "bn": "বার্ষিক ক্রীড়া প্রতিযোগিতা",
+      "en": "Annual Sports Competition"
+    },
+    "icon": "🏆",
+    "image": "assets/images/events/sports-day.jpg",
+    "description": {
+      "bn": "বার্ষিক আন্তঃক্লাব ক্রীড়া প্রতিযোগিতা। ফুটবল, ক্রিকেট, ব্যাডমিন্টন, দৌড় সহ বিভিন্ন খেলার আয়োজন। বিজয়ীদের জন্য ট্রফি ও পুরস্কার।",
+      "en": "Annual inter-club sports competition. Organization of various sports including football, cricket, badminton, and running. Trophies and prizes for winners."
+    },
+    "date": {
+      "display": {
+        "bn": "ডিসেম্বর ২০২৫",
+        "en": "December 2025"
+      },
+      "iso": "2025-12"
+    },
+    "location": {
+      "bn": "ক্লাব মাঠ",
+      "en": "Club Playground"
+    },
+    "type": "annual",
+    "isFlagship": false,
+    "gallery": [
+      "assets/images/events/sports-1.jpg",
+      "assets/images/events/sports-2.jpg",
+      "assets/images/events/sports-3.jpg"
+    ],
+    "status": "upcoming",
+    "order": 2
+  },
+  {
+    "id": "basanta-utsab",
+    "name": {
+      "bn": "বসন্ত উৎসব",
+      "en": "Basanta Utsab"
+    },
+    "icon": "🌸",
+    "image": "assets/images/events/basanta-utsab.jpg",
+    "description": {
+      "bn": "বসন্তকালে রঙিন উৎসব। রবীন্দ্রসংগীত, নৃত্য, কবিতা পাঠ ও রঙ খেলার আয়োজন। সকল বয়সের মানুষ অংশগ্রহণ করেন।",
+      "en": "Colorful festival in spring. Arrangement of Rabindra Sangeet, dance, poetry recitation, and color play. People of all ages participate."
+    },
+    "date": {
+      "display": {
+        "bn": "ফেব্রুয়ারি ২০২৬",
+        "en": "February 2026"
+      },
+      "iso": "2026-02"
+    },
+    "location": {
+      "bn": "ক্লাব প্রাঙ্গণ",
+      "en": "Club Premises"
+    },
+    "type": "annual",
+    "isFlagship": false,
+    "gallery": [
+      "assets/images/events/basanta-1.jpg",
+      "assets/images/events/basanta-2.jpg"
+    ],
+    "status": "upcoming",
+    "order": 3
+  },
+  {
+    "id": "saraswati-puja",
+    "name": {
+      "bn": "সরস্বতী পূজা",
+      "en": "Saraswati Puja"
+    },
+    "icon": "🎓",
+    "image": "assets/images/events/saraswati-puja.jpg",
+    "description": {
+      "bn": "বিদ্যার দেবী সরস্বতীর পূজা। ছাত্রছাত্রীরা তাদের বই ও কলম নিয়ে পূজা দেন। সাংস্কৃতিক অনুষ্ঠান ও প্রসাদ বিতরণ।",
+      "en": "Worship of Goddess Saraswati, the deity of knowledge. Students worship with their books and pens. Cultural programs and distribution of prasad."
+    },
+    "date": {
+      "display": {
+        "bn": "জানুয়ারি ২০২৬",
+        "en": "January 2026"
+      },
+      "iso": "2026-01"
+    },
+    "location": {
+      "bn": "ক্লাব হল",
+      "en": "Club Hall"
+    },
+    "type": "annual",
+    "isFlagship": false,
+    "gallery": [
+      "assets/images/events/saraswati-1.jpg",
+      "assets/images/events/saraswati-2.jpg"
+    ],
+    "status": "upcoming",
+    "order": 4
+  }
+]

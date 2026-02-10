@@ -1,0 +1,125 @@
+{
+  "executive": [
+    {
+      "role": {
+        "bn": "সভাপতি",
+        "en": "President"
+      },
+      "name": "শ্রী রাজেশ মুখার্জী",
+      "photo": "assets/images/common/president.jpg",
+      "phone": "+91 98300 11111",
+      "order": 1
+    },
+    {
+      "role": {
+        "bn": "সম্পাদক",
+        "en": "Secretary"
+      },
+      "name": "শ্রী অমিত ঘোষ",
+      "photo": "assets/images/common/secretary.jpg",
+      "phone": "+91 98300 22222",
+      "order": 2
+    },
+    {
+      "role": {
+        "bn": "কোষাধ্যক্ষ",
+        "en": "Treasurer"
+      },
+      "name": "শ্রী সুব্রত দাস",
+      "photo": "assets/images/common/treasurer.jpg",
+      "phone": "+91 98300 33333",
+      "order": 3
+    }
+  ],
+  "subcommittees": [
+    {
+      "name": {
+        "bn": "সাংস্কৃতিক উপকমিটি",
+        "en": "Cultural Sub-committee"
+      },
+      "members": [
+        {
+          "name": "শ্রী অনিল সেন",
+          "role": {
+            "bn": "সভাপতি",
+            "en": "Head"
+          }
+        },
+        {
+          "name": "শ্রীমতী প্রীতি রায়",
+          "role": {
+            "bn": "সদস্য",
+            "en": "Member"
+          }
+        },
+        {
+          "name": "শ্রী দেবাশীষ সরকার",
+          "role": {
+            "bn": "সদস্য",
+            "en": "Member"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "bn": "ক্রীড়া উপকমিটি",
+        "en": "Sports Sub-committee"
+      },
+      "members": [
+        {
+          "name": "শ্রী রবি কুমার",
+          "role": {
+            "bn": "সভাপতি",
+            "en": "Head"
+          }
+        },
+        {
+          "name": "শ্রী সুজয় মণ্ডল",
+          "role": {
+            "bn": "সদস্য",
+            "en": "Member"
+          }
+        },
+        {
+          "name": "শ্রী তপন ভট্টাচার্য",
+          "role": {
+            "bn": "সদস্য",
+            "en": "Member"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "bn": "পূজা উপকমিটি",
+        "en": "Puja Sub-committee"
+      },
+      "members": [
+        {
+          "name": "শ্রী বিকাশ চক্রবর্তী",
+          "role": {
+            "bn": "সভাপতি",
+            "en": "Head"
+          }
+        },
+        {
+          "name": "শ্রী অমল দত্ত",
+          "role": {
+            "bn": "সদস্য",
+            "en": "Member"
+          }
+        },
+        {
+          "name": "শ্রী প্রদীপ পাল",
+          "role": {
+            "bn": "সদস্য",
+            "en": "Member"
+          }
+        }
+      ]
+    }
+  ],
+  "memberCount": 500,
+  "foundingYear": 1937
+}

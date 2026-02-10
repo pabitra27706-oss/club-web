@@ -1,0 +1,177 @@
+[
+  {
+    "id": "gym",
+    "name": {
+      "bn": "জিম ও শারীরিক প্রশিক্ষণ",
+      "en": "Gym & Physical Training"
+    },
+    "icon": "🏋️",
+    "image": "assets/images/programs/gym.jpg",
+    "description": {
+      "bn": "আধুনিক যন্ত্রপাতি সহ জিমে শারীরিক সুস্থতা ও শক্তি বৃদ্ধির জন্য প্রশিক্ষণ। অভিজ্ঞ প্রশিক্ষকের তত্ত্বাবধানে ওজন কমানো ও পেশী গঠনের কর্মসূচি।",
+      "en": "Training for physical fitness and strength building in a gym with modern equipment. Weight loss and muscle building programs under the supervision of experienced trainers."
+    },
+    "schedule": {
+      "days": {
+        "bn": "প্রতিদিন",
+        "en": "Daily"
+      },
+      "time": {
+        "bn": "সকাল ৬টা - রাত ৮টা",
+        "en": "6 AM - 8 PM"
+      }
+    },
+    "ageGroup": {
+      "bn": "১৬+ বছর",
+      "en": "16+ years"
+    },
+    "location": {
+      "bn": "ক্লাব ভবন - দ্বিতীয় তলা",
+      "en": "Club Building - 2nd Floor"
+    },
+    "instructor": "রবি কুমার",
+    "status": "active",
+    "enrollmentOpen": true,
+    "order": 1
+  },
+  {
+    "id": "karate",
+    "name": {
+      "bn": "ক্যারাটে প্রশিক্ষণ",
+      "en": "Karate Training"
+    },
+    "icon": "🥋",
+    "image": "assets/images/programs/karate.jpg",
+    "description": {
+      "bn": "শিশু ও কিশোরদের জন্য আত্মরক্ষা ও শৃঙ্খলা শিক্ষার ক্যারাটে প্রশিক্ষণ। জাতীয় স্তরের ব্ল্যাক বেল্ট প্রশিক্ষকের তত্ত্বাবধানে।",
+      "en": "Karate training for self-defense and discipline learning for children and teenagers. Under the supervision of a national-level black belt instructor."
+    },
+    "schedule": {
+      "days": {
+        "bn": "শনি - রবি - মঙ্গল - বৃহস্পতি",
+        "en": "Sat - Sun - Tue - Thu"
+      },
+      "time": {
+        "bn": "সন্ধ্যা ৫টা - ৭টা",
+        "en": "5 PM - 7 PM"
+      }
+    },
+    "ageGroup": {
+      "bn": "৮-১৮ বছর",
+      "en": "8-18 years"
+    },
+    "location": {
+      "bn": "ক্লাব মাঠ",
+      "en": "Club Playground"
+    },
+    "instructor": "সেনসেই অনিল দাস",
+    "status": "active",
+    "enrollmentOpen": true,
+    "order": 2
+  },
+  {
+    "id": "football",
+    "name": {
+      "bn": "ফুটবল প্রশিক্ষণ",
+      "en": "Football Training"
+    },
+    "icon": "⚽",
+    "image": "assets/images/programs/football.jpg",
+    "description": {
+      "bn": "তরুণদের জন্য পেশাদার ফুটবল প্রশিক্ষণ। মৌলিক দক্ষতা থেকে উন্নত কৌশল শেখানো হয়। ইন্টার-ক্লাব টুর্নামেন্টে অংশগ্রহণের সুযোগ।",
+      "en": "Professional football training for youth. Teaching from basic skills to advanced techniques. Opportunity to participate in inter-club tournaments."
+    },
+    "schedule": {
+      "days": {
+        "bn": "সোম - বুধ - শুক্র",
+        "en": "Mon - Wed - Fri"
+      },
+      "time": {
+        "bn": "সন্ধ্যা ৫টা - ৭টা",
+        "en": "5 PM - 7 PM"
+      }
+    },
+    "ageGroup": {
+      "bn": "১০-২০ বছর",
+      "en": "10-20 years"
+    },
+    "location": {
+      "bn": "ক্লাব মাঠ",
+      "en": "Club Playground"
+    },
+    "instructor": "কোচ সুব্রত ঘোষ",
+    "status": "active",
+    "enrollmentOpen": true,
+    "order": 3
+  },
+  {
+    "id": "ncc",
+    "name": {
+      "bn": "এনসিসি প্রশিক্ষণ",
+      "en": "NCC Training"
+    },
+    "icon": "🎖️",
+    "image": "assets/images/programs/ncc.jpg",
+    "description": {
+      "bn": "ন্যাশনাল ক্যাডেট কোর প্রশিক্ষণ। শৃঙ্খলা, নেতৃত্ব ও দেশপ্রেম শিক্ষা। ক্যাম্প ও প্যারেডে অংশগ্রহণের সুযোগ।",
+      "en": "National Cadet Corps training. Learning discipline, leadership, and patriotism. Opportunity to participate in camps and parades."
+    },
+    "schedule": {
+      "days": {
+        "bn": "রবিবার",
+        "en": "Sunday"
+      },
+      "time": {
+        "bn": "সকাল ৭টা - ১০টা",
+        "en": "7 AM - 10 AM"
+      }
+    },
+    "ageGroup": {
+      "bn": "১৩-১৯ বছর",
+      "en": "13-19 years"
+    },
+    "location": {
+      "bn": "ক্লাব মাঠ",
+      "en": "Club Playground"
+    },
+    "instructor": "সুবেদার মজুমদার",
+    "status": "active",
+    "enrollmentOpen": true,
+    "order": 4
+  },
+  {
+    "id": "drawing",
+    "name": {
+      "bn": "চিত্রাঙ্কন ও শিল্পকলা",
+      "en": "Drawing & Art"
+    },
+    "icon": "🎨",
+    "image": "assets/images/programs/drawing.jpg",
+    "description": {
+      "bn": "শিশুদের জন্য চিত্রাঙ্কন, রং, ও হস্তশিল্পের ক্লাস। সৃজনশীলতা ও কল্পনাশক্তি বিকাশে সহায়তা। বার্ষিক চিত্র প্রদর্শনী আয়োজন।",
+      "en": "Drawing, painting, and craft classes for children. Helps develop creativity and imagination. Annual art exhibition organized."
+    },
+    "schedule": {
+      "days": {
+        "bn": "শনি - রবি",
+        "en": "Sat - Sun"
+      },
+      "time": {
+        "bn": "বিকাল ৩টা - ৫টা",
+        "en": "3 PM - 5 PM"
+      }
+    },
+    "ageGroup": {
+      "bn": "৬-১৫ বছর",
+      "en": "6-15 years"
+    },
+    "location": {
+      "bn": "ক্লাব ভবন - প্রথম তলা",
+      "en": "Club Building - 1st Floor"
+    },
+    "instructor": "শিল্পী প্রীতি সেন",
+    "status": "active",
+    "enrollmentOpen": true,
+    "order": 5
+  }
+]
