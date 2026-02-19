@@ -46,6 +46,7 @@
                 <a href="pages/library.html" class="nav-link">পাঠাগার</a>
                 <a href="pages/updates.html" class="nav-link">আপডেট</a>
                 <a href="pages/community.html" class="nav-link">সমিতি</a>
+                <a href="pages/gallery.html" class="btn btn-primary btn-sm header-cta">GALLERY</a>
                 <a href="pages/contact.html" class="btn btn-primary btn-sm header-cta">যোগাযোগ</a>
             </nav>
 
@@ -83,6 +84,9 @@
             </li>
             <li class="nav-mobile-item">
                 <a href="pages/community.html" class="nav-mobile-link">👥 সমিতি</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="pages/gallery.html" class="nav-mobile-link">🖼️ GALLERY</a>
             </li>
         </ul>
         <div class="nav-mobile-cta">
@@ -206,6 +210,27 @@
             </div>
         </section>
 
+        <!-- GALLERY PREVIEW SECTION (NEW) -->
+        <section class="section section-light">
+            <div class="container">
+                <h2 class="section-title text-center">গ্যালারি</h2>
+                <p class="section-subtitle text-center">আমাদের স্মৃতির সংগ্রহ</p>
+                
+                <div class="gallery-preview-grid" id="gallery-preview">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+
+                <div class="text-center mt-8">
+                    <a href="pages/gallery.html" class="btn btn-primary btn-lg">
+                        <span>সম্পূর্ণ গ্যালারি দেখুন</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- CTA SECTION -->
         <section class="section">
             <div class="container">
@@ -229,7 +254,7 @@
                         <span class="footer-logo-text" id="footer-club-name">Sarberia Pally Seba Samity</span>
                     </div>
                     <p class="footer-about" id="footer-about">
-                        ১৯৩৭ সাল থেকে খেলাধুলা ও সংস্কৃতিতে সেবায় নিয়োজিত
+                        ১৯৩৮ সাল থেকে খেলাধুলা ও সংস্কৃতিতে সেবায় নিয়োজিত
                     </p>
                     <div class="social-links" id="social-links"></div>
                 </div>
@@ -250,6 +275,7 @@
                         <li><a href="pages/library.html">পাঠাগার</a></li>
                         <li><a href="pages/updates.html">আপডেট</a></li>
                         <li><a href="pages/community.html">সমিতি</a></li>
+                        <li><a href="pages/gallery.html">গ্যালারি</a></li>
                         <li><a href="pages/contact.html">যোগাযোগ</a></li>
                     </ul>
                 </div>
@@ -263,7 +289,7 @@
             <div class="footer-bottom">
                 <div class="footer-bottom-content">
                     <p class="footer-copyright">
-                        © <span id="current-year"></span> আমাদের ক্লাব. সর্বস্বত্ব সংরক্ষিত.
+                        © <span id="current-year"></span> সারবেরিয়া পল্লী সেবা সমিতি. সর্বস্বত্ব সংরক্ষিত.
                     </p>
                 </div>
             </div>
@@ -286,7 +312,47 @@
             await loadAllData();
             initLanguage();
             renderHomePage();
+            renderGalleryPreview(); // Load gallery preview
         });
+
+        // Gallery Preview Renderer
+        async function renderGalleryPreview() {
+            try {
+                const response = await fetch('data/gallery.json');
+                const galleryData = await response.json();
+                const container = document.getElementById('gallery-preview');
+                
+                if (!container || !galleryData.albums) return;
+                
+                // Get latest 4 albums
+                const latestAlbums = galleryData.albums.slice(0, 4);
+                const lang = document.documentElement.lang || 'bn';
+                
+                container.innerHTML = latestAlbums.map(album => {
+                    const category = galleryData.categories.find(c => c.id === album.category);
+                    return `
+                        <a href="pages/gallery.html" class="gallery-preview-card">
+                            <div class="gallery-preview-image">
+                                <img src="${album.featuredImage}" alt="${lang === 'bn' ? album.title.bn : album.title.en}" loading="lazy">
+                                <div class="gallery-preview-overlay">
+                                    <span class="gallery-preview-icon">🔍</span>
+                                </div>
+                            </div>
+                            <div class="gallery-preview-content">
+                                <h3 class="gallery-preview-title">${lang === 'bn' ? album.title.bn : album.title.en}</h3>
+                                <p class="gallery-preview-meta">
+                                    <span>${lang === 'bn' ? category.name.bn : category.name.en}</span>
+                                    <span>•</span>
+                                    <span>${album.year}</span>
+                                </p>
+                            </div>
+                        </a>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.log('Gallery preview not loaded:', error);
+            }
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="সারবেরিয়া পল্লী সেবা সমিতির ফটো ও ভিডিও গ্যালারি">
+    <meta name="keywords" content="গ্যালারি, ছবি, ভিডিও, দুর্গা পূজা, অনুষ্ঠান">
+    <meta name="theme-color" content="#1a5f7a">
+    <title>গ্যালারি - Sarberia Pally Seba Samity</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/typography.css">
+    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../css/components.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/utilities.css">
+    <link rel="stylesheet" href="../css/pages.css">
+    <link rel="stylesheet" href="../css/gallery.css">
+    
+    <link rel="icon" type="image/png" href="../assets/images/common/logo.png">
+</head>
+<body>
+    <a href="#main-content" class="skip-link">মূল বিষয়বস্তুতে যান</a>
+
+    <!-- HEADER -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <a href="../index.html" class="logo">
+                <img src="../assets/images/common/logo.png" alt="Club Logo" class="logo-image">
+                <div class="logo-text">
+                    <span class="logo-name" id="club-name">Sarberia Pally<br> Seba Samity</span>
+                    <span class="logo-tagline" id="club-tagline">Since 1938</span>
+                </div>
+            </a>
+
+            <nav class="nav-desktop" aria-label="Main Navigation">
+                <a href="../index.html" class="nav-link">হোম</a>
+                <a href="about.html" class="nav-link">আমাদের সম্পর্কে</a>
+                <a href="programs.html" class="nav-link">প্রশিক্ষণ</a>
+                <a href="events.html" class="nav-link">অনুষ্ঠান</a>
+                <a href="library.html" class="nav-link">পাঠাগার</a>
+                <a href="updates.html" class="nav-link">আপডেট</a>
+                <a href="community.html" class="nav-link">সমিতি</a>
+                <a href="contact.html" class="btn btn-primary btn-sm header-cta">যোগাযোগ</a>
+                <a href="gallery.html" class="btn btn-primary btn-sm header-cta active">GALLERY</a>
+            </nav>
+
+            <div class="language-toggle">
+                <button class="lang-btn" data-lang="bn" title="বাংলা">বাং</button>
+                <button class="lang-btn" data-lang="en" title="English">EN</button>
+            </div>
+
+            <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+                <span class="hamburger"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MOBILE NAVIGATION -->
+    <nav class="nav-mobile" id="nav-mobile" aria-label="Mobile Navigation">
+        <ul class="nav-mobile-list">
+            <li class="nav-mobile-item">
+                <a href="../index.html" class="nav-mobile-link">🏠 হোম</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="about.html" class="nav-mobile-link">📖 আমাদের সম্পর্কে</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="programs.html" class="nav-mobile-link">🏋️ প্রশিক্ষণ</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="events.html" class="nav-mobile-link">🎉 অনুষ্ঠান</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="library.html" class="nav-mobile-link">📚 পাঠাগার</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="updates.html" class="nav-mobile-link">📢 আপডেট</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="community.html" class="nav-mobile-link">👥 সমিতি</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="gallery.html" class="nav-mobile-link active">🖼️ GALLERY</a>
+            </li>
+        </ul>
+        <div class="nav-mobile-cta">
+            <a href="contact.html" class="btn btn-primary btn-block">যোগাযোগ করুন</a>
+        </div>
+        <div class="nav-mobile-language">
+            <button class="lang-btn" data-lang="bn" title="বাংলা">বাংলা</button>
+            <button class="lang-btn" data-lang="en" title="English">English</button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main id="main-content" class="main-content">
+        
+        <!-- GALLERY HERO SECTION -->
+        <section class="gallery-hero">
+            <div class="container">
+                <h1 class="gallery-hero-title" data-bn="গ্যালারি" data-en="Gallery">গ্যালারি</h1>
+                <p class="gallery-hero-subtitle" data-bn="আমাদের স্মৃতির সংগ্রহ" data-en="Collection of Our Memories">আমাদের স্মৃতির সংগ্রহ</p>
+            </div>
+        </section>
+
+        <!-- GALLERY FILTERS -->
+        <section class="gallery-filters" id="gallery-filters">
+            <div class="container">
+                <div class="filters-wrapper">
+                    <!-- Category Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label" data-bn="বিভাগ" data-en="Category">বিভাগ</label>
+                        <div class="filter-buttons" id="category-filters">
+                            <button class="filter-btn active" data-category="all" data-bn="সব" data-en="All">সব</button>
+                        </div>
+                    </div>
+
+                    <!-- Year Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label" data-bn="বছর" data-en="Year">বছর</label>
+                        <div class="filter-select-wrapper">
+                            <select class="filter-select" id="year-filter">
+                                <option value="all" data-bn="সব বছর" data-en="All Years">সব বছর</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Reset Button -->
+                    <button class="filter-reset-btn" id="reset-filters" data-bn="রিসেট" data-en="Reset">
+                        <span class="reset-icon">↻</span>
+                        রিসেট
+                    </button>
+                </div>
+
+                <!-- Active Filters Display -->
+                <div class="active-filters" id="active-filters"></div>
+
+                <!-- Results Count -->
+                <div class="results-count" id="results-count"></div>
+            </div>
+        </section>
+
+        <!-- GALLERY ALBUMS GRID -->
+        <section class="gallery-albums-section">
+            <div class="container">
+                <div class="gallery-albums-grid" id="gallery-albums-grid">
+                    <!-- Albums will be loaded dynamically -->
+                </div>
+
+                <!-- No Results Message -->
+                <div class="no-results" id="no-results" style="display: none;">
+                    <div class="no-results-icon">📷</div>
+                    <h3 data-bn="কোনো ছবি পাওয়া যায়নি" data-en="No images found">কোনো ছবি পাওয়া যায়নি</h3>
+                    <p data-bn="অন্য ফিল্টার ব্যবহার করে দেখুন" data-en="Try different filters">অন্য ফিল্টার ব্যবহার করে দেখুন</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ALBUM DETAIL VIEW -->
+        <section class="album-detail-section" id="album-detail-section" style="display: none;">
+            <div class="container">
+                <!-- Back Button -->
+                <button class="album-back-btn" id="album-back-btn">
+                    <span class="back-arrow">←</span>
+                    <span data-bn="গ্যালারিতে ফিরুন" data-en="Back to Gallery">গ্যালারিতে ফিরুন</span>
+                </button>
+
+                <!-- Album Header -->
+                <div class="album-detail-header" id="album-detail-header"></div>
+
+                <!-- Featured Image -->
+                <div class="album-featured-image" id="album-featured-image"></div>
+
+                <!-- Media Grid -->
+                <div class="album-media-grid" id="album-media-grid"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+        <div class="lightbox-overlay"></div>
+        <div class="lightbox-container">
+            <button class="lightbox-close" id="lightbox-close" aria-label="Close">×</button>
+            <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous">❮</button>
+            <button class="lightbox-next" id="lightbox-next" aria-label="Next">❯</button>
+            
+            <div class="lightbox-content" id="lightbox-content"></div>
+            
+            <div class="lightbox-info">
+                <p class="lightbox-caption" id="lightbox-caption"></p>
+                <p class="lightbox-counter" id="lightbox-counter"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <img src="../assets/images/common/logo.png" alt="Club Logo" class="footer-logo-image">
+                        <span class="footer-logo-text" id="footer-club-name">Sarberia Pally Seba Samity</span>
+                    </div>
+                    <p class="footer-about" id="footer-about">
+                        ১৯৩৮ সাল থেকে খেলাধুলা ও সংস্কৃতিতে সেবায় নিয়োজিত
+                    </p>
+                    <div class="social-links" id="social-links"></div>
+                </div>
+
+                <div>
+                    <h3 class="footer-section-title">লিংক</h3>
+                    <ul class="footer-links">
+                        <li><a href="../index.html">হোম</a></li>
+                        <li><a href="about.html">আমাদের সম্পর্কে</a></li>
+                        <li><a href="programs.html">প্রশিক্ষণ</a></li>
+                        <li><a href="events.html">অনুষ্ঠান</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="footer-section-title">আরও</h3>
+                    <ul class="footer-links">
+                        <li><a href="library.html">পাঠাগার</a></li>
+                        <li><a href="updates.html">আপডেট</a></li>
+                        <li><a href="community.html">সমিতি</a></li>
+                        <li><a href="gallery.html">গ্যালারি</a></li>
+                        <li><a href="contact.html">যোগাযোগ</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="footer-section-title">যোগাযোগ</h3>
+                    <div id="footer-contact"></div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="footer-copyright">
+                        © <span id="current-year"></span> সারবেরিয়া পল্লী সেবা সমিতি. সর্বস্বত্ব সংরক্ষিত.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button class="back-to-top" id="back-to-top" aria-label="Back to Top">
+        <span class="back-to-top-icon">↑</span>
+    </button>
+
+    <!-- SCRIPTS -->
+    <script src="../js/data-loader.js"></script>
+    <script src="../js/language.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/gallery.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadAllData();
+            initLanguage();
+            initGallery();
+        });
+    </script>
+
+    <!-- FIX: Remove sticky filter on mobile -->
+    <script>
+        (function() {
+            var filters = document.getElementById('gallery-filters');
+            
+            function fixMobileSticky() {
+                if (window.innerWidth <= 768) {
+                    // Mobile: Remove sticky, allow scroll away
+                    filters.style.position = 'static';
+                    filters.style.top = 'auto';
+                } else {
+                    // Desktop: Keep sticky
+                    filters.style.position = 'sticky';
+                    filters.style.top = '70px';
+                }
+            }
+            
+            // Run immediately
+            fixMobileSticky();
+            
+            // Run on resize
+            window.addEventListener('resize', fixMobileSticky);
+            
+            // Run again after page fully loads
+            window.addEventListener('load', fixMobileSticky);
+        })();
+    </script>
+</body>
+</html>

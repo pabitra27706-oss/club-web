@@ -1,0 +1,439 @@
+{
+    "categories": [
+        {
+            "id": "durga-puja",
+            "name": {
+                "bn": "দুর্গা পূজা",
+                "en": "Durga Puja"
+            },
+            "icon": "🙏",
+            "coverImage": "assets/images/gallery/durga-puja/cover.jpg"
+        },
+        {
+            "id": "annual-events",
+            "name": {
+                "bn": "বার্ষিক অনুষ্ঠান",
+                "en": "Annual Events"
+            },
+            "icon": "🎉",
+            "coverImage": "assets/images/gallery/annual-events/cover.jpg"
+        },
+        {
+            "id": "sports",
+            "name": {
+                "bn": "খেলাধুলা",
+                "en": "Sports"
+            },
+            "icon": "⚽",
+            "coverImage": "assets/images/gallery/sports/cover.jpg"
+        },
+        {
+            "id": "karate",
+            "name": {
+                "bn": "ক্যারাটে",
+                "en": "Karate"
+            },
+            "icon": "🥋",
+            "coverImage": "assets/images/gallery/karate/cover.jpg"
+        },
+        {
+            "id": "gym",
+            "name": {
+                "bn": "জিম",
+                "en": "Gym"
+            },
+            "icon": "🏋️",
+            "coverImage": "assets/images/gallery/gym/cover.jpg"
+        },
+        {
+            "id": "library",
+            "name": {
+                "bn": "পাঠাগার",
+                "en": "Library"
+            },
+            "icon": "📚",
+            "coverImage": "assets/images/gallery/library/cover.jpg"
+        },
+        {
+            "id": "cultural",
+            "name": {
+                "bn": "সাংস্কৃতিক অনুষ্ঠান",
+                "en": "Cultural Programs"
+            },
+            "icon": "🎭",
+            "coverImage": "assets/images/gallery/cultural/cover.jpg"
+        },
+        {
+            "id": "others",
+            "name": {
+                "bn": "অন্যান্য",
+                "en": "Others"
+            },
+            "icon": "📷",
+            "coverImage": "assets/images/gallery/others/cover.jpg"
+        }
+    ],
+    
+    "years": [2024, 2023, 2022, 2021, 2020, 2019, 2018],
+    
+    "albums": [
+        {
+            "id": "durga-puja-2024",
+            "category": "durga-puja",
+            "year": 2024,
+            "title": {
+                "bn": "দুর্গা পূজা ২০২৪",
+                "en": "Durga Puja 2024"
+            },
+            "description": {
+                "bn": "এ বছরের দুর্গা পূজার স্মরণীয় মুহূর্তগুলো",
+                "en": "Memorable moments from this year's Durga Puja celebration"
+            },
+            "date": "2024-10-09",
+            "featuredImage": "assets/images/gallery/durga-puja/2024/main.jpg",
+            "images": [
+                {
+                    "src": "assets/images/gallery/durga-puja/2024/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-01.jpg",
+                    "caption": {
+                        "bn": "প্রতিমা",
+                        "en": "The Idol"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/durga-puja/2024/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-02.jpg",
+                    "caption": {
+                        "bn": "আরতি",
+                        "en": "Aarti Ceremony"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/durga-puja/2024/img-03.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-03.jpg",
+                    "caption": {
+                        "bn": "পুষ্পাঞ্জলি",
+                        "en": "Pushpanjali"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/durga-puja/2024/img-04.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-04.jpg",
+                    "caption": {
+                        "bn": "সন্ধ্যা আরতি",
+                        "en": "Evening Aarti"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/durga-puja/2024/img-05.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-05.jpg",
+                    "caption": {
+                        "bn": "বিসর্জন",
+                        "en": "Visarjan"
+                    }
+                }
+            ],
+            "videos": [
+                {
+                    "src": "assets/videos/gallery/durga-puja/2024/dhak.mp4",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/video-thumb-01.jpg",
+                    "caption": {
+                        "bn": "ঢাকের বাদ্য",
+                        "en": "Dhak Performance"
+                    },
+                    "duration": "2:30"
+                }
+            ]
+        },
+        {
+            "id": "durga-puja-2023",
+            "category": "durga-puja",
+            "year": 2023,
+            "title": {
+                "bn": "দুর্গা পূজা ২০২৩",
+                "en": "Durga Puja 2023"
+            },
+            "description": {
+                "bn": "২০২৩ সালের দুর্গা পূজার আলোকচিত্র",
+                "en": "Photo collection from Durga Puja 2023"
+            },
+            "date": "2023-10-20",
+            "featuredImage": "assets/images/gallery/durga-puja/2023/main.jpg",
+            "images": [
+                {
+                    "src": "assets/images/gallery/durga-puja/2023/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2023/thumb/img-01.jpg",
+                    "caption": {
+                        "bn": "প্রতিমা ২০২৩",
+                        "en": "The Idol 2023"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/durga-puja/2023/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2023/thumb/img-02.jpg",
+                    "caption": {
+                        "bn": "সন্ধ্যা আলো",
+                        "en": "Evening Lights"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/durga-puja/2023/img-03.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2023/thumb/img-03.jpg",
+                    "caption": {
+                        "bn": "ভক্তরা",
+                        "en": "Devotees"
+                    }
+                }
+            ],
+            "videos": []
+        },
+        {
+            "id": "annual-sports-2024",
+            "category": "sports",
+            "year": 2024,
+            "title": {
+                "bn": "বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৪",
+                "en": "Annual Sports Meet 2024"
+            },
+            "description": {
+                "bn": "বার্ষিক ক্রীড়া প্রতিযোগিতার রোমাঞ্চকর মুহূর্ত",
+                "en": "Exciting moments from our annual sports competition"
+            },
+            "date": "2024-01-26",
+            "featuredImage": "assets/images/gallery/sports/2024/main.jpg",
+            "images": [
+                {
+                    "src": "assets/images/gallery/sports/2024/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/sports/2024/thumb/img-01.jpg",
+                    "caption": {
+                        "bn": "উদ্বোধনী অনুষ্ঠান",
+                        "en": "Opening Ceremony"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/sports/2024/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/sports/2024/thumb/img-02.jpg",
+                    "caption": {
+                        "bn": "ফুটবল ম্যাচ",
+                        "en": "Football Match"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/sports/2024/img-03.jpg",
+                    "thumbnail": "assets/images/gallery/sports/2024/thumb/img-03.jpg",
+                    "caption": {
+                        "bn": "পুরস্কার বিতরণ",
+                        "en": "Prize Distribution"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/sports/2024/img-04.jpg",
+                    "thumbnail": "assets/images/gallery/sports/2024/thumb/img-04.jpg",
+                    "caption": {
+                        "bn": "বিজয়ী দল",
+                        "en": "Winning Team"
+                    }
+                }
+            ],
+            "videos": [
+                {
+                    "src": "assets/videos/gallery/sports/2024/highlights.mp4",
+                    "thumbnail": "assets/images/gallery/sports/2024/video-thumb-01.jpg",
+                    "caption": {
+                        "bn": "হাইলাইটস",
+                        "en": "Highlights"
+                    },
+                    "duration": "5:45"
+                }
+            ]
+        },
+        {
+            "id": "karate-championship-2024",
+            "category": "karate",
+            "year": 2024,
+            "title": {
+                "bn": "ক্যারাটে চ্যাম্পিয়নশিপ ২০২৪",
+                "en": "Karate Championship 2024"
+            },
+            "description": {
+                "bn": "জেলা স্তরের ক্যারাটে প্রতিযোগিতা",
+                "en": "District level karate competition"
+            },
+            "date": "2024-03-15",
+            "featuredImage": "assets/images/gallery/karate/2024/main.jpg",
+            "images": [
+                {
+                    "src": "assets/images/gallery/karate/2024/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/karate/2024/thumb/img-01.jpg",
+                    "caption": {
+                        "bn": "কাতা প্রদর্শন",
+                        "en": "Kata Performance"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/karate/2024/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/karate/2024/thumb/img-02.jpg",
+                    "caption": {
+                        "bn": "কুমিতে",
+                        "en": "Kumite"
+                    }
+                }
+            ],
+            "videos": []
+        },
+        {
+            "id": "gym-inauguration-2023",
+            "category": "gym",
+            "year": 2023,
+            "title": {
+                "bn": "নতুন জিম উদ্বোধন",
+                "en": "New Gym Inauguration"
+            },
+            "description": {
+                "bn": "আধুনিক যন্ত্রপাতি সহ নতুন জিমের উদ্বোধন",
+                "en": "Inauguration of new gym with modern equipment"
+            },
+            "date": "2023-06-01",
+            "featuredImage": "assets/images/gallery/gym/2023/main.jpg",
+            "images": [
+                {
+                    "src": "assets/images/gallery/gym/2023/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/gym/2023/thumb/img-01.jpg",
+                    "caption": {
+                        "bn": "উদ্বোধনী ফিতা কাটা",
+                        "en": "Ribbon Cutting"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/gym/2023/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/gym/2023/thumb/img-02.jpg",
+                    "caption": {
+                        "bn": "আধুনিক যন্ত্রপাতি",
+                        "en": "Modern Equipment"
+                    }
+                }
+            ],
+            "videos": []
+        },
+        {
+            "id": "cultural-program-2024",
+            "category": "cultural",
+            "year": 2024,
+            "title": {
+                "bn": "সাংস্কৃতিক সন্ধ্যা ২০২৪",
+                "en": "Cultural Evening 2024"
+            },
+            "description": {
+                "bn": "বার্ষিক সাংস্কৃতিক অনুষ্ঠান",
+                "en": "Annual cultural program"
+            },
+            "date": "2024-02-21",
+            "featuredImage": "assets/images/gallery/cultural/2024/main.jpg",
+            "images": [
+                {
+                    "src": "assets/images/gallery/cultural/2024/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/cultural/2024/thumb/img-01.jpg",
+                    "caption": {
+                        "bn": "নৃত্য পরিবেশনা",
+                        "en": "Dance Performance"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/cultural/2024/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/cultural/2024/thumb/img-02.jpg",
+                    "caption": {
+                        "bn": "সংগীত পরিবেশনা",
+                        "en": "Music Performance"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/cultural/2024/img-03.jpg",
+                    "thumbnail": "assets/images/gallery/cultural/2024/thumb/img-03.jpg",
+                    "caption": {
+                        "bn": "নাটক",
+                        "en": "Drama"
+                    }
+                }
+            ],
+            "videos": [
+                {
+                    "src": "assets/videos/gallery/cultural/2024/rabindra-sangeet.mp4",
+                    "thumbnail": "assets/images/gallery/cultural/2024/video-thumb-01.jpg",
+                    "caption": {
+                        "bn": "রবীন্দ্র সংগীত",
+                        "en": "Rabindra Sangeet"
+                    },
+                    "duration": "4:20"
+                }
+            ]
+        },
+        {
+            "id": "library-event-2024",
+            "category": "library",
+            "year": 2024,
+            "title": {
+                "bn": "বই উৎসব ২০২৪",
+                "en": "Book Festival 2024"
+            },
+            "description": {
+                "bn": "পাঠাগারে বই উৎসব ও পাঠচক্র",
+                "en": "Book festival and reading circle at library"
+            },
+            "date": "2024-04-23",
+            "featuredImage": "assets/images/gallery/library/2024/main.jpg",
+            "images": [
+                {
+                    "src": "assets/images/gallery/library/2024/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/library/2024/thumb/img-01.jpg",
+                    "caption": {
+                        "bn": "বই প্রদর্শনী",
+                        "en": "Book Exhibition"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/library/2024/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/library/2024/thumb/img-02.jpg",
+                    "caption": {
+                        "bn": "পাঠচক্র",
+                        "en": "Reading Circle"
+                    }
+                }
+            ],
+            "videos": []
+        },
+        {
+            "id": "annual-meeting-2024",
+            "category": "annual-events",
+            "year": 2024,
+            "title": {
+                "bn": "বার্ষিক সাধারণ সভা ২০২৪",
+                "en": "Annual General Meeting 2024"
+            },
+            "description": {
+                "bn": "ক্লাবের বার্ষিক সাধারণ সভা",
+                "en": "Club's annual general meeting"
+            },
+            "date": "2024-01-01",
+            "featuredImage": "assets/images/gallery/annual-events/2024/main.jpg",
+            "images": [
+                {
+                    "src": "assets/images/gallery/annual-events/2024/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/annual-events/2024/thumb/img-01.jpg",
+                    "caption": {
+                        "bn": "সভাস্থল",
+                        "en": "Meeting Venue"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/annual-events/2024/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/annual-events/2024/thumb/img-02.jpg",
+                    "caption": {
+                        "bn": "সদস্যবৃন্দ",
+                        "en": "Members"
+                    }
+                }
+            ],
+            "videos": []
+        }
+    ]
+}
