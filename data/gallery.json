@@ -87,47 +87,47 @@
     
     "albums": [
         {
-            "id": "durga-puja-2024",
+            "id": "durga-puja-2025",
             "category": "durga-puja",
-            "year": 2024,
+            "year": 2025,
             "title": {
                 "bn": "দুর্গা পূজা ২০২৪",
-                "en": "Durga Puja 2024"
+                "en": "Durga Puja 2025"
             },
             "description": {
                 "bn": "এ বছরের দুর্গা পূজার স্মরণীয় মুহূর্তগুলো",
                 "en": "Memorable moments from this year's Durga Puja celebration"
             },
-            "date": "2024-10-09",
-            "featuredImage": "assets/images/gallery/durga-puja/2024/main.jpg",
+            "date": "2025-09-28",
+            "featuredImage": "assets/images/gallery/durga-puja/2025/main.jpg",
             "images": [
                 {
-                    "src": "assets/images/gallery/durga-puja/2024/img-01.jpg",
-                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-01.jpg",
+                    "src": "assets/images/gallery/durga-puja/2025/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2025/thumb/img-01.jpg",
                     "caption": {
                         "bn": "প্রতিমা",
                         "en": "The Idol"
                     }
                 },
                 {
-                    "src": "assets/images/gallery/durga-puja/2024/img-02.jpg",
-                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-02.jpg",
+                    "src": "assets/images/gallery/durga-puja/2025/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2025/thumb/img-02.jpg",
                     "caption": {
                         "bn": "আরতি",
                         "en": "Aarti Ceremony"
                     }
                 },
                 {
-                    "src": "assets/images/gallery/durga-puja/2024/img-03.jpg",
-                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-03.jpg",
+                    "src": "assets/images/gallery/durga-puja/2025/img-03.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2026/thumb/img-03.jpg",
                     "caption": {
                         "bn": "পুষ্পাঞ্জলি",
                         "en": "Pushpanjali"
                     }
                 },
                 {
-                    "src": "assets/images/gallery/durga-puja/2024/img-04.jpg",
-                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-04.jpg",
+                    "src": "assets/images/gallery/durga-puja/2025/img-04.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2025/thumb/img-04.jpg",
                     "caption": {
                         "bn": "সন্ধ্যা আরতি",
                         "en": "Evening Aarti"
@@ -140,47 +140,47 @@
             
         },
         {
-            "id": "saraswati-puja-2024",
+            "id": "saraswati-puja-2026",
             "category": "saraswati-puja",
             "year": 2024,
             "title": {
-                "bn": "সরস্বতী পূজা ২০২৪",
-                "en": "saraswati Puja 2024"
+                "bn": "সরস্বতী পূজা ২০২৬",
+                "en": "saraswati Puja 2026"
             },
             "description": {
                 "bn": "এ বছরের সরস্বতী পূজার স্মরণীয় মুহূর্তগুলো",
                 "en": "Memorable moments from this year's saraswati Puja celebration"
             },
-            "date": "2024-10-09",
-            "featuredImage": "assets/images/gallery/saraswati-puja/2024/main.jpg",
+            "date": "2026-01-23",
+            "featuredImage": "assets/images/gallery/saraswati-puja/2026/main.jpg",
             "images": [
                 {
-                    "src": "assets/images/gallery/saraswati-puja/2024/img-01.jpg",
-                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-01.jpg",
+                    "src": "assets/images/gallery/saraswati-puja/2026/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/saraswati-puja/2026/thumb/img-01.jpg",
                     "caption": {
                         "bn": "প্রতিমা",
                         "en": "The Idol"
                     }
                 },
                 {
-                    "src": "assets/images/gallery/saraswati-puja/2024/img-02.jpg",
-                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-02.jpg",
+                    "src": "assets/images/gallery/saraswati-puja/2026/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/saraswati-puja/2026/thumb/img-02.jpg",
                     "caption": {
                         "bn": "আরতি",
                         "en": "Aarti Ceremony"
                     }
                 },
                 {
-                    "src": "assets/images/gallery/saraswati-puja/2024/img-03.jpg",
-                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-03.jpg",
+                    "src": "assets/images/gallery/saraswati-puja/2026/img-03.jpg",
+                    "thumbnail": "assets/images/gallery/saraswati-puja/2026/thumb/img-03.jpg",
                     "caption": {
                         "bn": "পুষ্পাঞ্জলি",
                         "en": "Pushpanjali"
                     }
                 },
                 {
-                    "src": "assets/images/gallery/saraswati-puja/2024/img-04.jpg",
-                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-04.jpg",
+                    "src": "assets/images/gallery/saraswati-puja/2026/img-04.jpg",
+                    "thumbnail": "assets/images/gallery/saraswati-puja/2026/thumb/img-04.jpg",
                     "caption": {
                         "bn": "সন্ধ্যা আরতি",
                         "en": "Evening Aarti"
