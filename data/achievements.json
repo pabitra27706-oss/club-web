@@ -1,0 +1,68 @@
+{
+    "images": [
+        {
+            "year": 2024,
+            "title": {
+                "bn": "খুঁটি পুজা ও ব্যানার উন্মোচন 2025",
+                "en": "Best Idol - First Prize"
+            },
+            "image": "assets/images/achievements/2024-1.jpg"
+        },
+        {
+            "year": 2024,
+            "title": {
+                "bn": "সংবাদপত্রে প্রকাশিত",
+                "en": "Published in Newspaper"
+            },
+            "image": "assets/images/achievements/2024-2.jpg"
+        },
+        {
+            "year": 2023,
+            "title": {
+                "bn": "শ্রেষ্ঠ মণ্ডপ পুরস্কার",
+                "en": "Best Pandal Award"
+            },
+            "image": "assets/images/achievements/2023-1.jpg"
+        },
+        {
+            "year": 2023,
+            "title": {
+                "bn": "জেলা স্তরে সম্মাননা",
+                "en": "District Level Recognition"
+            },
+            "image": "assets/images/achievements/2023-2.jpg"
+        },
+        {
+            "year": 2022,
+            "title": {
+                "bn": "শ্রেষ্ঠ সাজসজ্জা",
+                "en": "Best Decoration"
+            },
+            "image": "assets/images/achievements/2022-1.jpg"
+        },
+        {
+            "year": 2022,
+            "title": {
+                "bn": "সংবাদপত্রের কাটিং",
+                "en": "Newspaper Clipping"
+            },
+            "image": "assets/images/achievements/2022-2.jpg"
+        },
+        {
+            "year": 2021,
+            "title": {
+                "bn": "বিশেষ সম্মাননা",
+                "en": "Special Recognition"
+            },
+            "image": "assets/images/achievements/2021-1.jpg"
+        },
+        {
+            "year": 2019,
+            "title": {
+                "bn": "রাজ্য স্তরে পুরস্কার",
+                "en": "State Level Award"
+            },
+            "image": "assets/images/achievements/2019-1.jpg"
+        }
+    ]
+}

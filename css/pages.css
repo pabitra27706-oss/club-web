@@ -1234,3 +1234,206 @@
         grid-template-columns: 1fr;
     }
 }
+/* ==========================================
+   ACHIEVEMENTS PREVIEW (Homepage)
+   ========================================== */
+.achievements-preview-section {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    padding: 4rem 0;
+}
+
+.achievements-preview-section .section-title,
+.achievements-preview-section .section-subtitle {
+    color: #fff;
+}
+
+.achievements-preview-section .section-subtitle {
+    opacity: 0.85;
+}
+
+.achievements-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.achievement-preview-card {
+    display: block;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.achievement-preview-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px);
+    border-color: #b8860b;
+}
+
+.achievement-preview-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-preview-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.achievement-preview-card:hover .achievement-preview-image img {
+    transform: scale(1.05);
+}
+
+.achievement-preview-year {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: #b8860b;
+    color: #fff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.achievement-preview-content {
+    padding: 1rem;
+}
+
+.achievement-preview-title {
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Gallery Preview Grid */
+.gallery-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.gallery-preview-card {
+    display: block;
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.gallery-preview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.gallery-preview-image {
+    position: relative;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+}
+
+.gallery-preview-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.gallery-preview-card:hover .gallery-preview-image img {
+    transform: scale(1.1);
+}
+
+.gallery-preview-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 95, 122, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-preview-card:hover .gallery-preview-overlay {
+    opacity: 1;
+}
+
+.gallery-preview-icon {
+    font-size: 2.5rem;
+    color: var(--white);
+}
+
+.gallery-preview-content {
+    padding: 1.25rem;
+}
+
+.gallery-preview-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.gallery-preview-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .achievements-preview-grid,
+    .gallery-preview-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .achievement-preview-content,
+    .gallery-preview-content {
+        padding: 0.875rem;
+    }
+    
+    .achievement-preview-title {
+        font-size: 0.85rem;
+    }
+    
+    .gallery-preview-title {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .achievements-preview-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+    
+    .gallery-preview-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .achievement-preview-year {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.5rem;
+    }
+    
+    .achievement-preview-title {
+        font-size: 0.8rem;
+    }
+}
