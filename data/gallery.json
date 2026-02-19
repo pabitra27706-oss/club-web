@@ -91,7 +91,7 @@
             "category": "durga-puja",
             "year": 2025,
             "title": {
-                "bn": "দুর্গা পূজা ২০২৪",
+                "bn": "দুর্গা পূজা ২০২৫",
                 "en": "Durga Puja 2025"
             },
             "description": {
@@ -193,44 +193,62 @@
             
         },
         {
-            "id": "durga-puja-2023",
+            "id": "durga-puja-2024",
             "category": "durga-puja",
-            "year": 2023,
+            "year": 2024,
             "title": {
-                "bn": "দুর্গা পূজা ২০২৩",
-                "en": "Durga Puja 2023"
+                "bn": "দুর্গা পূজা ২০২৪",
+                "en": "Durga Puja 2024"
             },
             "description": {
-                "bn": "২০২৩ সালের দুর্গা পূজার আলোকচিত্র",
-                "en": "Photo collection from Durga Puja 2023"
+                "bn": "২০২৪ সালের দুর্গা পূজার আলোকচিত্র",
+                "en": "Photo collection from Durga Puja 2024"
             },
-            "date": "2023-10-20",
-            "featuredImage": "assets/images/gallery/durga-puja/2023/main.jpg",
+            "date": "2024-10-09",
+            "featuredImage": "assets/images/gallery/durga-puja/2024/main.jpg",
             "images": [
                 {
-                    "src": "assets/images/gallery/durga-puja/2023/img-01.jpg",
-                    "thumbnail": "assets/images/gallery/durga-puja/2023/thumb/img-01.jpg",
+                    "src": "assets/images/gallery/durga-puja/2024/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-01.jpg",
                     "caption": {
-                        "bn": "প্রতিমা ২০২৩",
-                        "en": "The Idol 2023"
+                        "bn": "প্রতিমা ২০২৪",
+                        "en": "The Idol 2024"
                     }
                 },
                 {
-                    "src": "assets/images/gallery/durga-puja/2023/img-02.jpg",
-                    "thumbnail": "assets/images/gallery/durga-puja/2023/thumb/img-02.jpg",
+                    "src": "assets/images/gallery/durga-puja/2024/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-02.jpg",
                     "caption": {
                         "bn": "সন্ধ্যা আলো",
                         "en": "Evening Lights"
                     }
                 },
                 {
-                    "src": "assets/images/gallery/durga-puja/2023/img-03.jpg",
-                    "thumbnail": "assets/images/gallery/durga-puja/2023/thumb/img-03.jpg",
+                    "src": "assets/images/gallery/durga-puja/2024/img-03.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-03.jpg",
                     "caption": {
                         "bn": "ভক্তরা",
                         "en": "Devotees"
                     }
+                },
+                {
+                    "src": "assets/images/gallery/durga-puja/2024/img-04.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-04.jpg",
+                    "caption": {
+                        "bn": "প্রতিমা ২০২৪",
+                        "en": "The Idol 2024"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/durga-puja/2024/img-05.jpg",
+                    "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-05.jpg",
+                    "caption": {
+                        "bn": "প্রতিমা ২০২৪",
+                        "en": "The Idol 2024"
+                    }
                 }
+                
+               
             ],
             "videos": []
         },
