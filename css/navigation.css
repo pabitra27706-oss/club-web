@@ -747,3 +747,14 @@ body.menu-open {
     background-color: var(--color-primary);
     color: var(--color-white);
 }
+/* Ensure all mobile menu items are visible */
+.nav-mobile {
+    max-height: calc(100vh - var(--header-height-mobile));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.nav-mobile-list {
+    max-height: none;
+    overflow: visible;
+}
