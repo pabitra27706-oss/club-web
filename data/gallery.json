@@ -192,15 +192,8 @@
                         "bn": "সন্ধ্যা আরতি",
                         "en": "Evening Aarti"
                     }
-                },
-                {
-                    "src": "assets/images/gallery/saraswati-puja/2024/img-05.jpg",
-                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-05.jpg",
-                    "caption": {
-                        "bn": "বিসর্জন",
-                        "en": "Visarjan"
-                    }
                 }
+               
             ],
             "videos": [ ]
                 
