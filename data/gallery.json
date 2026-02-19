@@ -133,17 +133,9 @@
                     }
                 }
             ],
-            "videos": [
-                {
-                    "src": "assets/videos/gallery/durga-puja/2024/dhak.mp4",
-                    "thumbnail": "assets/images/gallery/durga-puja/2024/video-thumb-01.jpg",
-                    "caption": {
-                        "bn": "ঢাকের বাদ্য",
-                        "en": "Dhak Performance"
-                    },
-                    "duration": "2:30"
-                }
-            ]
+            "videos": [ ]
+                
+            
         },
         {
             "id": "durga-puja-2023",
