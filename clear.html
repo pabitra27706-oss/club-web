@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Clear Cache - Sarberia Pally Seba Samity</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            text-align: left;
+            border-radius: 8px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .info-box p {
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .info-box ul {
+            margin-top: 0.5rem;
+            margin-left: 1.5rem;
+        }
+
+        .info-box li {
+            color: #555;
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+            min-width: 150px;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .progress {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .progress.show {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: progress 2s ease-in-out;
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        .checklist {
+            text-align: left;
+            margin-top: 2rem;
+        }
+
+        .checklist-item {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item.done {
+            background: #d4edda;
+        }
+
+        .checklist-item .check {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item.done .check {
+            background: #27ae60;
+            border-color: #27ae60;
+            color: white;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .icon {
+                font-size: 4rem;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon" id="icon">🔄</div>
+        <h1>Clear Cache & Data</h1>
+        <p class="subtitle">Clear all cached data for fresh loading</p>
+
+        <div class="info-box">
+            <h3>📋 What will be cleared:</h3>
+            <ul>
+                <li>Browser cache</li>
+                <li>LocalStorage data</li>
+                <li>SessionStorage data</li>
+                <li>Service Worker cache</li>
+                <li>Cookies (optional)</li>
+            </ul>
+        </div>
+
+        <div class="checklist" id="checklist" style="display: none;">
+            <div class="checklist-item" id="check-storage">
+                <div class="check"></div>
+                <span>Clearing Storage...</span>
+            </div>
+            <div class="checklist-item" id="check-cache">
+                <div class="check"></div>
+                <span>Clearing Cache...</span>
+            </div>
+            <div class="checklist-item" id="check-sw">
+                <div class="check"></div>
+                <span>Unregistering Service Workers...</span>
+            </div>
+            <div class="checklist-item" id="check-cookies">
+                <div class="check"></div>
+                <span>Clearing Cookies...</span>
+            </div>
+        </div>
+
+        <div class="progress" id="progress">
+            <div class="progress-bar"></div>
+        </div>
+
+        <div id="buttons">
+            <button class="btn" onclick="clearCacheSoft()">🧹 Clear Cache</button>
+            <button class="btn btn-danger" onclick="clearCacheFull()">🔥 Deep Clean</button>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+
+    <script>
+        // Soft Clear (No cookies)
+        async function clearCacheSoft() {
+            showProgress();
+            
+            try {
+                // Clear localStorage
+                await delay(300);
+                localStorage.clear();
+                markDone('check-storage');
+                
+                // Clear sessionStorage
+                sessionStorage.clear();
+                
+                // Clear cache
+                await delay(300);
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                }
+                markDone('check-cache');
+                
+                // Unregister service workers
+                await delay(300);
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(registrations.map(reg => reg.unregister()));
+                }
+                markDone('check-sw');
+                
+                await delay(500);
+                showSuccess('Cache cleared successfully! 🎉');
+                
+                setTimeout(() => {
+                    if (confirm('Cache cleared! Reload page now?')) {
+                        window.location.href = 'index.html?v=' + Date.now();
+                    }
+                }, 1500);
+                
+            } catch (error) {
+                showError('Error: ' + error.message);
+            }
+        }
+
+        // Full Clear (Including cookies)
+        async function clearCacheFull() {
+            if (!confirm('⚠️ This will clear ALL data including cookies. Continue?')) {
+                return;
+            }
+            
+            showProgress();
+            
+            try {
+                // Clear localStorage
+                await delay(300);
+                localStorage.clear();
+                markDone('check-storage');
+                
+                // Clear sessionStorage
+                sessionStorage.clear();
+                
+                // Clear cache
+                await delay(300);
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                }
+                markDone('check-cache');
+                
+                // Unregister service workers
+                await delay(300);
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(registrations.map(reg => reg.unregister()));
+                }
+                markDone('check-sw');
+                
+                // Clear cookies
+                await delay(300);
+                clearCookies();
+                markDone('check-cookies');
+                
+                // Clear IndexedDB
+                if ('indexedDB' in window) {
+                    const dbs = await indexedDB.databases();
+                    dbs.forEach(db => indexedDB.deleteDatabase(db.name));
+                }
+                
+                await delay(500);
+                showSuccess('Deep clean complete! 🔥');
+                
+                setTimeout(() => {
+                    if (confirm('All data cleared! Reload page now?')) {
+                        window.location.href = 'index.html?v=' + Date.now();
+                    }
+                }, 1500);
+                
+            } catch (error) {
+                showError('Error: ' + error.message);
+            }
+        }
+
+        function clearCookies() {
+            const cookies = document.cookie.split(';');
+            cookies.forEach(cookie => {
+                const [name] = cookie.split('=');
+                document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            });
+        }
+
+        function showProgress() {
+            document.getElementById('buttons').style.display = 'none';
+            document.getElementById('checklist').style.display = 'block';
+            document.getElementById('progress').classList.add('show');
+            document.getElementById('icon').textContent = '⏳';
+            
+            // Reset checklist
+            document.querySelectorAll('.checklist-item').forEach(item => {
+                item.classList.remove('done');
+                item.querySelector('.check').textContent = '';
+            });
+        }
+
+        function markDone(id) {
+            const item = document.getElementById(id);
+            item.classList.add('done');
+            item.querySelector('.check').textContent = '✓';
+        }
+
+        function showSuccess(message) {
+            const status = document.getElementById('status');
+            status.className = 'status success show';
+            status.textContent = message;
+            document.getElementById('icon').textContent = '✅';
+            document.getElementById('progress').classList.remove('show');
+        }
+
+        function showError(message) {
+            const status = document.getElementById('status');
+            status.className = 'status warning show';
+            status.textContent = message;
+            document.getElementById('icon').textContent = '⚠️';
+            document.getElementById('progress').classList.remove('show');
+            document.getElementById('buttons').style.display = 'block';
+            document.getElementById('checklist').style.display = 'none';
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // Show cache size (if supported)
+        if ('storage' in navigator && 'estimate' in navigator.storage) {
+            navigator.storage.estimate().then(estimate => {
+                const used = (estimate.usage / 1024 / 1024).toFixed(2);
+                const quota = (estimate.quota / 1024 / 1024).toFixed(2);
+                console.log(`Storage: ${used}MB / ${quota}MB used`);
+            });
+        }
+    </script>
+</body>
+</html>
