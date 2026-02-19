@@ -10,6 +10,15 @@
             "coverImage": "assets/images/gallery/durga-puja/cover.jpg"
         },
         {
+            "id": "saraswati-puja",
+            "name": {
+                "bn": "সরস্বতী পূজা",
+                "en": "Saraswati Puja"
+            },
+            "icon": "🙏",
+            "coverImage": "assets/images/gallery/saraswati-puja/cover.jpg"
+        },
+        {
             "id": "annual-events",
             "name": {
                 "bn": "বার্ষিক অনুষ্ঠান",
@@ -127,6 +136,66 @@
                 {
                     "src": "assets/images/gallery/durga-puja/2024/img-05.jpg",
                     "thumbnail": "assets/images/gallery/durga-puja/2024/thumb/img-05.jpg",
+                    "caption": {
+                        "bn": "বিসর্জন",
+                        "en": "Visarjan"
+                    }
+                }
+            ],
+            "videos": [ ]
+                
+            
+        },
+        {
+            "id": "saraswati-puja-2024",
+            "category": "saraswati-puja",
+            "year": 2024,
+            "title": {
+                "bn": "সরস্বতী পূজা ২০২৪",
+                "en": "saraswati Puja 2024"
+            },
+            "description": {
+                "bn": "এ বছরের সরস্বতী পূজার স্মরণীয় মুহূর্তগুলো",
+                "en": "Memorable moments from this year's saraswati Puja celebration"
+            },
+            "date": "2024-10-09",
+            "featuredImage": "assets/images/gallery/saraswati-puja/2024/main.jpg",
+            "images": [
+                {
+                    "src": "assets/images/gallery/saraswati-puja/2024/img-01.jpg",
+                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-01.jpg",
+                    "caption": {
+                        "bn": "প্রতিমা",
+                        "en": "The Idol"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/saraswati-puja/2024/img-02.jpg",
+                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-02.jpg",
+                    "caption": {
+                        "bn": "আরতি",
+                        "en": "Aarti Ceremony"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/saraswati-puja/2024/img-03.jpg",
+                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-03.jpg",
+                    "caption": {
+                        "bn": "পুষ্পাঞ্জলি",
+                        "en": "Pushpanjali"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/saraswati-puja/2024/img-04.jpg",
+                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-04.jpg",
+                    "caption": {
+                        "bn": "সন্ধ্যা আরতি",
+                        "en": "Evening Aarti"
+                    }
+                },
+                {
+                    "src": "assets/images/gallery/saraswati-puja/2024/img-05.jpg",
+                    "thumbnail": "assets/images/gallery/saraswati-puja/2024/thumb/img-05.jpg",
                     "caption": {
                         "bn": "বিসর্জন",
                         "en": "Visarjan"
