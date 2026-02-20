@@ -313,40 +313,6 @@
             ]
         },
         {
-            "id": "karate-championship-2024",
-            "category": "karate",
-            "year": 2024,
-            "title": {
-                "bn": "ক্যারাটে চ্যাম্পিয়নশিপ ২০২৪",
-                "en": "Karate Championship 2024"
-            },
-            "description": {
-                "bn": "জেলা স্তরের ক্যারাটে প্রতিযোগিতা",
-                "en": "District level karate competition"
-            },
-            "date": "2024-03-15",
-            "featuredImage": "assets/images/gallery/karate/2024/main.jpg",
-            "images": [
-                {
-                    "src": "assets/images/gallery/karate/2024/img-01.jpg",
-                    "thumbnail": "assets/images/gallery/karate/2024/thumb/img-01.jpg",
-                    "caption": {
-                        "bn": "কাতা প্রদর্শন",
-                        "en": "Kata Performance"
-                    }
-                },
-                {
-                    "src": "assets/images/gallery/karate/2024/img-02.jpg",
-                    "thumbnail": "assets/images/gallery/karate/2024/thumb/img-02.jpg",
-                    "caption": {
-                        "bn": "কুমিতে",
-                        "en": "Kumite"
-                    }
-                }
-            ],
-            "videos": []
-        },
-        {
             "id": "gym-inauguration-2023",
             "category": "gym",
             "year": 2023,
