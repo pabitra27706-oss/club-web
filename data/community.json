@@ -7,7 +7,7 @@
       },
       "name": "ডাঃ সুকুমার সাহা",
       "photo": "assets/images/common/president.jpg",
-      "phone": "+91 98300 11111",
+      "phone": "+91 97755 18114",
       "order": 1
     },
     {
@@ -17,7 +17,7 @@
       },
       "name": "সুশান্ত ঘোষ",
       "photo": "assets/images/common/secretary.jpg",
-      "phone": "+91 98300 22222",
+      "phone": "+91 97755 18114",
       "order": 2
     },
     {
@@ -25,10 +25,70 @@
         "bn": "কোষাধ্যক্ষ",
         "en": "Treasurer"
       },
-      "name": "শ্রী সুব্রত দাস",
+      "name": "শ্রী তিলক সাহা",
       "photo": "assets/images/common/treasurer.jpg",
-      "phone": "+91 98300 33333",
+      "phone": "+91 97755 18114",
       "order": 3
+    },
+    {
+      "role": {
+        "bn": "সাংস্কৃতিক সম্পাদক",
+        "en": "cultural secretary"
+      },
+      "name": "শ্রী শম্ভু নাথ সাহা",
+      "photo": "assets/images/common/cs1.jpg",
+      "phone": "+91 97755 18114",
+      "order": 4
+    },
+    {
+      "role": {
+        "bn": "সাংস্কৃতিক সম্পাদক",
+        "en": "cultural secretary"
+      },
+      "name": "শ্রী পুলক সাহা",
+      "photo": "assets/images/common/cs2.jpg",
+      "phone": "+91 97755 18114",
+      "order":5
+    },
+    {
+      "role": {
+        "bn": "খেলা সচিব",
+        "en": "Game secretary"
+      },
+      "name": "শ্রী সৌমিতা সাহা",
+      "photo": "assets/images/common/gs1.jpg",
+      "phone": "+91 97755 18114",
+      "order": 6
+    },
+    {
+      "role": {
+        "bn": "খেলা সচিব",
+        "en": "Game secretary"
+      },
+      "name": "শ্রী গোপীনাথ সাহা",
+      "photo": "assets/images/common/gs2.jpg",
+      "phone": "+91 97755 18114",
+      "order": 7
+    },
+    {
+      "role": {
+        "bn": "গ্রন্থাগার সচিব",
+        "en": "Library secretary"
+      },
+      "name": "শ্রী জয় সাহা",
+      "photo": "assets/images/common/ls1.jpg",
+      "phone": "+91 97755 18114",
+      "order": 8
+    },
+    {
+      "role": {
+        "bn": "গ্রন্থাগার সচিব",
+        "en": "Library secretary"
+      },
+      "name": "শ্রী তিলক সাহা",
+      "photo": "assets/images/common/ls2.jpg",
+      "phone": "+91 97755 18114",
+      "order": 9
     }
   ],
   "subcommittees": [
@@ -39,14 +99,14 @@
       },
       "members": [
         {
-          "name": "শ্রী অনিল সেন",
+          "name": "ডাঃ সুকুমার সাহা",
           "role": {
             "bn": "সভাপতি",
             "en": "Head"
           }
         },
         {
-          "name": "শ্রীমতী প্রীতি রায়",
+          "name": "আয়ুশ সাহা",
           "role": {
             "bn": "সদস্য",
             "en": "Member"
