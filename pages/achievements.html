@@ -197,6 +197,15 @@
             await loadAllData();
             initLanguage();
             initAchievements();
+            renderCommonElements(); // This updates all data-bn/data-en elements
+        });
+
+        // Listen for language changes
+        document.addEventListener('languageChanged', function() {
+            renderCommonElements();
+            if (typeof updateAchievementsLanguage === 'function') {
+                updateAchievementsLanguage();
+            }
         });
     </script>
 </body>

@@ -211,7 +211,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <img src="../assets/images/common/logo.png" alt="Club Logo" class="footer-logo-image">
+                        <img src="../assets/images/common/logo.png" alt="Club Logo" class="logo-image">
                         <span class="footer-logo-text" id="footer-club-name">Sarberia Pally Seba Samity</span>
                     </div>
                     <p class="footer-about" id="footer-about">
@@ -274,6 +274,15 @@
             await loadAllData();
             initLanguage();
             initGallery();
+            renderCommonElements(); // This updates all data-bn/data-en elements
+        });
+
+        // Listen for language changes
+        document.addEventListener('languageChanged', function() {
+            renderCommonElements();
+            if (typeof updateGalleryLanguage === 'function') {
+                updateGalleryLanguage();
+            }
         });
     </script>
 
@@ -284,23 +293,16 @@
             
             function fixMobileSticky() {
                 if (window.innerWidth <= 768) {
-                    // Mobile: Remove sticky, allow scroll away
                     filters.style.position = 'static';
                     filters.style.top = 'auto';
                 } else {
-                    // Desktop: Keep sticky
                     filters.style.position = 'sticky';
                     filters.style.top = '70px';
                 }
             }
             
-            // Run immediately
             fixMobileSticky();
-            
-            // Run on resize
             window.addEventListener('resize', fixMobileSticky);
-            
-            // Run again after page fully loads
             window.addEventListener('load', fixMobileSticky);
         })();
     </script>

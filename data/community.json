@@ -5,7 +5,7 @@
         "bn": "সভাপতি",
         "en": "President"
       },
-      "name": "শ্রী রাজেশ মুখার্জী",
+      "name": "ডাঃ সুকুমার সাহা",
       "photo": "assets/images/common/president.jpg",
       "phone": "+91 98300 11111",
       "order": 1
@@ -15,7 +15,7 @@
         "bn": "সম্পাদক",
         "en": "Secretary"
       },
-      "name": "শ্রী অমিত ঘোষ",
+      "name": "সুশান্ত ঘোষ",
       "photo": "assets/images/common/secretary.jpg",
       "phone": "+91 98300 22222",
       "order": 2
@@ -120,6 +120,6 @@
       ]
     }
   ],
-  "memberCount": 500,
+  "memberCount": 400,
   "foundingYear": 1937
 }

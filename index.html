@@ -217,15 +217,15 @@
         <!-- SHARAD SAMMAN PREVIEW SECTION -->
         <section class="section achievements-preview-section">
             <div class="container">
-                <h2 class="section-title text-center">🏆 শারদ সম্মান</h2>
-                <p class="section-subtitle text-center">দুর্গা পূজায় আমাদের অর্জনসমূহ</p>
+                <h2 class="section-title text-center" id="sharad-samman-title">🏆 শারদ সম্মান</h2>
+                <p class="section-subtitle text-center" id="sharad-samman-subtitle">দুর্গা পূজায় আমাদের অর্জনসমূহ</p>
                 
                 <div class="achievements-preview-grid" id="achievements-preview">
                     <!-- Dynamic content loaded here -->
                 </div>
 
                 <div class="text-center mt-8">
-                    <a href="pages/achievements.html" class="btn btn-primary btn-lg">
+                    <a href="pages/achievements.html" class="btn btn-primary btn-lg" id="view-all-achievements-btn">
                         <span>সকল সম্মাননা দেখুন</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -238,15 +238,15 @@
         <!-- GALLERY PREVIEW SECTION -->
         <section class="section section-light">
             <div class="container">
-                <h2 class="section-title text-center">গ্যালারি</h2>
-                <p class="section-subtitle text-center">আমাদের স্মৃতির সংগ্রহ</p>
+                <h2 class="section-title text-center" id="gallery-title">গ্যালারি</h2>
+                <p class="section-subtitle text-center" id="gallery-subtitle">আমাদের স্মৃতির সংগ্রহ</p>
                 
                 <div class="gallery-preview-grid" id="gallery-preview">
                     <!-- Dynamic content will be loaded here -->
                 </div>
 
                 <div class="text-center mt-8">
-                    <a href="pages/gallery.html" class="btn btn-primary btn-lg">
+                    <a href="pages/gallery.html" class="btn btn-primary btn-lg" id="view-full-gallery-btn">
                         <span>সম্পূর্ণ গ্যালারি দেখুন</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -275,7 +275,7 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <img src="assets/images/common/logo.png" alt="Club Logo" class="footer-logo-image">
+                        <img src="assets/images/common/logo.png" alt="Club Logo" class="logo-image">
                         <span class="footer-logo-text" id="footer-club-name">Sarberia Pally Seba Samity</span>
                     </div>
                     <p class="footer-about" id="footer-about">
@@ -343,12 +343,40 @@
             renderHomePage();
             renderAchievementsPreview();
             renderGalleryPreview();
+            
+            // Update section titles with translations
+            updateSectionTitles();
         });
 
-        // Listen for language changes and update previews
+        // Update section titles function
+        function updateSectionTitles() {
+            const labels = getUILabels();
+            
+            // Sharad Samman section
+            const sharadTitle = document.getElementById('sharad-samman-title');
+            const sharadSubtitle = document.getElementById('sharad-samman-subtitle');
+            const viewAllBtn = document.getElementById('view-all-achievements-btn');
+            
+            if (sharadTitle) sharadTitle.innerHTML = `🏆 ${labels.sharadSammanTitle || 'শারদ সম্মান'}`;
+            if (sharadSubtitle) sharadSubtitle.textContent = labels.sharadSammanSubtitle || 'দুর্গা পূজায় আমাদের অর্জনসমূহ';
+            if (viewAllBtn) viewAllBtn.querySelector('span').textContent = labels.viewAllAchievements || 'সকল সম্মাননা দেখুন';
+            
+            // Gallery section
+            const galleryTitle = document.getElementById('gallery-title');
+            const gallerySubtitle = document.getElementById('gallery-subtitle');
+            const viewGalleryBtn = document.getElementById('view-full-gallery-btn');
+            
+            if (galleryTitle) galleryTitle.textContent = labels.galleryTitle || 'গ্যালারি';
+            if (gallerySubtitle) gallerySubtitle.textContent = labels.gallerySubtitle || 'আমাদের স্মৃতির সংগ্রহ';
+            if (viewGalleryBtn) viewGalleryBtn.querySelector('span').textContent = labels.viewFullGallery || 'সম্পূর্ণ গ্যালারি দেখুন';
+        }
+
+        // Listen for language changes and update previews and titles
         document.addEventListener('languageChanged', () => {
             renderAchievementsPreview();
             renderGalleryPreview();
+            updateSectionTitles();
+            renderCommonElements();
         });
 
         // Achievements Preview Renderer
