@@ -1,68 +1,164 @@
 {
     "images": [
         {
+            "year": 2025,
+            "title": {
+                "bn": "জেলার সেরা পুজোর উদ্বোধন ২০২৫",
+                "en": "Inauguration of the Best Puja in the District 2025"
+            },
+            "image": "assets/images/achievements/2025-1.jpg"
+        },
+        {
+            "year": 2025,
+            "title": {
+                "bn": "শারদ সম্মান",
+                "en": "Sharad Samman (Autumn Honor) 2025"
+            },
+            "image": "assets/images/achievements/2025-2.jpg"
+        },
+        {
+            "year": 2025,
+            "title": {
+                "bn": "সেরা পুজো, জেলার সেরা (News 18 বাংলা)",
+                "en": "Best Puja, District Best (News 18 Bangla)"
+            },
+            "image": "assets/images/achievements/2025-3.jpg"
+        },
+        {
+            "year": 2025,
+            "title": {
+                "bn": "ট্রফি 🏆",
+                "en": "Award Trophy 🏆"
+            },
+            "image": "assets/images/achievements/2025-4.jpg"
+        },
+        {
+            "year": 2025,
+            "title": {
+                "bn": "স্বাস্থ্যবান্ধব শারদ সম্মান",
+                "en": "Health-Friendly Sharad Samman"
+            },
+            "image": "assets/images/achievements/2025-5.jpg"
+        },
+        {
             "year": 2024,
             "title": {
-                "bn": "খুঁটি পুজা ও ব্যানার উন্মোচন 2025",
-                "en": "Best Idol - First Prize"
+                "bn": "আনন্দবাজার পত্রিকা",
+                "en": "Anandabazar Patrika (Newspaper Coverage)"
             },
             "image": "assets/images/achievements/2024-1.jpg"
         },
         {
             "year": 2024,
             "title": {
-                "bn": "সংবাদপত্রে প্রকাশিত",
-                "en": "Published in Newspaper"
+                "bn": "আনন্দবাজার পত্রিকা",
+                "en": "Anandabazar Patrika (Special Recognition)"
             },
             "image": "assets/images/achievements/2024-2.jpg"
         },
         {
             "year": 2023,
             "title": {
-                "bn": "শ্রেষ্ঠ মণ্ডপ পুরস্কার",
-                "en": "Best Pandal Award"
+                "bn": "আনন্দবাজার পত্রিকা",
+                "en": "Anandabazar Patrika (Award Coverage)"
             },
             "image": "assets/images/achievements/2023-1.jpg"
         },
         {
             "year": 2023,
             "title": {
-                "bn": "জেলা স্তরে সম্মাননা",
-                "en": "District Level Recognition"
+                "bn": "এই সময় পত্রিকা",
+                "en": "Ei Samay Patrika (Award Coverage)"
             },
             "image": "assets/images/achievements/2023-2.jpg"
         },
         {
+            "year": 2023,
+            "title": {
+                "bn": "আনন্দবাজার পত্রিকা",
+                "en": "Anandabazar Patrika (Award Coverage)"
+            },
+            "image": "assets/images/achievements/2023-3.jpg"
+        },
+        {
             "year": 2022,
             "title": {
-                "bn": "শ্রেষ্ঠ সাজসজ্জা",
-                "en": "Best Decoration"
+                "bn": "বর্তমান পত্রিকা",
+                "en": "Bartaman Patrika (Award Coverage)"
             },
             "image": "assets/images/achievements/2022-1.jpg"
         },
         {
             "year": 2022,
             "title": {
-                "bn": "সংবাদপত্রের কাটিং",
-                "en": "Newspaper Clipping"
+                "bn": "পুরস্কার",
+                "en": "Award"
             },
             "image": "assets/images/achievements/2022-2.jpg"
         },
         {
             "year": 2021,
             "title": {
-                "bn": "বিশেষ সম্মাননা",
-                "en": "Special Recognition"
+                "bn": "বর্তমান পত্রিকা",
+                "en": "Bartaman Patrika (Award Coverage)"
             },
             "image": "assets/images/achievements/2021-1.jpg"
         },
         {
+            "year": 2020,
+            "title": {
+                "bn": "আনন্দবাজার পত্রিকা",
+                "en": "Anandabazar Patrika (Award Coverage)"
+            },
+            "image": "assets/images/achievements/2020-1.jpg"
+        },
+        {
             "year": 2019,
             "title": {
-                "bn": "রাজ্য স্তরে পুরস্কার",
-                "en": "State Level Award"
+                "bn": "পুরস্কার",
+                "en": "Award"
             },
             "image": "assets/images/achievements/2019-1.jpg"
+        },
+        {
+            "year": 2019,
+            "title": {
+                "bn": "পুরস্কার",
+                "en": "Award"
+            },
+            "image": "assets/images/achievements/2019-2.jpg"
+        },
+        {
+            "year": 2019,
+            "title": {
+                "bn": "সেরার সেরা",
+                "en": "Best of the Best Award"
+            },
+            "image": "assets/images/achievements/2019-3.jpg"
+        },
+        {
+            "year": 2019,
+            "title": {
+                "bn": "সেরা পরিবেশবান্ধব",
+                "en": "Best Eco-Friendly Award"
+            },
+            "image": "assets/images/achievements/2019-4.jpg"
+        },
+        {
+            "year": 2019,
+            "title": {
+                "bn": "সেরা মণ্ডপ",
+                "en": "Best Pandal Award"
+            },
+            "image": "assets/images/achievements/2019-5.jpg"
+        },
+        {
+            "year": 2019,
+            "title": {
+                "bn": "আনন্দবাজার পত্রিকা",
+                "en": "Anandabazar Patrika (Award Coverage)"
+            },
+            "image": "assets/images/achievements/2019-6.jpg"
         }
     ]
 }

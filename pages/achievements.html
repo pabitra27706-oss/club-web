@@ -42,7 +42,10 @@
                 <a href="about.html" class="nav-link">আমাদের সম্পর্কে</a>
                 <a href="programs.html" class="nav-link">প্রশিক্ষণ</a>
                 <a href="events.html" class="nav-link">অনুষ্ঠান</a>
-                <a href="achievements.html" class="nav-link active">শারদ সম্মান</a>
+                <a href="library.html" class="nav-link">পাঠাগার</a>
+                <a href="updates.html" class="nav-link">আপডেট</a>
+                <a href="community.html" class="nav-link">সমিতি</a>
+                <a href="achievements.html" class="nav-link active">🏆 শারদ সম্মান</a>
                 <a href="gallery.html" class="btn btn-primary btn-sm header-cta">GALLERY</a>
                 <a href="contact.html" class="btn btn-primary btn-sm header-cta">যোগাযোগ</a>
             </nav>
@@ -74,6 +77,15 @@
                 <a href="events.html" class="nav-mobile-link">🎉 অনুষ্ঠান</a>
             </li>
             <li class="nav-mobile-item">
+                <a href="library.html" class="nav-mobile-link">📚 পাঠাগার</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="updates.html" class="nav-mobile-link">📢 আপডেট</a>
+            </li>
+            <li class="nav-mobile-item">
+                <a href="community.html" class="nav-mobile-link">👥 সমিতি</a>
+            </li>
+            <li class="nav-mobile-item">
                 <a href="achievements.html" class="nav-mobile-link active">🏆 শারদ সম্মান</a>
             </li>
             <li class="nav-mobile-item">
@@ -82,6 +94,10 @@
         </ul>
         <div class="nav-mobile-cta">
             <a href="contact.html" class="btn btn-primary btn-block">যোগাযোগ করুন</a>
+        </div>
+        <div class="nav-mobile-language">
+            <button class="lang-btn" data-lang="bn" title="বাংলা">বাংলা</button>
+            <button class="lang-btn" data-lang="en" title="English">English</button>
         </div>
     </nav>
 
@@ -138,6 +154,9 @@
                         <li><a href="about.html">আমাদের সম্পর্কে</a></li>
                         <li><a href="programs.html">প্রশিক্ষণ</a></li>
                         <li><a href="events.html">অনুষ্ঠান</a></li>
+                        <li><a href="library.html">পাঠাগার</a></li>
+                        <li><a href="updates.html">আপডেট</a></li>
+                        <li><a href="community.html">সমিতি</a></li>
                     </ul>
                 </div>
 
@@ -167,10 +186,11 @@
         <span class="back-to-top-icon">↑</span>
     </button>
 
-    <!-- SCRIPTS -->
+    <!-- SCRIPTS - Load in correct order -->
     <script src="../js/data-loader.js"></script>
     <script src="../js/language.js"></script>
     <script src="../js/main.js"></script>
+    <script src="../js/renderer.js"></script>
     <script src="../js/achievements.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {

@@ -327,17 +327,26 @@
         <span class="back-to-top-icon">↑</span>
     </button>
 
-    <!-- SCRIPTS -->
-    <script src="js/typing-animation.js"></script>
+    <!-- SCRIPTS - Core files always loaded -->
     <script src="js/data-loader.js"></script>
     <script src="js/language.js"></script>
     <script src="js/main.js"></script>
     <script src="js/renderer.js"></script>
+    
+    <!-- Page specific scripts -->
+    <script src="js/typing-animation.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             await loadAllData();
             initLanguage();
             renderHomePage();
+            renderAchievementsPreview();
+            renderGalleryPreview();
+        });
+
+        // Listen for language changes and update previews
+        document.addEventListener('languageChanged', () => {
             renderAchievementsPreview();
             renderGalleryPreview();
         });

@@ -34,6 +34,9 @@ function setLanguage(lang) {
     document.documentElement.lang = lang;
     updateLangButtons();
     reRenderPage();
+    
+    // Dispatch event for gallery and achievements pages
+    document.dispatchEvent(new CustomEvent('languageChanged'));
 }
 
 function updateLangButtons() {
@@ -63,22 +66,35 @@ function reRenderPage() {
     renderCommonElements();
     
     if (path === '/' || path.endsWith('index.html') || path === '') {
-        renderHomePage();
+        if (typeof renderHomePage === 'function') renderHomePage();
     } else if (path.includes('about')) {
-        renderAboutPage();
+        if (typeof renderAboutPage === 'function') renderAboutPage();
     } else if (path.includes('programs')) {
-        renderProgramsPage();
+        if (typeof renderProgramsPage === 'function') renderProgramsPage();
     } else if (path.includes('events')) {
-        renderEventsPage();
+        if (typeof renderEventsPage === 'function') renderEventsPage();
     } else if (path.includes('library')) {
-        renderLibraryPage();
+        if (typeof renderLibraryPage === 'function') renderLibraryPage();
     } else if (path.includes('updates')) {
-        renderUpdatesPage();
+        if (typeof renderUpdatesPage === 'function') renderUpdatesPage();
     } else if (path.includes('community')) {
-        renderCommunityPage();
+        if (typeof renderCommunityPage === 'function') renderCommunityPage();
     } else if (path.includes('contact')) {
-        renderContactPage();
+        if (typeof renderContactPage === 'function') renderContactPage();
     }
+}
+
+function renderCommonElements() {
+    // Update footer year
+    const yearSpan = document.getElementById('current-year');
+    if (yearSpan) {
+        yearSpan.textContent = new Date().getFullYear();
+    }
+    
+    // Update any elements with data-bn and data-en attributes
+    document.querySelectorAll('[data-bn][data-en]').forEach(el => {
+        el.textContent = el.dataset[currentLang];
+    });
 }
 
 function getUILabels() {
