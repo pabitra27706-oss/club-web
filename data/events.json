@@ -74,7 +74,7 @@
       "bn": "রক্তদান শিবির ও বসন্ত উৎসব",
       "en": "Blood Donation Camp and Basanta Utsab"
     },
-    "icon": "🌸",
+    "icon": "🩸",
     "image": "assets/images/events/basanta-utsab.jpg",
     "description": {
       "bn": "বসন্তকালে রঙিন উৎসব। রবীন্দ্রসংগীত, নৃত্য, কবিতা পাঠ ও রঙ খেলার আয়োজন। সকল বয়সের মানুষ অংশগ্রহণ করেন।",
@@ -89,8 +89,8 @@
       "endDate": "2026-03-16"
     },
     "location": {
-      "bn": "ক্লাব প্রাঙ্গণ",
-      "en": "Club Premises"
+      "bn": "সরবেড়িয়া শতদল বালিকা বিদ্যালয়",
+ "en": ""
     },
     "type": "annual",
     "isFlagship": true,

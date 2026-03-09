@@ -44,7 +44,7 @@
     background: #ffffff;
     border-radius: 20px;
     overflow: hidden;
-    max-width: 400px;
+    max-width: 420px;
     width: 90%;
     box-shadow:
         0 25px 60px rgba(0, 0, 0, 0.4),
@@ -97,18 +97,39 @@
         0 0 30px rgba(87, 197, 182, 0.15);
 }
 
-/* ---- Image Section ---- */
+
+/* ============================================
+   IMAGE SECTION — EXACT 16:9 ASPECT RATIO
+   ============================================ */
+
 .event-popup-image {
     position: relative;
     width: 100%;
-    height: 220px;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
+    background: linear-gradient(135deg, #1a5f7a 0%, #57c5b6 100%);
+}
+
+/* Fallback for older browsers that don't support aspect-ratio */
+@supports not (aspect-ratio: 16 / 9) {
+    .event-popup-image {
+        height: 0;
+        padding-bottom: 56.25%; /* 9/16 = 0.5625 = 56.25% */
+    }
+    
+    .event-popup-image img,
+    .event-popup-image-fallback {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 }
 
 .event-popup-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     animation: popupImageZoom 12s ease infinite alternate;
 }
 
@@ -124,7 +145,7 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 60%;
+    height: 50%;
     background: linear-gradient(
         to top,
         rgba(0, 0, 0, 0.5) 0%,
@@ -133,7 +154,7 @@
     pointer-events: none;
 }
 
-/* Image Fallback */
+/* Image Fallback (when image fails to load) */
 .event-popup-image-fallback {
     width: 100%;
     height: 100%;
@@ -143,6 +164,7 @@
     background: linear-gradient(135deg, #1a5f7a 0%, #57c5b6 100%);
     font-size: 4rem;
 }
+
 
 /* ---- Countdown Badge ---- */
 .event-popup-countdown {
@@ -182,6 +204,7 @@
     background: rgba(107, 114, 128, 0.92);
     animation: none;
 }
+
 
 /* ---- Content Section ---- */
 .event-popup-content {
@@ -465,12 +488,8 @@
     /* Pop-Up */
     .event-popup-banner {
         width: 92%;
-        max-width: 360px;
+        max-width: 380px;
         border-radius: 16px;
-    }
-
-    .event-popup-image {
-        height: 180px;
     }
 
     .event-popup-content {
@@ -483,6 +502,13 @@
 
     .event-popup-icon {
         font-size: 1.8rem;
+    }
+
+    .event-popup-countdown {
+        bottom: 10px;
+        right: 10px;
+        padding: 6px 14px;
+        font-size: 0.82rem;
     }
 
     /* Hero */
@@ -514,11 +540,8 @@
     /* Pop-Up */
     .event-popup-banner {
         width: 94%;
+        max-width: 340px;
         border-radius: 14px;
-    }
-
-    .event-popup-image {
-        height: 150px;
     }
 
     .event-popup-content {
@@ -535,8 +558,14 @@
     }
 
     .event-popup-countdown {
-        padding: 6px 14px;
-        font-size: 0.8rem;
+        bottom: 8px;
+        right: 8px;
+        padding: 5px 12px;
+        font-size: 0.75rem;
+    }
+
+    .event-popup-icon {
+        font-size: 1.6rem;
     }
 
     /* Hero */
@@ -559,5 +588,25 @@
 
     .typing-container .typing-text {
         font-size: clamp(0.85rem, 2.2vw, 1.3rem) !important;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+    .event-popup-banner {
+        width: 96%;
+        max-width: 300px;
+    }
+
+    .event-popup-content {
+        padding: 12px 14px 12px;
+    }
+
+    .event-popup-name {
+        font-size: 1.05rem;
+    }
+
+    .event-popup-hint {
+        font-size: 0.7rem;
     }
 }

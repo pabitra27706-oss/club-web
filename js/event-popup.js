@@ -151,7 +151,7 @@
                     <p class="event-popup-date">
                         <span>📍 ${location}</span>
                         <span>•</span>
-                        <span>📅 ${dateDisplay}</span>
+                        <span> ${dateDisplay}</span>
                     </p>
                     <div class="event-popup-divider"></div>
                     <p class="event-popup-description">${description}</p>
