@@ -16,7 +16,8 @@
         "bn": "অক্টোবর ২০২৫",
         "en": "October 2025"
       },
-      "iso": "2025-10"
+      "startDate": "2025-10-01",
+      "endDate": "2025-10-05"
     },
     "location": {
       "bn": "ক্লাব প্রাঙ্গণ",
@@ -50,7 +51,8 @@
         "bn": "ডিসেম্বর ২০২৫",
         "en": "December 2025"
       },
-      "iso": "2025-12"
+      "startDate": "2025-12-20",
+      "endDate": "2025-12-22"
     },
     "location": {
       "bn": "ক্লাব মাঠ",
@@ -70,7 +72,7 @@
     "id": "basanta-utsab",
     "name": {
       "bn": "রক্তদান শিবির ও বসন্ত উৎসব",
-      "en": "Blood Donation camp and Basanta Utsab"
+      "en": "Blood Donation Camp and Basanta Utsab"
     },
     "icon": "🌸",
     "image": "assets/images/events/basanta-utsab.jpg",
@@ -83,7 +85,8 @@
         "bn": "ফেব্রুয়ারি ২০২৬",
         "en": "February 2026"
       },
-      "iso": "2026-02"
+      "startDate": "2026-02-15",
+      "endDate": "2026-02-16"
     },
     "location": {
       "bn": "ক্লাব প্রাঙ্গণ",
@@ -115,7 +118,8 @@
         "bn": "জানুয়ারি ২০২৬",
         "en": "January 2026"
       },
-      "iso": "2026-01"
+      "startDate": "2026-01-25",
+      "endDate": "2026-01-25"
     },
     "location": {
       "bn": "ক্লাব হল",

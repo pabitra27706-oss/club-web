@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="css/navigation.css">
     <link rel="stylesheet" href="css/utilities.css">
     <link rel="stylesheet" href="css/pages.css">
+    <link rel="stylesheet" href="css/popup.css">
     
     <link rel="icon" type="image/png" href="assets/images/common/logo.png">
     <link rel="manifest" href="manifest.json">
@@ -116,19 +117,30 @@
             
             <div class="welcome-content">
                 <div class="container">
-                    <div class="typing-container">
-                        <h1 class="typing-text">
-                            <span class="typed-line" id="typed-line-1"></span>
-                            <span class="typed-line" id="typed-line-2"></span>
-                            <span class="typed-line" id="typed-line-3"></span>
-                            <span class="cursor">|</span>
+                    
+                    <!-- BIG CLUB NAME -->
+                    <div class="club-name-hero" id="club-name-hero">
+                        <h1 class="club-name-big" data-text="SARBERIA PALLY SEBA SAMITY">
+                            SARBERIA PALLY SEBA SAMITY
                         </h1>
+                        <p class="club-name-since">Since 1938</p>
                     </div>
                     
+                    <!-- TYPING ANIMATION (2 lines, smaller) -->
+                    <div class="typing-container">
+                        <p class="typing-text">
+                            <span class="typed-line" id="typed-line-1"></span>
+                            <span class="typed-line" id="typed-line-2"></span>
+                            <span class="cursor">|</span>
+                        </p>
+                    </div>
+                    
+                    <!-- SUBTITLE -->
                     <div class="welcome-subtitle fade-in-up" id="welcome-subtitle">
                         <p>খেলাধুলা, সংস্কৃতি ও শিক্ষায় ৮৫+ বছরের ঐতিহ্য</p>
                     </div>
                     
+                    <!-- MINI STATS -->
                     <div class="welcome-stats-mini fade-in-up delay-1">
                         <div class="stat-mini">
                             <span class="stat-mini-number">1938</span>
@@ -220,9 +232,7 @@
                 <h2 class="section-title text-center" id="sharad-samman-title">🏆 শারদ সম্মান</h2>
                 <p class="section-subtitle text-center" id="sharad-samman-subtitle">দুর্গা পূজায় আমাদের অর্জনসমূহ</p>
                 
-                <div class="achievements-preview-grid" id="achievements-preview">
-                    <!-- Dynamic content loaded here -->
-                </div>
+                <div class="achievements-preview-grid" id="achievements-preview"></div>
 
                 <div class="text-center mt-8">
                     <a href="pages/achievements.html" class="btn btn-primary btn-lg" id="view-all-achievements-btn">
@@ -241,9 +251,7 @@
                 <h2 class="section-title text-center" id="gallery-title">গ্যালারি</h2>
                 <p class="section-subtitle text-center" id="gallery-subtitle">আমাদের স্মৃতির সংগ্রহ</p>
                 
-                <div class="gallery-preview-grid" id="gallery-preview">
-                    <!-- Dynamic content will be loaded here -->
-                </div>
+                <div class="gallery-preview-grid" id="gallery-preview"></div>
 
                 <div class="text-center mt-8">
                     <a href="pages/gallery.html" class="btn btn-primary btn-lg" id="view-full-gallery-btn">
@@ -335,6 +343,7 @@
     
     <!-- Page specific scripts -->
     <script src="js/typing-animation.js"></script>
+    <script src="js/event-popup.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
