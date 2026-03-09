@@ -730,10 +730,10 @@
 }
 
 /* ============================================
-   CONTACT PAGE - COMPLETELY FIXED & IMPROVED
+   CONTACT PAGE
    ============================================ */
 
-/* Page Hero - Consistent with other pages */
+/* Page Hero */
 .page-hero {
     background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
     color: var(--color-white);
@@ -755,7 +755,7 @@
     margin: 0 auto;
 }
 
-/* Contact Grid - Main Layout */
+/* Contact Grid */
 .contact-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -1173,12 +1173,6 @@
     font-weight: 800;
 }
 
-.typed-line:nth-child(3) {
-    font-size: 0.4em;
-    font-weight: 400;
-    color: #a0e7e5;
-}
-
 /* Blinking Cursor */
 .cursor {
     display: inline-block;
@@ -1331,112 +1325,12 @@
     .typed-line:nth-child(1) {
         font-size: 0.4em;
     }
-    
-    .typed-line:nth-child(3) {
-        font-size: 0.35em;
-    }
 }
 
 /* ============================================
-   GALLERY PREVIEW (Homepage)
-   ============================================ */
-.gallery-preview-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-}
-
-.gallery-preview-card {
-    display: block;
-    background: var(--white);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-    text-decoration: none;
-}
-
-.gallery-preview-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.gallery-preview-image {
-    position: relative;
-    aspect-ratio: 16/10;
-    overflow: hidden;
-}
-
-.gallery-preview-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.gallery-preview-card:hover .gallery-preview-image img {
-    transform: scale(1.1);
-}
-
-.gallery-preview-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(26, 95, 122, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.gallery-preview-card:hover .gallery-preview-overlay {
-    opacity: 1;
-}
-
-.gallery-preview-icon {
-    font-size: 3rem;
-    color: var(--white);
-}
-
-.gallery-preview-content {
-    padding: 1.5rem;
-}
-
-.gallery-preview-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-}
-
-.gallery-preview-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-}
-
-@media (max-width: 768px) {
-    .gallery-preview-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .gallery-preview-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ==========================================
    ACHIEVEMENTS PREVIEW (Homepage)
-   ========================================== */
+   ============================================ */
+
 .achievements-preview-section {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
     padding: 4rem 0;
@@ -1514,7 +1408,10 @@
     margin: 0;
 }
 
-/* Gallery Preview Grid */
+/* ============================================
+   GALLERY PREVIEW (Homepage) — 16:9 Aspect Ratio
+   ============================================ */
+
 .gallery-preview-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1524,7 +1421,7 @@
 
 .gallery-preview-card {
     display: block;
-    background: var(--white);
+    background: var(--color-white);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -1537,16 +1434,32 @@
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+/* 16:9 Aspect Ratio for Gallery Preview Images */
 .gallery-preview-image {
     position: relative;
-    aspect-ratio: 16/10;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
+}
+
+/* Fallback for older browsers */
+@supports not (aspect-ratio: 16 / 9) {
+    .gallery-preview-image {
+        height: 0;
+        padding-bottom: 56.25%;
+    }
+
+    .gallery-preview-image img {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
 }
 
 .gallery-preview-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     transition: transform 0.4s ease;
 }
 
@@ -1574,7 +1487,7 @@
 
 .gallery-preview-icon {
     font-size: 2.5rem;
-    color: var(--white);
+    color: #ffffff;
 }
 
 .gallery-preview-content {
@@ -1584,7 +1497,7 @@
 .gallery-preview-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--text-primary);
+    color: var(--color-text);
     margin-bottom: 0.5rem;
 }
 
@@ -1593,10 +1506,13 @@
     align-items: center;
     gap: 0.5rem;
     font-size: 0.875rem;
-    color: var(--text-secondary);
+    color: var(--color-text-light);
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE — ACHIEVEMENTS & GALLERY PREVIEW
+   ============================================ */
+
 @media (max-width: 768px) {
     .achievements-preview-grid,
     .gallery-preview-grid {
