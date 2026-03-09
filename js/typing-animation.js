@@ -15,10 +15,7 @@ function initHeroSequence() {
     if (heroAnimationStarted) return;
     heroAnimationStarted = true;
 
-    // Start tracking user scroll
     startScrollTracking();
-
-    // Step 1: Fade in the big club name
     showClubName();
 }
 
@@ -32,26 +29,25 @@ function showClubName() {
         clubNameHero.classList.add('visible');
     }
 
-    // Step 2: Start typing after club name settles
     setTimeout(() => {
         initTypingAnimation();
-    }, 1000);
+    }, 800);
 }
 
 // ============================================
-// STEP 2: TYPING ANIMATION
+// STEP 2: TYPING ANIMATION (FASTER + CURSOR FIX)
 // ============================================
 function initTypingAnimation() {
     const lang = document.documentElement.lang || 'bn';
 
     const linesData = {
         bn: [
-            { text: 'স্বাগতম', speed: 100 },
-            { text: 'আমাদের অফিসিয়াল ওয়েবসাইটে', speed: 70 }
+            { text: 'স্বাগতম', speed: 65 },
+            { text: 'আমাদের অফিসিয়াল ওয়েবসাইটে', speed: 40 }
         ],
         en: [
-            { text: 'Welcome to', speed: 80 },
-            { text: 'Our Official Website', speed: 60 }
+            { text: 'Welcome to', speed: 55 },
+            { text: 'Our Official Website', speed: 40 }
         ]
     };
 
@@ -70,7 +66,10 @@ function initTypingAnimation() {
         }
     ];
 
-    const cursor = document.querySelector('.cursor');
+    // Create cursor element
+    const cursor = document.createElement('span');
+    cursor.className = 'typing-cursor';
+    cursor.textContent = '|';
 
     function typeText(element, text, speed) {
         return new Promise((resolve) => {
@@ -78,29 +77,39 @@ function initTypingAnimation() {
 
             element.classList.add('active');
             element.textContent = '';
+
+            // Attach cursor to this line
+            element.appendChild(cursor);
+
             let charIndex = 0;
 
             const typeInterval = setInterval(() => {
                 if (charIndex < text.length) {
-                    element.textContent += text.charAt(charIndex);
+                    // Insert character BEFORE cursor
+                    const charNode = document.createTextNode(text.charAt(charIndex));
+                    element.insertBefore(charNode, cursor);
                     charIndex++;
                 } else {
                     clearInterval(typeInterval);
-                    setTimeout(resolve, 400);
+                    setTimeout(resolve, 300);
                 }
             }, speed);
         });
     }
 
     async function startTyping() {
-        if (cursor) cursor.classList.add('active');
-
         for (let i = 0; i < lines.length; i++) {
             await typeText(lines[i].element, lines[i].text, lines[i].speed);
         }
 
-        // Step 3: Show subtitle and stats
-        onTypingComplete();
+        // Typing done → fade out cursor → show subtitle/stats
+        setTimeout(() => {
+            cursor.classList.add('fade-out');
+            setTimeout(() => {
+                cursor.remove();
+                onTypingComplete();
+            }, 400);
+        }, 300);
     }
 
     startTyping();
@@ -110,35 +119,28 @@ function initTypingAnimation() {
 // STEP 3: POST-TYPING REVEALS
 // ============================================
 function onTypingComplete() {
-    const cursor = document.querySelector('.cursor');
     const subtitle = document.getElementById('welcome-subtitle');
     const stats = document.querySelector('.welcome-stats-mini');
 
-    // Hide cursor
+    // Show subtitle
+    if (subtitle) subtitle.classList.add('visible');
+
+    // Show stats
     setTimeout(() => {
-        if (cursor) cursor.style.opacity = '0';
+        if (stats) stats.classList.add('visible');
 
-        // Show subtitle
-        if (subtitle) subtitle.classList.add('visible');
-
-        // Show stats with slight delay
+        // Auto-scroll after everything visible
         setTimeout(() => {
-            if (stats) stats.classList.add('visible');
+            autoScrollPastHero();
+        }, 1500);
 
-            // Step 4: Auto-scroll after everything is visible
-            setTimeout(() => {
-                autoScrollPastHero();
-            }, 2000);
-
-        }, 400);
-    }, 500);
+    }, 300);
 }
 
 // ============================================
 // STEP 4: AUTO-SCROLL PAST HERO
 // ============================================
 function autoScrollPastHero() {
-    // Only auto-scroll if user hasn't manually scrolled
     if (userHasScrolled) return;
 
     const welcomeSection = document.querySelector('.welcome-section');
@@ -227,14 +229,13 @@ function initParticles() {
             p.draw();
         });
 
-        // Draw connections
         for (let i = 0; i < particles.length; i++) {
             for (let j = i + 1; j < particles.length; j++) {
                 const dx = particles[i].x - particles[j].x;
                 const dy = particles[i].y - particles[j].y;
                 const dist = dx * dx + dy * dy;
 
-                if (dist < 10000) { // 100px squared
+                if (dist < 10000) {
                     const opacity = 0.15 * (1 - Math.sqrt(dist) / 100);
                     ctx.strokeStyle = `rgba(87, 197, 182, ${opacity})`;
                     ctx.lineWidth = 0.8;
@@ -251,7 +252,6 @@ function initParticles() {
 
     animate();
 
-    // Resize handler with debounce
     let resizeTimeout;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
@@ -292,13 +292,10 @@ function initScrollReveal() {
 // INITIALIZE ON DOM READY
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Particles always start immediately
     initParticles();
-
-    // Scroll reveal for sections
     initScrollReveal();
 
-    // Fallback: if event-popup.js doesn't load or trigger hero
+    // Fallback: if event-popup.js doesn't trigger hero
     setTimeout(() => {
         if (!heroAnimationStarted) {
             const popup = document.getElementById('event-popup-overlay');

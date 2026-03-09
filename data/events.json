@@ -24,15 +24,15 @@
       "en": "Club Premises"
     },
     "type": "annual",
-    "isFlagship": true,
+    "isFlagship": false,
     "gallery": [
       "assets/images/events/durga-puja-1.jpg",
       "assets/images/events/durga-puja-2.jpg",
       "assets/images/events/durga-puja-3.jpg",
       "assets/images/events/durga-puja-4.jpg"
     ],
-    "status": "upcoming",
-    "order": 1
+    "status": "end",
+    "order": 4
   },
   {
     "id": "sports-day",
@@ -65,8 +65,8 @@
       "assets/images/events/sports-2.jpg",
       "assets/images/events/sports-3.jpg"
     ],
-    "status": "upcoming",
-    "order": 2
+    "status": "end",
+    "order": 3
   },
   {
     "id": "basanta-utsab",
@@ -82,24 +82,24 @@
     },
     "date": {
       "display": {
-        "bn": "ফেব্রুয়ারি ২০২৬",
-        "en": "February 2026"
+        "bn": "মার্চ ২০২৬",
+        "en": "March 2026"
       },
-      "startDate": "2026-02-15",
-      "endDate": "2026-02-16"
+      "startDate": "2026-03-15",
+      "endDate": "2026-03-16"
     },
     "location": {
       "bn": "ক্লাব প্রাঙ্গণ",
       "en": "Club Premises"
     },
     "type": "annual",
-    "isFlagship": false,
+    "isFlagship": true,
     "gallery": [
       "assets/images/events/basanta-1.jpg",
       "assets/images/events/basanta-2.jpg"
     ],
     "status": "upcoming",
-    "order": 3
+    "order": 1
   },
   {
     "id": "saraswati-puja",
@@ -131,7 +131,7 @@
       "assets/images/events/saraswati-puja-1.jpg",
       "assets/images/events/saraswati-puja-2.jpg"
     ],
-    "status": "upcoming",
-    "order": 4
+    "status": "end",
+    "order": 2
   }
 ]

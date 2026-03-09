@@ -106,7 +106,7 @@
     <!-- MAIN CONTENT -->
     <main id="main-content" class="main-content">
         
-        <!-- ADVANCED WELCOME SECTION WITH TYPING ANIMATION -->
+        <!-- ADVANCED WELCOME SECTION -->
         <section class="welcome-section">
             <div class="welcome-background">
                 <div class="gradient-orb orb-1"></div>
@@ -126,12 +126,11 @@
                         <p class="club-name-since">Since 1938</p>
                     </div>
                     
-                    <!-- TYPING ANIMATION (2 lines, smaller) -->
+                    <!-- TYPING ANIMATION (2 lines, cursor follows text) -->
                     <div class="typing-container">
                         <p class="typing-text">
                             <span class="typed-line" id="typed-line-1"></span>
                             <span class="typed-line" id="typed-line-2"></span>
-                            <span class="cursor">|</span>
                         </p>
                     </div>
                     
@@ -352,16 +351,12 @@
             renderHomePage();
             renderAchievementsPreview();
             renderGalleryPreview();
-            
-            // Update section titles with translations
             updateSectionTitles();
         });
 
-        // Update section titles function
         function updateSectionTitles() {
             const labels = getUILabels();
             
-            // Sharad Samman section
             const sharadTitle = document.getElementById('sharad-samman-title');
             const sharadSubtitle = document.getElementById('sharad-samman-subtitle');
             const viewAllBtn = document.getElementById('view-all-achievements-btn');
@@ -370,7 +365,6 @@
             if (sharadSubtitle) sharadSubtitle.textContent = labels.sharadSammanSubtitle || 'দুর্গা পূজায় আমাদের অর্জনসমূহ';
             if (viewAllBtn) viewAllBtn.querySelector('span').textContent = labels.viewAllAchievements || 'সকল সম্মাননা দেখুন';
             
-            // Gallery section
             const galleryTitle = document.getElementById('gallery-title');
             const gallerySubtitle = document.getElementById('gallery-subtitle');
             const viewGalleryBtn = document.getElementById('view-full-gallery-btn');
@@ -380,7 +374,6 @@
             if (viewGalleryBtn) viewGalleryBtn.querySelector('span').textContent = labels.viewFullGallery || 'সম্পূর্ণ গ্যালারি দেখুন';
         }
 
-        // Listen for language changes and update previews and titles
         document.addEventListener('languageChanged', () => {
             renderAchievementsPreview();
             renderGalleryPreview();
@@ -388,7 +381,6 @@
             renderCommonElements();
         });
 
-        // Achievements Preview Renderer
         async function renderAchievementsPreview() {
             try {
                 const response = await fetch('data/achievements.json');
@@ -416,7 +408,6 @@
             }
         }
 
-        // Gallery Preview Renderer
         async function renderGalleryPreview() {
             try {
                 const response = await fetch('data/gallery.json');
@@ -425,7 +416,6 @@
                 
                 if (!container || !galleryData.albums) return;
                 
-                // Get latest 4 albums
                 const latestAlbums = galleryData.albums.slice(0, 4);
                 const lang = document.documentElement.lang || 'bn';
                 
