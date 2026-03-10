@@ -32,7 +32,7 @@
     "instructor": "রবি কুমার",
     "status": "active",
     "enrollmentOpen": true,
-    "order": 1
+    "order": 2
   },
   {
     "id": "karate",
@@ -67,7 +67,7 @@
     "instructor": "সেনসেই অনিল দাস",
     "status": "active",
     "enrollmentOpen": true,
-    "order": 2
+    "order": 1
   },
   {
     "id": "football",
