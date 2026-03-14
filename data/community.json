@@ -6,7 +6,7 @@
         "en": "President"
       },
       "name": "ডাঃ সুকুমার সাহা",
-      "photo": "assets/images/common/president.jpg",
+      "photo": "assets/images/common/1.png",
       "phone": "+91 97755 18114",
       "order": 1
     },
@@ -16,7 +16,7 @@
         "en": "Secretary"
       },
       "name": "সুশান্ত ঘোষ",
-      "photo": "assets/images/common/secretary1.jpg",
+      "photo": "assets/images/common/1.png",
       "phone": "+91 97755 18114",
       "order": 2
     },
@@ -26,7 +26,7 @@
         "en": "Joint Secretary"
       },
       "name": "সহদেব সাহা",
-      "photo": "assets/images/common/secretary2.jpg",
+      "photo": "assets/images/common/1.png",
       "phone": "+91 97755 18114",
       "order": 3
     },
@@ -36,7 +36,7 @@
         "en": "Treasurer"
       },
       "name": "তিলক সাহা",
-      "photo": "assets/images/common/treasurer.jpg",
+      "photo": "assets/images/common/1.png",
       "phone": "+91 97755 18114",
       "order": 4
     }
