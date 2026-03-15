@@ -6,7 +6,7 @@
       "en": "Durga Puja"
     },
     "icon": "🪔",
-    "image": "assets/images/events/durga-puja.jpg",
+    "image": "assets/images/events/durga-puja/durga-puja.jpg",
     "description": {
       "bn": "আমাদের ক্লাবের সবচেয়ে বড় ও জাঁকজমকপূর্ণ বার্ষিক উৎসব। চার দিনব্যাপী পূজা, সাংস্কৃতিক অনুষ্ঠান, খাবার স্টল ও প্রতিমা প্রদর্শনী। হাজারো ভক্ত ও দর্শক অংশগ্রহণ করেন।",
       "en": "Our club's biggest and most grand annual festival. Four-day puja, cultural programs, food stalls, and idol exhibition. Thousands of devotees and visitors participate."
@@ -26,10 +26,10 @@
     "type": "annual",
     "isFlagship": false,
     "gallery": [
-      "assets/images/events/durga-puja-1.jpg",
-      "assets/images/events/durga-puja-2.jpg",
-      "assets/images/events/durga-puja-3.jpg",
-      "assets/images/events/durga-puja-4.jpg"
+      "assets/images/events/durga-puja/1.jpg",
+      "assets/images/events/durga-puja/2.jpg",
+      "assets/images/events/durga-puja/3.jpg",
+      "assets/images/events/durga-puja/4.jpg"
     ],
     "status": "end",
     "order": 4
@@ -41,7 +41,7 @@
       "en": "Annual Sports Competition"
     },
     "icon": "🏆",
-    "image": "assets/images/events/sports-day.jpg",
+    "image": "assets/images/events/sports/sports-day.jpg",
     "description": {
       "bn": "বার্ষিক আন্তঃক্লাব ক্রীড়া প্রতিযোগিতা। ফুটবল, ক্রিকেট, ব্যাডমিন্টন, দৌড় সহ বিভিন্ন খেলার আয়োজন। বিজয়ীদের জন্য ট্রফি ও পুরস্কার।",
       "en": "Annual inter-club sports competition. Organization of various sports including football, cricket, badminton, and running. Trophies and prizes for winners."
@@ -61,9 +61,10 @@
     "type": "annual",
     "isFlagship": false,
     "gallery": [
-      "assets/images/events/sports-1.jpg",
-      "assets/images/events/sports-2.jpg",
-      "assets/images/events/sports-3.jpg"
+      "assets/images/events/sports/1.jpg",
+      "assets/images/events/sports/2.jpg",
+      "assets/images/events/sports/3.jpg",
+      "assets/images/events/sports/4.jpg"
     ],
     "status": "end",
     "order": 3
