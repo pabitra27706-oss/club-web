@@ -1,6 +1,7 @@
 /**
- * membership.js – v2
- * Offline cash payment, duplicate check, app ID collision fix, start date at approval
+ * membership.js – v2.1
+ * Offline cash payment, duplicate check, app ID collision fix,
+ * start date at approval, cash transactionId fix.
  */
 import { db } from './firebase-config.js';
 import {
@@ -304,7 +305,7 @@ async function submitApplication() {
     const appId = await generateUniqueAppId();
     STATE.appIdGenerated = appId;
     const isUpi = STATE.paymentMethod === 'upi';
-    const txnVal = isUpi ? $('f-txn').value.trim() : null;
+    const txnVal = isUpi ? $('f-txn').value.trim() : "";
     const receiverVal = isUpi ? null : $('f-receiver').value.trim();
     const cashNoteVal = isUpi ? null : ($('f-cash-note').value.trim() || null);
 
@@ -326,7 +327,7 @@ async function submitApplication() {
       duration: plan.duration,
       validYears: plan.validYears,
       paymentMethod: STATE.paymentMethod,
-      transactionId: txnVal,
+      transactionId: txnVal,                 // empty string for cash
       receiverName: receiverVal,
       cashNote: cashNoteVal,
       screenshotURL: null,
@@ -342,7 +343,7 @@ async function submitApplication() {
     STATE.lastAppData = {
       appId,
       plan,
-      txnId: txnVal,
+      txnId: txnVal || null,          // keep null for cash in state if needed
       receiverName: receiverVal,
       email: emailVal,
       paymentMethod: STATE.paymentMethod,
@@ -545,7 +546,6 @@ function initStatusChecker() {
     }
   });
 
-  // Escape key to close modal
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
       closeStatusModal();
@@ -623,7 +623,7 @@ async function searchApplication() {
 
   try {
     let foundDoc = null; let totalMatches = 0;
-    // Strategy 1: exact query
+    // Strategy 1
     const q1 = fbQuery(collection(db, 'membership_applications'), where(searchField, '==', searchValue), where('email', '==', email));
     const snap1 = await getDocs(q1);
     if (!snap1.empty) {
@@ -631,7 +631,7 @@ async function searchApplication() {
       if (docs.length > 1) docs.sort((a,b) => (b.submittedAt?.toDate?.()||0) - (a.submittedAt?.toDate?.()||0));
       foundDoc = docs[0]; totalMatches = docs.length;
     }
-    // Strategy 2: field only + client filter email
+    // Strategy 2
     if (!foundDoc) {
       const q2 = fbQuery(collection(db, 'membership_applications'), where(searchField, '==', searchValue));
       const snap2 = await getDocs(q2);
@@ -644,7 +644,7 @@ async function searchApplication() {
         }
       }
     }
-    // Strategy 3: if txn search failed, email-only + client txn filter
+    // Strategy 3
     if (!foundDoc && method === 'txn') {
       const q3 = fbQuery(collection(db, 'membership_applications'), where('email', '==', email));
       const snap3 = await getDocs(q3);
@@ -654,7 +654,7 @@ async function searchApplication() {
         if (matched.length) { foundDoc = matched[0]; totalMatches = matched.length; }
       }
     }
-    // Strategy 4: if appid search failed, email-only + client appId filter
+    // Strategy 4
     if (!foundDoc && method === 'appid') {
       const q4 = fbQuery(collection(db, 'membership_applications'), where('email', '==', email));
       const snap4 = await getDocs(q4);
@@ -721,7 +721,6 @@ function showStatusResults(app, totalMatches) {
   set('ms-r-name', app.name);
   set('ms-r-plan', app.planName);
   set('ms-r-amount', `₹${app.amount || 0}`);
-  // Show payment method and details
   const paymentDisplay = app.paymentMethod === 'cash'
     ? `Cash (Receiver: ${app.receiverName || 'N/A'})`
     : (app.transactionId || 'N/A');
