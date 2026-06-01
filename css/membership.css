@@ -438,3 +438,122 @@ body.m-scroll-locked { overflow: hidden; }
   color: var(--m-error);
   margin-top: 8px;
 }
+/* ─── Sign‑in Banner ────────────────────────────── */
+.m-signin-banner {
+  position: relative;
+  background: linear-gradient(135deg, var(--m-dark-3), var(--m-dark));
+  border-bottom: 2px solid var(--m-gold);
+  display: flex;
+  justify-content: center;
+  padding: 10px 20px;
+  z-index: 210;
+}
+.m-signin-banner__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 900px;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.m-signin-banner__icon {
+  color: var(--m-gold-light);
+  flex-shrink: 0;
+}
+.m-signin-banner__text {
+  color: rgba(255,255,255,0.85);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.m-signin-banner__btn {
+  background: var(--m-gold);
+  color: var(--m-dark);
+  border: none;
+  padding: 8px 20px;
+  border-radius: var(--m-radius-pill);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background var(--m-transition);
+  white-space: nowrap;
+}
+.m-signin-banner__btn:hover {
+  background: var(--m-gold-light);
+}
+.m-signin-banner__close {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+.m-signin-banner__close:hover {
+  color: var(--m-white);
+}
+
+/* ─── Hero badge SVGs ────────────────────────────── */
+.m-hero__badge-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--m-gold-light);
+  flex-shrink: 0;
+}
+
+/* ─── How-it-works step SVGs ─────────────────────── */
+.m-how__step-icon {
+  color: var(--m-gold-light);
+}
+
+/* ─── Lock icon in email label ───────────────────── */
+#email-lock-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--m-text-light);
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ─── Form card icon (SVG) ───────────────────────── */
+.m-form-card__icon {
+  width: 24px;
+  height: 24px;
+  color: var(--m-gold);
+}
+
+/* ─── Member card icon (SVG) ─────────────────────── */
+.m-member-card__icon {
+  width: 24px;
+  height: 24px;
+  color: var(--m-gold-light);
+}
+
+/* ─── Success icon SVG ───────────────────────────── */
+.m-success-icon svg {
+  color: var(--m-success);
+}
+
+/* ─── Next step icon SVG ─────────────────────────── */
+.m-next-step__icon {
+  color: var(--m-text-light);
+}
+
+/* ─── Payment card icon SVG ──────────────────────── */
+.m-pay-card__icon svg {
+  color: var(--m-text);
+}
+
+/* ─── UPI tabs icon SVG ──────────────────────────── */
+.m-pay-tab svg {
+  vertical-align: middle;
+  margin-right: 4px;
+}
