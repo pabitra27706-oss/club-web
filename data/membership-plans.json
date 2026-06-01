@@ -17,7 +17,7 @@
     {
       "id": "annual",
       "name": "Annual Membership",
-      "price": 500,
+      "price": 100,
       "currency": "INR",
       "currencySymbol": "₹",
       "duration": "1 Year",
