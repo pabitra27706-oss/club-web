@@ -98,6 +98,73 @@
                 <div class="contact-grid">
                     
                     <div>
+
+                        <!-- ══════════════════════════════════════════════════
+                             MEMBERSHIP BUTTON CARD
+                             Placed above contact information.
+                             Both contact.html and membership.html are in
+                             the same /pages/ folder — href is just
+                             "membership.html" (no path prefix needed).
+                        ══════════════════════════════════════════════════ -->
+                        <div class="card mb-6"
+                             style="border:2px solid #c9a84c;
+                                    border-radius:12px;
+                                    overflow:hidden;">
+                            <div class="card-body"
+                                 style="background:linear-gradient(135deg,#1a1a2e 0%,#0f3460 100%);
+                                        padding:24px 20px;
+                                        text-align:center;
+                                        display:flex;
+                                        flex-direction:column;
+                                        align-items:center;
+                                        gap:12px;">
+
+                                <div style="font-size:2rem;line-height:1;">🎴</div>
+
+                                <h3 style="color:#f0c040;
+                                           font-size:1rem;
+                                           font-weight:700;
+                                           margin:0;">
+                                    সদস্যপদ নিন
+                                </h3>
+
+                                <p style="color:rgba(255,255,255,0.70);
+                                          font-size:0.83rem;
+                                          line-height:1.55;
+                                          margin:0;
+                                          max-width:220px;">
+                                    অনলাইনে আবেদন করুন এবং UPI-এর মাধ্যমে পেমেন্ট করুন।
+                                    মাত্র কয়েক মিনিটেই সম্পন্ন!
+                                </p>
+
+                                <a href="membership.html"
+                                   style="display:inline-flex;
+                                          align-items:center;
+                                          gap:7px;
+                                          background:#c9a84c;
+                                          color:#1a1a2e;
+                                          font-weight:700;
+                                          font-size:0.88rem;
+                                          padding:11px 24px;
+                                          border-radius:100px;
+                                          text-decoration:none;
+                                          margin-top:4px;
+                                          transition:background 0.2s ease,
+                                                     transform 0.2s ease,
+                                                     box-shadow 0.2s ease;"
+                                   onmouseover="this.style.background='#f0c040';
+                                                this.style.transform='translateY(-2px)';
+                                                this.style.boxShadow='0 6px 20px rgba(201,168,76,0.45)';"
+                                   onmouseout="this.style.background='#c9a84c';
+                                               this.style.transform='translateY(0)';
+                                               this.style.boxShadow='none';">
+                                    সদস্যপদ পেজে যান →
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- /.membership button card -->
+
                         <h2 class="mb-6">যোগাযোগের তথ্য</h2>
                         
                         <div class="contact-info-card" id="contact-info-container"></div>
@@ -108,6 +175,7 @@
                                 <p id="opening-hours"></p>
                             </div>
                         </div>
+
                     </div>
 
                     <div>
@@ -139,41 +207,6 @@
                                         <option value="event">অনুষ্ঠান সম্পর্কে</option>
                                         <option value="other">অন্যান্য</option>
                                     </select>
-                                </div>
-
-                                <!-- ── MEMBERSHIP REDIRECT NOTICE ───────────────────────────
-                                     Shown only when subject = "membership".
-                                     Redirects to membership.html which is in the same
-                                     /pages/ folder as this contact.html file.
-                                ─────────────────────────────────────────────────────────── -->
-                                <div id="membership-notice"
-                                     style="display:none;
-                                            background:#fffde7;
-                                            border:1px solid #ffe082;
-                                            border-left:4px solid #c9a84c;
-                                            border-radius:8px;
-                                            padding:14px 16px;
-                                            margin-bottom:16px;">
-                                    <p style="margin:0 0 10px;
-                                              font-size:0.9rem;
-                                              color:#5d4037;
-                                              line-height:1.55;">
-                                        🎴 <strong>সদস্যপদের জন্য আবেদন করতে চান?</strong><br>
-                                        আমাদের অনলাইন সদস্যপদ পেজে যান — পরিকল্পনা বেছে নিন,
-                                        ফর্ম পূরণ করুন এবং UPI-এর মাধ্যমে পেমেন্ট করুন।
-                                    </p>
-                                    <a href="membership.html"
-                                       style="display:inline-block;
-                                              background:#c9a84c;
-                                              color:#1a1a2e;
-                                              font-weight:700;
-                                              font-size:0.88rem;
-                                              padding:9px 20px;
-                                              border-radius:6px;
-                                              text-decoration:none;
-                                              transition:background 0.2s ease;">
-                                        সদস্যপদ পেজে যান →
-                                    </a>
                                 </div>
 
                                 <div class="form-group">
@@ -256,19 +289,6 @@
             await loadAllData();
             initLanguage();
             renderContactPage();
-
-            // ── Membership notice toggle ──────────────────────────────────
-            // When subject dropdown = "membership", show the redirect notice.
-            // Both contact.html and membership.html are in /pages/ folder.
-            const subjectEl = document.getElementById('subject');
-            const noticeEl  = document.getElementById('membership-notice');
-
-            if (subjectEl && noticeEl) {
-                subjectEl.addEventListener('change', function () {
-                    noticeEl.style.display =
-                        this.value === 'membership' ? 'block' : 'none';
-                });
-            }
         });
     </script>
 </body>
