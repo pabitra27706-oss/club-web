@@ -92,7 +92,12 @@
                 <a href="gallery.html" class="nav-mobile-link">🖼️ GALLERY</a>
             </li>
         </ul>
-        <div class="nav-mobile-cta">
+        <!-- MEMBERSHIP CTA (ENGLISH ONLY) – ABOVE CONTACT -->
+        <div class="nav-mobile-cta" id="membership-mobile-cta">
+            <a href="membership.html" class="btn btn-primary btn-block">Membership</a>
+        </div>
+        <!-- CONTACT CTA -->
+        <div class="nav-mobile-cta" id="contact-mobile-cta">
             <a href="contact.html" class="btn btn-primary btn-block">যোগাযোগ করুন</a>
         </div>
         <div class="nav-mobile-language">
@@ -141,12 +146,12 @@
             <div class="footer-grid">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <img src="../assets/images/common/logo.png" alt="Club Logo" class="footer-logo-image">
-                        <span class="footer-logo-text">Sarberia Pally Seba Samity</span>
+                        <img src="../assets/images/common/logo.png" alt="Club Logo" class="logo-image">
+                        <span class="footer-logo-text" id="footer-club-name">Sarberia Pally Seba Samity</span>
                     </div>
-                    <p class="footer-about">১৯৩৮ সাল থেকে সেবায় নিয়োজিত</p>
+                    <p class="footer-about" id="footer-about">১৯৩৮ সাল থেকে খেলাধুলা ও সংস্কৃতিতে সেবায় নিয়োজিত</p>
+                    <div class="social-links" id="social-links"></div>
                 </div>
-
                 <div>
                     <h3 class="footer-section-title">লিংক</h3>
                     <ul class="footer-links">
@@ -154,29 +159,29 @@
                         <li><a href="about.html">আমাদের সম্পর্কে</a></li>
                         <li><a href="programs.html">প্রশিক্ষণ</a></li>
                         <li><a href="events.html">অনুষ্ঠান</a></li>
-                        <li><a href="library.html">পাঠাগার</a></li>
-                        <li><a href="updates.html">আপডেট</a></li>
-                        <li><a href="community.html">সমিতি</a></li>
                     </ul>
                 </div>
-
                 <div>
                     <h3 class="footer-section-title">আরও</h3>
                     <ul class="footer-links">
+                        <li><a href="library.html">পাঠাগার</a></li>
+                        <li><a href="updates.html">আপডেট</a></li>
+                        <li><a href="community.html">সমিতি</a></li>
                         <li><a href="achievements.html">শারদ সম্মান</a></li>
                         <li><a href="gallery.html">গ্যালারি</a></li>
+                        <li><a href="membership.html">Membership</a></li>
                         <li><a href="contact.html">যোগাযোগ</a></li>
                     </ul>
                 </div>
-
                 <div>
                     <h3 class="footer-section-title">যোগাযোগ</h3>
                     <div id="footer-contact"></div>
                 </div>
             </div>
-
             <div class="footer-bottom">
-                <p class="footer-copyright">© <span id="current-year"></span> সারবেরিয়া পল্লী সেবা সমিতি</p>
+                <div class="footer-bottom-content">
+                    <p class="footer-copyright">© <span id="current-year"></span> সারবেরিয়া পল্লী সেবা সমিতি. সর্বস্বত্ব সংরক্ষিত.</p>
+                </div>
             </div>
         </div>
     </footer>
