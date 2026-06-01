@@ -4,7 +4,7 @@
  * - Loads plans from JSON
  * - Step navigation + validation
  * - Firebase Firestore submission
- * - Status checker (search by App ID + Email)
+ * - Status checker (search by Email + Transaction ID)
  * - FAQ accordion, mobile menu, footer year
  */
 
@@ -489,8 +489,17 @@ function saveConfirmation() {
     `Plan            : ${d.plan.name}`,
     `Amount Paid     : ${d.plan.currencySymbol}${d.plan.price}`,
     `Transaction ID  : ${d.txnId}`,
+    `Email           : ${d.email || ''}`,
     `Status          : Pending (Under Review)`,
     `Submitted At    : ${now} IST`,
+    '',
+    '───────────────────────────────────────────────',
+    '   CHECK YOUR STATUS',
+    '───────────────────────────────────────────────',
+    'Visit the membership page and click "Check Status".',
+    'You can search using:',
+    `  Option 1: Application ID (${d.appId}) + Email`,
+    `  Option 2: Transaction ID (${d.txnId}) + Email`,
     '',
     '───────────────────────────────────────────────',
     '   WHAT HAPPENS NEXT',
@@ -499,13 +508,6 @@ function saveConfirmation() {
     '2. Application approved within 24 hours.',
     '3. You receive an email with your digital card.',
     '4. Present your card at club events.',
-    '',
-    '───────────────────────────────────────────────',
-    '   CHECK YOUR STATUS',
-    '───────────────────────────────────────────────',
-    'Visit the membership page and click "Check Status".',
-    `Enter Application ID: ${d.appId}`,
-    `Enter Email: ${d.email || ''}`,
     '',
     '───────────────────────────────────────────────',
     '   CONTACT',
@@ -621,17 +623,19 @@ function initMobileMenu() {
 
 /* ═══════════════════════════════════════════════════════════════════════════
    STATUS CHECKER
+   Two search methods:
+     1. Application ID + Email
+     2. Transaction ID + Email (for users who forgot their App ID)
    ═══════════════════════════════════════════════════════════════════════════ */
 function initStatusChecker() {
-  const openBtn   = $('m-open-status-btn');
-  const closeBtn  = $('m-status-modal-close');
-  const searchBtn = $('m-status-search-btn');
-  const againBtn  = $('ms-search-again-btn');
-  const closeBtnR = $('ms-close-btn');
-  const modal     = $('m-status-modal');
-
-  // "Check Status" button after submit (step 3)
+  const openBtn          = $('m-open-status-btn');
+  const closeBtn         = $('m-status-modal-close');
+  const searchBtn        = $('m-status-search-btn');
+  const againBtn         = $('ms-search-again-btn');
+  const closeBtnR        = $('ms-close-btn');
+  const modal            = $('m-status-modal');
   const checkAfterSubmit = $('m-check-status-after-submit');
+  const methodToggle     = $('ms-method-toggle');
 
   if (openBtn) {
     openBtn.addEventListener('click', openStatusModal);
@@ -640,7 +644,8 @@ function initStatusChecker() {
   if (checkAfterSubmit) {
     checkAfterSubmit.addEventListener('click', () => {
       openStatusModal();
-      // Pre-fill with last submission data
+      // Pre-fill with last submission data — use App ID method
+      switchSearchMethod('appid');
       if (STATE.lastAppData) {
         const appIdEl = $('ms-app-id');
         const emailEl = $('ms-email');
@@ -672,8 +677,18 @@ function initStatusChecker() {
     closeBtnR.addEventListener('click', closeStatusModal);
   }
 
+  // Method toggle link
+  if (methodToggle) {
+    methodToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      const currentMethod = methodToggle.getAttribute('data-current') || 'appid';
+      const newMethod = currentMethod === 'appid' ? 'txn' : 'appid';
+      switchSearchMethod(newMethod);
+    });
+  }
+
   // Clear errors on focus
-  ['ms-app-id', 'ms-email'].forEach(id => {
+  ['ms-app-id', 'ms-email', 'ms-txn'].forEach(id => {
     const el = $(id);
     if (el) {
       el.addEventListener('focus', () => {
@@ -685,6 +700,41 @@ function initStatusChecker() {
       });
     }
   });
+}
+
+function switchSearchMethod(method) {
+  const appIdGroup  = $('ms-group-appid');
+  const txnGroup    = $('ms-group-txn');
+  const toggleLink  = $('ms-method-toggle');
+  const toggleText  = $('ms-method-text');
+
+  if (method === 'txn') {
+    // Show Transaction ID field, hide App ID field
+    if (appIdGroup) appIdGroup.style.display = 'none';
+    if (txnGroup)   txnGroup.style.display   = 'flex';
+    if (toggleLink) toggleLink.setAttribute('data-current', 'txn');
+    if (toggleText) toggleText.textContent   = 'I have my Application ID';
+  } else {
+    // Show App ID field, hide Transaction ID field
+    if (appIdGroup) appIdGroup.style.display = 'flex';
+    if (txnGroup)   txnGroup.style.display   = 'none';
+    if (toggleLink) toggleLink.setAttribute('data-current', 'appid');
+    if (toggleText) toggleText.textContent   = 'Forgot Application ID? Use Transaction ID';
+  }
+
+  // Clear values and errors
+  ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => {
+    const el = $(id);
+    if (el) {
+      el.classList.remove('m--error');
+    }
+  });
+  ['ms-app-id-err', 'ms-txn-err', 'ms-email-err'].forEach(id => {
+    const el = $(id);
+    if (el) el.textContent = '';
+  });
+  const gErr = $('ms-error');
+  if (gErr) gErr.style.display = 'none';
 }
 
 function openStatusModal() {
@@ -710,17 +760,14 @@ function showSearchForm() {
   if (searchForm) searchForm.style.display = 'flex';
   if (results)    results.style.display    = 'none';
 
-  const appIdEl = $('ms-app-id');
-  const emailEl = $('ms-email');
-  if (appIdEl) appIdEl.value = '';
-  if (emailEl) emailEl.value = '';
+  // Reset to App ID method by default
+  switchSearchMethod('appid');
 
-  ['ms-app-id-err', 'ms-email-err'].forEach(id => {
+  // Clear all fields
+  ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => {
     const el = $(id);
-    if (el) el.textContent = '';
+    if (el) el.value = '';
   });
-  const gErr = $('ms-error');
-  if (gErr) gErr.style.display = 'none';
 }
 
 function formatDateForStatus(val) {
@@ -742,21 +789,14 @@ function formatDateForStatus(val) {
 }
 
 async function searchApplication() {
-  const appIdEl = $('ms-app-id');
-  const emailEl = $('ms-email');
-  const errEl   = $('ms-error');
+  const toggleLink = $('ms-method-toggle');
+  const method     = (toggleLink?.getAttribute('data-current')) || 'appid';
+  const emailEl    = $('ms-email');
+  const errEl      = $('ms-error');
+  const email      = (emailEl?.value || '').trim().toLowerCase();
 
-  const appId = (appIdEl?.value || '').trim().toUpperCase();
-  const email = (emailEl?.value || '').trim().toLowerCase();
-
-  // Validate
+  // Validate email (common to both methods)
   let valid = true;
-  if (!appId) {
-    const e = $('ms-app-id-err');
-    if (e) e.textContent = 'Application ID is required.';
-    appIdEl?.classList.add('m--error');
-    valid = false;
-  }
   if (!email) {
     const e = $('ms-email-err');
     if (e) e.textContent = 'Email address is required.';
@@ -768,6 +808,39 @@ async function searchApplication() {
     emailEl?.classList.add('m--error');
     valid = false;
   }
+
+  let searchField = '';
+  let searchValue = '';
+
+  if (method === 'appid') {
+    const appIdEl = $('ms-app-id');
+    const appId   = (appIdEl?.value || '').trim().toUpperCase();
+    if (!appId) {
+      const e = $('ms-app-id-err');
+      if (e) e.textContent = 'Application ID is required.';
+      appIdEl?.classList.add('m--error');
+      valid = false;
+    }
+    searchField = 'applicationId';
+    searchValue = appId;
+  } else {
+    const txnEl = $('ms-txn');
+    const txn   = (txnEl?.value || '').trim();
+    if (!txn) {
+      const e = $('ms-txn-err');
+      if (e) e.textContent = 'Transaction ID is required.';
+      txnEl?.classList.add('m--error');
+      valid = false;
+    } else if (txn.length < 8) {
+      const e = $('ms-txn-err');
+      if (e) e.textContent = 'Transaction ID must be at least 8 characters.';
+      txnEl?.classList.add('m--error');
+      valid = false;
+    }
+    searchField = 'transactionId';
+    searchValue = txn;
+  }
+
   if (!valid) return;
 
   // Show loading
@@ -782,23 +855,38 @@ async function searchApplication() {
   try {
     const q = fbQuery(
       collection(db, 'membership_applications'),
-      where('applicationId', '==', appId),
+      where(searchField, '==', searchValue),
       where('email', '==', email)
     );
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
       if (errEl) {
-        errEl.textContent =
-          '❌ No application found with this ID and email combination. ' +
-          'Please check your Application ID and email address and try again.';
+        const fieldLabel = method === 'appid' ? 'Application ID' : 'Transaction ID';
+        errEl.innerHTML =
+          `❌ No application found matching this <strong>${fieldLabel}</strong> ` +
+          `and <strong>Email</strong> combination.<br><br>` +
+          `Please double-check your details and try again. ` +
+          (method === 'appid'
+            ? 'If you forgot your Application ID, click the link below to search by Transaction ID instead.'
+            : 'If you have your Application ID, click the link below to search by that instead.');
         errEl.style.display = 'block';
       }
       return;
     }
 
-    const docData = snapshot.docs[0].data();
-    showStatusResults(docData);
+    // If multiple results found (unlikely but possible with txn search),
+    // show the most recent one
+    let docs = snapshot.docs.map(d => d.data());
+    if (docs.length > 1) {
+      docs.sort((a, b) => {
+        const da = a.submittedAt?.toDate?.() || new Date(0);
+        const db2 = b.submittedAt?.toDate?.() || new Date(0);
+        return db2 - da;
+      });
+    }
+
+    showStatusResults(docs[0], docs.length > 1 ? docs.length : 0);
 
   } catch (err) {
     console.error('Status search error:', err);
@@ -814,11 +902,23 @@ async function searchApplication() {
   }
 }
 
-function showStatusResults(app) {
+function showStatusResults(app, totalMatches) {
   const searchForm = $('m-status-search-form');
   const results    = $('m-status-results');
   if (searchForm) searchForm.style.display = 'none';
   if (results)    results.style.display    = 'flex';
+
+  // Multiple match notice
+  const multiNotice = $('ms-multi-notice');
+  if (multiNotice) {
+    if (totalMatches > 1) {
+      multiNotice.textContent =
+        `ℹ️ Found ${totalMatches} applications. Showing the most recent one.`;
+      multiNotice.style.display = 'block';
+    } else {
+      multiNotice.style.display = 'none';
+    }
+  }
 
   // Banner
   const banner     = $('ms-banner');
@@ -866,7 +966,6 @@ function showStatusResults(app) {
   if (bannerIcon) bannerIcon.textContent  = info.icon;
   if (bannerStat) bannerStat.textContent  = info.label;
 
-  // Status message
   const msgEl = $('ms-message');
   if (msgEl) msgEl.textContent = info.msg;
 
@@ -910,7 +1009,6 @@ function showStatusResults(app) {
    ATTACH ALL EVENT LISTENERS
    ═══════════════════════════════════════════════════════════════════════════ */
 function attachListeners() {
-  // Step 1 → 2
   const step1Next = $('m-step1-next');
   if (step1Next) {
     step1Next.addEventListener('click', () => {
@@ -918,19 +1016,16 @@ function attachListeners() {
     });
   }
 
-  // Step 2 → 1 (back)
   const step2Back = $('m-step2-back');
   if (step2Back) {
     step2Back.addEventListener('click', () => goToStep(1));
   }
 
-  // Submit
   const step2Submit = $('m-step2-submit');
   if (step2Submit) {
     step2Submit.addEventListener('click', submitApplication);
   }
 
-  // Change plan
   const changePlanBtn = $('m-change-plan-btn');
   if (changePlanBtn) {
     changePlanBtn.addEventListener('click', () => {
@@ -941,19 +1036,16 @@ function attachListeners() {
     });
   }
 
-  // Copy UPI
   const copyUpiBtn = $('m-copy-upi-btn');
   if (copyUpiBtn) {
     copyUpiBtn.addEventListener('click', copyUpiId);
   }
 
-  // Save confirmation
   const saveBtn = $('m-save-confirmation-btn');
   if (saveBtn) {
     saveBtn.addEventListener('click', saveConfirmation);
   }
 
-  // Real-time error clearing
   const clearMap = [
     ['f-name',      'e-name'],
     ['f-email',     'e-email'],
@@ -972,7 +1064,6 @@ function attachListeners() {
     }
   });
 
-  // Checkbox error clear
   const confirmCb = $('f-confirm');
   if (confirmCb) {
     confirmCb.addEventListener('change', () => {
@@ -981,7 +1072,6 @@ function attachListeners() {
     });
   }
 
-  // Phone: digits only
   const phoneField = $('f-phone');
   if (phoneField) {
     phoneField.addEventListener('input', () => {
