@@ -1,8 +1,6 @@
 /**
- * membership.js – v3
- * Optional login, member dashboard, secure claiming,
- * duplicate txn block, active warning, renewal,
- * email locked for logged-in users, cash applicant account creation prompt.
+ * membership.js – v4
+ * All features + complete status checker.
  */
 import { db, auth } from './firebase-config.js';
 import {
@@ -59,7 +57,6 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     if (authBtn) authBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> My Membership`;
     STATE.guestMode = false;
-    // Lock email field
     if (emailField) {
       emailField.value = user.email || '';
       emailField.readOnly = true;
@@ -67,7 +64,6 @@ onAuthStateChanged(auth, async (user) => {
       emailField.style.cursor = 'not-allowed';
     }
     if (lockIcon) lockIcon.style.display = 'inline-block';
-    // Hide banner
     if (banner) banner.style.display = 'none';
     await loadMemberData();
     showMemberDashboard();
@@ -75,14 +71,12 @@ onAuthStateChanged(auth, async (user) => {
     if (authBtn) authBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Sign In`;
     STATE.guestMode = true;
     STATE.memberApps = [];
-    // Unlock email field
     if (emailField) {
       emailField.readOnly = false;
       emailField.style.backgroundColor = '';
       emailField.style.cursor = '';
     }
     if (lockIcon) lockIcon.style.display = 'none';
-    // Show sign-in banner for guests
     if (banner) banner.style.display = 'flex';
     hideMemberDashboard();
   }
@@ -244,7 +238,6 @@ function validateStep1() {
   else if (!emailRx.test(email)) { setError('f-email', 'e-email', 'Please enter a valid email address.'); valid = false; }
   else { clearError('f-email', 'e-email'); }
 
-  // If logged in and the email has been changed (shouldn't happen because it's read-only), we don't allow it.
   if (STATE.user && email !== STATE.user.email) {
     setError('f-email', 'e-email', 'Email cannot be changed while signed in.');
     valid = false;
@@ -456,7 +449,6 @@ async function handleAuth(mode) {
       await signInWithEmailAndPassword(auth, email, password);
     }
     await loadMemberData();
-    // Check for unclaimed applications (no userId) with this email
     const unclaimed = STATE.memberApps.filter(a => !a.userId);
     if (unclaimed.length > 0) {
       showClaimModal(unclaimed);
@@ -530,9 +522,7 @@ function showClaimModal(unclaimedApps) {
     showMemberDashboard();
   };
 
-  document.getElementById('m-claim-skip').onclick = () => {
-    modal.style.display = 'none';
-  };
+  document.getElementById('m-claim-skip').onclick = () => { modal.style.display = 'none'; };
   document.getElementById('m-claim-modal-close').onclick = () => modal.style.display = 'none';
   modal.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
 }
@@ -557,7 +547,6 @@ async function submitApplication() {
     const isUpi = STATE.paymentMethod === 'upi';
     const txnVal = isUpi ? $('f-txn').value.trim() : '';
 
-    // Duplicate transaction ID check (UPI only)
     if (isUpi && txnVal) {
       const q = fbQuery(collection(db, 'membership_applications'), where('transactionId', '==', txnVal));
       const snap = await getDocs(q);
@@ -567,7 +556,6 @@ async function submitApplication() {
       }
     }
 
-    // Active membership warning
     const activeQ = fbQuery(collection(db, 'membership_applications'), where('email', '==', emailVal), where('status', '==', 'approved'));
     const activeSnap = await getDocs(activeQ);
     if (!activeSnap.empty) {
@@ -579,7 +567,6 @@ async function submitApplication() {
       }
     }
 
-    // Duplicate pending check
     const pendingQ = fbQuery(collection(db, 'membership_applications'), where('email', '==', emailVal), where('status', '==', 'pending'));
     const pendingSnap = await getDocs(pendingQ);
     if (!pendingSnap.empty) {
@@ -658,16 +645,13 @@ function populateSuccessStep() {
     setTxt('s-txn', `Cash (Receiver: ${d.receiverName})`);
   }
 
-  // Show/hide Create Account button based on guest mode
   const createBtn = $('m-create-account-btn');
   if (createBtn) {
     if (STATE.guestMode) {
       createBtn.style.display = 'inline-flex';
-      // Pre-fill signup email when clicked
       createBtn.onclick = () => {
         showAuthForm('signup');
         $('m-auth-modal').style.display = 'flex';
-        // Pre-fill the email field
         setTimeout(() => {
           const authEmail = document.getElementById('auth-email');
           if (authEmail) authEmail.value = d.email;
@@ -804,18 +788,264 @@ function initMobileMenu() {
   });
 }
 
-/* ---------- Status checker (from v2, unchanged) ---------- */
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATUS CHECKER (full)
+   ═══════════════════════════════════════════════════════════════════════════ */
 function initStatusChecker() {
-  // same as before
+  const openBtn = $('m-open-status-btn');
+  const closeBtn = $('m-status-modal-close');
+  const searchBtn = $('m-status-search-btn');
+  const againBtn = $('ms-search-again-btn');
+  const closeBtnR = $('ms-close-btn');
+  const modal = $('m-status-modal');
+  const checkAfterSubmit = $('m-check-status-after-submit');
+  const methodToggle = $('ms-method-toggle');
+
+  if (openBtn) openBtn.addEventListener('click', openStatusModal);
+  if (checkAfterSubmit) {
+    checkAfterSubmit.addEventListener('click', () => {
+      openStatusModal();
+      switchSearchMethod('appid');
+      if (STATE.lastAppData) {
+        const appIdEl = $('ms-app-id'); const emailEl = $('ms-email');
+        if (appIdEl) appIdEl.value = STATE.lastAppData.appId || '';
+        if (emailEl) emailEl.value = STATE.lastAppData.email || '';
+      }
+    });
+  }
+  if (closeBtn) closeBtn.addEventListener('click', closeStatusModal);
+  if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeStatusModal(); });
+  if (searchBtn) searchBtn.addEventListener('click', searchApplication);
+  if (againBtn) againBtn.addEventListener('click', showSearchForm);
+  if (closeBtnR) closeBtnR.addEventListener('click', closeStatusModal);
+  if (methodToggle) {
+    methodToggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      const current = methodToggle.getAttribute('data-current') || 'appid';
+      switchSearchMethod(current === 'appid' ? 'txn' : 'appid');
+    });
+  }
+  ['ms-app-id', 'ms-email', 'ms-txn'].forEach(id => {
+    const el = $(id);
+    if (el) {
+      el.addEventListener('focus', () => {
+        const errEl = $(id + '-err'); if (errEl) errEl.textContent = '';
+        el.classList.remove('m--error');
+        const gErr = $('ms-error'); if (gErr) gErr.style.display = 'none';
+      });
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal && modal.style.display === 'flex') {
+      closeStatusModal();
+    }
+  });
 }
 
-function switchSearchMethod(method) { /* ... */ }
-function openStatusModal() { /* ... */ }
-function closeStatusModal() { /* ... */ }
-function showSearchForm() { /* ... */ }
-async function searchApplication() { /* ... */ }
-function showStatusResults(app, totalMatches) { /* ... */ }
-function formatDateForStatus(val) { /* ... */ }
+function switchSearchMethod(method) {
+  const appIdGroup = $('ms-group-appid');
+  const txnGroup = $('ms-group-txn');
+  const toggleLink = $('ms-method-toggle');
+  const toggleText = $('ms-method-text');
+  if (method === 'txn') {
+    if (appIdGroup) appIdGroup.style.display = 'none';
+    if (txnGroup) txnGroup.style.display = 'flex';
+    if (toggleLink) toggleLink.setAttribute('data-current', 'txn');
+    if (toggleText) toggleText.textContent = 'I have my Application ID';
+  } else {
+    if (appIdGroup) appIdGroup.style.display = 'flex';
+    if (txnGroup) txnGroup.style.display = 'none';
+    if (toggleLink) toggleLink.setAttribute('data-current', 'appid');
+    if (toggleText) toggleText.textContent = 'Forgot Application ID? Use Transaction ID';
+  }
+  ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => { const el = $(id); if (el) el.classList.remove('m--error'); });
+  ['ms-app-id-err', 'ms-txn-err', 'ms-email-err'].forEach(id => { const el = $(id); if (el) el.textContent = ''; });
+  const gErr = $('ms-error'); if (gErr) gErr.style.display = 'none';
+}
+
+function openStatusModal() {
+  const modal = $('m-status-modal');
+  if (modal) { modal.style.display = 'flex'; document.body.classList.add('m-scroll-locked'); }
+  showSearchForm();
+}
+
+function closeStatusModal() {
+  const modal = $('m-status-modal');
+  if (modal) { modal.style.display = 'none'; document.body.classList.remove('m-scroll-locked'); }
+}
+
+function showSearchForm() {
+  const searchForm = $('m-status-search-form');
+  const results = $('m-status-results');
+  if (searchForm) searchForm.style.display = 'flex';
+  if (results) results.style.display = 'none';
+  switchSearchMethod('appid');
+  ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => { const el = $(id); if (el) el.value = ''; });
+}
+
+async function searchApplication() {
+  const toggleLink = $('ms-method-toggle');
+  const method = (toggleLink?.getAttribute('data-current')) || 'appid';
+  const emailEl = $('ms-email');
+  const errEl = $('ms-error');
+  const email = (emailEl?.value || '').trim().toLowerCase();
+  let valid = true;
+  if (!email) { const e = $('ms-email-err'); if (e) e.textContent = 'Email address is required.'; emailEl?.classList.add('m--error'); valid = false; }
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { const e = $('ms-email-err'); if (e) e.textContent = 'Please enter a valid email.'; emailEl?.classList.add('m--error'); valid = false; }
+  let searchField = ''; let searchValue = '';
+  if (method === 'appid') {
+    const appIdEl = $('ms-app-id'); const appId = (appIdEl?.value || '').trim().toUpperCase();
+    if (!appId) { const e = $('ms-app-id-err'); if (e) e.textContent = 'Application ID is required.'; appIdEl?.classList.add('m--error'); valid = false; }
+    searchField = 'applicationId'; searchValue = appId;
+  } else {
+    const txnEl = $('ms-txn'); const txn = (txnEl?.value || '').trim();
+    if (!txn) { const e = $('ms-txn-err'); if (e) e.textContent = 'Transaction ID is required.'; txnEl?.classList.add('m--error'); valid = false; }
+    else if (txn.length < 8) { const e = $('ms-txn-err'); if (e) e.textContent = 'Transaction ID must be at least 8 characters.'; txnEl?.classList.add('m--error'); valid = false; }
+    searchField = 'transactionId'; searchValue = txn;
+  }
+  if (!valid) return;
+
+  const searchBtn = $('m-status-search-btn');
+  const btnText = searchBtn?.querySelector('.m-btn__text');
+  const btnSpin = searchBtn?.querySelector('.m-btn__spinner');
+  if (btnText) btnText.style.display = 'none';
+  if (btnSpin) btnSpin.style.display = 'inline-flex';
+  if (searchBtn) searchBtn.disabled = true;
+  if (errEl) errEl.style.display = 'none';
+
+  try {
+    let foundDoc = null; let totalMatches = 0;
+    const q1 = fbQuery(collection(db, 'membership_applications'), where(searchField, '==', searchValue), where('email', '==', email));
+    const snap1 = await getDocs(q1);
+    if (!snap1.empty) {
+      let docs = snap1.docs.map(d => d.data());
+      if (docs.length > 1) docs.sort((a,b) => (b.submittedAt?.toDate?.()||0) - (a.submittedAt?.toDate?.()||0));
+      foundDoc = docs[0]; totalMatches = docs.length;
+    }
+    if (!foundDoc) {
+      const q2 = fbQuery(collection(db, 'membership_applications'), where(searchField, '==', searchValue));
+      const snap2 = await getDocs(q2);
+      if (!snap2.empty) {
+        const allDocs = snap2.docs.map(d => d.data());
+        const matched = allDocs.filter(d => (d.email||'').toLowerCase().trim() === email);
+        if (matched.length) {
+          if (matched.length > 1) matched.sort((a,b) => (b.submittedAt?.toDate?.()||0) - (a.submittedAt?.toDate?.()||0));
+          foundDoc = matched[0]; totalMatches = matched.length;
+        }
+      }
+    }
+    if (!foundDoc && method === 'txn') {
+      const q3 = fbQuery(collection(db, 'membership_applications'), where('email', '==', email));
+      const snap3 = await getDocs(q3);
+      if (!snap3.empty) {
+        const allDocs = snap3.docs.map(d => d.data());
+        const matched = allDocs.filter(d => (d.transactionId||'').toLowerCase().trim() === searchValue.toLowerCase().trim());
+        if (matched.length) { foundDoc = matched[0]; totalMatches = matched.length; }
+      }
+    }
+    if (!foundDoc && method === 'appid') {
+      const q4 = fbQuery(collection(db, 'membership_applications'), where('email', '==', email));
+      const snap4 = await getDocs(q4);
+      if (!snap4.empty) {
+        const allDocs = snap4.docs.map(d => d.data());
+        const matched = allDocs.filter(d => (d.applicationId||'').toUpperCase().trim() === searchValue.toUpperCase().trim());
+        if (matched.length) { foundDoc = matched[0]; totalMatches = matched.length; }
+      }
+    }
+
+    if (foundDoc) {
+      showStatusResults(foundDoc, totalMatches > 1 ? totalMatches : 0);
+    } else {
+      const fieldLabel = method === 'appid' ? 'Application ID' : 'Transaction ID';
+      if (errEl) {
+        errEl.innerHTML = `❌ No application found matching this <strong>${fieldLabel}</strong> and <strong>Email</strong> combination.<br><br>
+          <strong>Tips:</strong><br>
+          ▪ Make sure the email is exactly what you used during application<br>
+          ▪ Check for typos in your ${fieldLabel}<br>
+          ${method === 'appid' ? '▪ Try searching by Transaction ID instead (click the link above)<br>' : '▪ Try searching by Application ID instead (click the link above)<br>'}
+          ▪ Check your UPI app for the exact Transaction ID<br>
+          ▪ If you downloaded the confirmation .txt file, check it for your details`;
+        errEl.style.display = 'block';
+      }
+    }
+  } catch (err) {
+    console.error('[Status Checker] Error:', err);
+    if (err.message && err.message.includes('index')) {
+      if (errEl) errEl.innerHTML = '🔧 Search index is being set up. This is a one-time process.<br><br>Please try again in 2-3 minutes. If the problem persists, try searching by <strong>Application ID</strong> instead.';
+    } else {
+      if (errEl) errEl.textContent = '⚠️ Something went wrong. Please check your internet connection and try again.';
+    }
+    if (errEl) errEl.style.display = 'block';
+  } finally {
+    if (btnText) btnText.style.display = 'inline';
+    if (btnSpin) btnSpin.style.display = 'none';
+    if (searchBtn) searchBtn.disabled = false;
+  }
+}
+
+function showStatusResults(app, totalMatches) {
+  const searchForm = $('m-status-search-form');
+  const results = $('m-status-results');
+  if (searchForm) searchForm.style.display = 'none';
+  if (results) results.style.display = 'flex';
+
+  const multiNotice = $('ms-multi-notice');
+  if (multiNotice) {
+    if (totalMatches > 1) { multiNotice.textContent = `📋 Found ${totalMatches} applications. Showing the most recent one.`; multiNotice.style.display = 'block'; }
+    else { multiNotice.style.display = 'none'; }
+  }
+  const banner = $('ms-banner');
+  const bannerIcon = $('ms-banner-icon');
+  const bannerStat = $('ms-banner-status');
+  if (banner) banner.classList.remove('m-status-banner--pending', 'm-status-banner--approved', 'm-status-banner--rejected');
+  const statusMap = {
+    pending: { cls: 'm-status-banner--pending', icon: '⏳', label: 'Pending Review', msg: 'Your application is currently under review. Our admin team will verify your payment and process your application within 24 hours. You will receive an email once it is approved.' },
+    approved: { cls: 'm-status-banner--approved', icon: '✅', label: 'Approved', msg: 'Congratulations! Your membership has been approved. You should receive (or have already received) an email with your digital membership card (PDF) attached.' },
+    rejected: { cls: 'm-status-banner--rejected', icon: '❌', label: 'Rejected', msg: 'Unfortunately, your application was not approved. Please check the rejection reason below.' }
+  };
+  const info = statusMap[app.status] || statusMap.pending;
+  if (banner) banner.classList.add(info.cls);
+  if (bannerIcon) bannerIcon.textContent = info.icon;
+  if (bannerStat) bannerStat.textContent = info.label;
+  const msgEl = $('ms-message'); if (msgEl) msgEl.textContent = info.msg;
+
+  const set = (id, val) => { const el = $(id); if (el) el.textContent = val || '-'; };
+  set('ms-r-appid', app.applicationId);
+  set('ms-r-name', app.name);
+  set('ms-r-plan', app.planName);
+  set('ms-r-amount', `₹${app.amount || 0}`);
+  const paymentDisplay = app.paymentMethod === 'cash'
+    ? `Cash (Receiver: ${app.receiverName || 'N/A'})`
+    : (app.transactionId || 'N/A');
+  set('ms-r-payment', paymentDisplay);
+  set('ms-r-submitted', formatDateForStatus(app.submittedAt));
+
+  const approvedBlock = $('ms-approved-details'); if (approvedBlock) approvedBlock.style.display = app.status === 'approved' ? 'block' : 'none';
+  if (app.status === 'approved') {
+    set('ms-r-mid', app.membershipId);
+    set('ms-r-start', formatDateForStatus(app.startDate));
+    set('ms-r-expiry', formatDateForStatus(app.expiryDate));
+    set('ms-r-verified', formatDateForStatus(app.verifiedAt));
+  }
+  const rejectedBlock = $('ms-rejected-details'); if (rejectedBlock) rejectedBlock.style.display = app.status === 'rejected' ? 'block' : 'none';
+  if (app.status === 'rejected') {
+    set('ms-r-reason', app.adminNotes || 'No reason provided.');
+    set('ms-r-rejected-date', formatDateForStatus(app.verifiedAt));
+  }
+}
+
+function formatDateForStatus(val) {
+  if (!val) return '-';
+  if (val && typeof val.toDate === 'function') {
+    return val.toDate().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+  if (typeof val === 'string') {
+    const d = new Date(val);
+    if (isNaN(d.getTime())) return val;
+    return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+  return String(val);
+}
 
 /* ---------- Attach listeners ---------- */
 function attachListeners() {

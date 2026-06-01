@@ -5,16 +5,12 @@
  * - Live preview of card overlays
  * - PDF generation via html2canvas + jsPDF
  * - Auth guard (handled by admin.js onAuthStateChanged)
+ * - Fix: overlay now correctly shows plan duration from URL
  */
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   DOM HELPERS
-   ═══════════════════════════════════════════════════════════════════════════ */
 const $ = (id) => document.getElementById(id);
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   FORMAT DATE: YYYY-MM-DD → DD / MM / YYYY
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Format date to DD / MM / YYYY ── */
 function formatDateDisplay(isoStr) {
   if (!isoStr) return 'DD / MM / YYYY';
   const [y, m, d] = isoStr.split('-');
@@ -22,30 +18,24 @@ function formatDateDisplay(isoStr) {
   return `${d} / ${m} / ${y}`;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   GET TODAY AS YYYY-MM-DD
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Today as YYYY-MM-DD ── */
 function todayISO() {
   return new Date().toISOString().split('T')[0];
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   GENERATE MEMBERSHIP ID (fallback if not passed via URL)
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Fallback membership ID ── */
 function generateMembershipId() {
   const year = new Date().getFullYear();
   const random = Math.floor(1000 + Math.random() * 9000);
   return `PSS-${year}-${random}`;
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   UPDATE CARD PREVIEW OVERLAYS
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Update card overlay preview ── */
 function updatePreview() {
   const name = ($('ag-name') || {}).value?.trim().toUpperCase() || 'MEMBER NAME';
   const mid = ($('ag-mid') || {}).value?.trim() || 'PSS-0000-0000';
   const date = ($('ag-date') || {}).value || '';
-  const valid = ($('ag-valid') || {}).value || '1';
+  const valid = ($('ag-valid') || {}).value || '1'; // just the number
   
   const nameEl = $('ag-overlay-name');
   const idEl = $('ag-overlay-id');
@@ -55,12 +45,10 @@ function updatePreview() {
   if (nameEl) nameEl.textContent = name;
   if (idEl) idEl.textContent = mid;
   if (dateEl) dateEl.textContent = formatDateDisplay(date);
-  if (validEl) validEl.textContent = valid;
+  if (validEl) validEl.textContent = valid; // shows e.g. "2"
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   READ URL PARAMS AND PRE-FILL
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Pre-fill form from URL params ── */
 function prefillFromURL() {
   const params = new URLSearchParams(window.location.search);
   let hasPrefill = false;
@@ -69,49 +57,45 @@ function prefillFromURL() {
   const email = params.get('email') || '';
   const appId = params.get('appId') || '';
   const membershipId = params.get('membershipId') || '';
-  const validYears = params.get('validYears') || '1';
+  const validYears = parseInt(params.get('validYears'), 10) || 1; // number
   
   if (name || membershipId) hasPrefill = true;
   
-  const setVal = (id, val) => {
-    const el = $(id);
-    if (el && val) el.value = val;
-  };
+  // Fill the fields
+  if ($('ag-name')) $('ag-name').value = name;
+  if ($('ag-email')) $('ag-email').value = email;
+  if ($('ag-appid')) $('ag-appid').value = appId;
+  if ($('ag-mid')) $('ag-mid').value = membershipId || generateMembershipId();
+  if ($('ag-date')) $('ag-date').value = todayISO();
   
-  setVal('ag-name', name);
-  setVal('ag-email', email);
-  setVal('ag-appid', appId);
-  setVal('ag-mid', membershipId || generateMembershipId());
-  setVal('ag-date', todayISO());
-  
-  // Set valid years dropdown
-  const validEl = $('ag-valid');
-  if (validEl) {
-    const vy = String(parseInt(validYears, 10) || 1);
-    // Find matching option
-    for (const opt of validEl.options) {
-      if (opt.value === vy) { opt.selected = true; break; }
+  // Set the "Valid For" dropdown to the correct number
+  const validSelect = $('ag-valid');
+  if (validSelect) {
+    // Find and select the matching option (1,2,3)
+    for (const opt of validSelect.options) {
+      if (parseInt(opt.value, 10) === validYears) {
+        opt.selected = true;
+        break;
+      }
     }
   }
   
-  // Show prefill notice
-  if (hasPrefill) {
-    const notice = $('ag-prefill-notice');
-    if (notice) notice.style.display = 'flex';
+  // Show notice if pre-filled
+  const notice = $('ag-prefill-notice');
+  if (notice) notice.style.display = hasPrefill ? 'flex' : 'none';
+  
+  // Immediately update the overlay with the correct duration
+  // (even if dropdown hasn't fired change event yet)
+  const validOverlay = $('ag-overlay-valid');
+  if (validOverlay) {
+    validOverlay.textContent = validYears;
   }
   
-  // If no membershipId from URL, set generated one
-  const midEl = $('ag-mid');
-  if (midEl && !midEl.value) {
-    midEl.value = generateMembershipId();
-  }
-  
+  // Finally, refresh all overlays
   updatePreview();
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   TEMPLATE ERROR FALLBACK
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Template error fallback ── */
 window.handleTemplateError = function() {
   const img = $('ag-card-bg');
   const wrap = $('ag-card-wrap');
@@ -122,11 +106,8 @@ window.handleTemplateError = function() {
   }
 };
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   PDF GENERATION
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Generate PDF ── */
 async function generatePDF() {
-  // Validate required fields
   const name = ($('ag-name') || {}).value?.trim();
   const mid = ($('ag-mid') || {}).value?.trim();
   
@@ -140,23 +121,20 @@ async function generatePDF() {
     return;
   }
   
-  // Ensure preview is up to date
   updatePreview();
   
-  // Show loading overlay
   const loadingEl = $('ag-loading-overlay');
   const downloadBtn = $('ag-download-btn');
   if (loadingEl) loadingEl.style.display = 'flex';
   if (downloadBtn) downloadBtn.disabled = true;
   
-  // Small delay to let DOM update render
+  // Wait for DOM to render
   await new Promise(r => setTimeout(r, 120));
   
   try {
     const cardEl = $('ag-card-wrap');
     if (!cardEl) throw new Error('Card element not found.');
     
-    // Capture with html2canvas at 3× scale for quality
     const canvas = await html2canvas(cardEl, {
       scale: 3,
       useCORS: true,
@@ -166,12 +144,9 @@ async function generatePDF() {
       imageTimeout: 10000,
     });
     
-    // Build filename from membership ID
     const safeMid = mid.replace(/[^a-zA-Z0-9-]/g, '');
     const filename = `Membership-Card-${safeMid}.pdf`;
     
-    // Create PDF — landscape, custom size (228mm × 148mm ≈ A5 landscape)
-    // jsPDF: new jsPDF(orientation, unit, [width, height])
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({
       orientation: 'landscape',
@@ -180,22 +155,14 @@ async function generatePDF() {
     });
     
     const imgData = canvas.toDataURL('image/png', 1.0);
-    
-    // Add image to fill the entire page
     pdf.addImage(imgData, 'PNG', 0, 0, 228, 148);
-    
-    // Save / download
     pdf.save(filename);
     
-    // Success feedback
     if (downloadBtn) {
       const orig = downloadBtn.textContent;
       downloadBtn.textContent = '✅ Downloaded!';
-      setTimeout(() => {
-        downloadBtn.textContent = orig;
-      }, 3000);
+      setTimeout(() => { downloadBtn.textContent = orig; }, 3000);
     }
-    
   } catch (err) {
     console.error('PDF generation error:', err);
     alert(
@@ -212,13 +179,9 @@ async function generatePDF() {
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   ATTACH EVENT LISTENERS
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Attach listeners ── */
 function attachListeners() {
-  // Live preview on all input changes
-  const liveFields = ['ag-name', 'ag-mid', 'ag-date', 'ag-valid'];
-  liveFields.forEach(id => {
+  ['ag-name', 'ag-mid', 'ag-date', 'ag-valid'].forEach(id => {
     const el = $(id);
     if (el) {
       el.addEventListener('input', updatePreview);
@@ -226,21 +189,16 @@ function attachListeners() {
     }
   });
   
-  // Download button
   const downloadBtn = $('ag-download-btn');
-  if (downloadBtn) {
-    downloadBtn.addEventListener('click', generatePDF);
-  }
+  if (downloadBtn) downloadBtn.addEventListener('click', generatePDF);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   INIT
-   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── Init ── */
 document.addEventListener('DOMContentLoaded', () => {
   prefillFromURL();
   attachListeners();
   
-  // Set default date if not pre-filled
+  // Fallback if date is empty
   const dateEl = $('ag-date');
   if (dateEl && !dateEl.value) {
     dateEl.value = todayISO();
