@@ -690,7 +690,7 @@ function renderCommonElements() {
         footerTitles[2].textContent = labels.contact;
     }
 
-    // Update navigation links
+    // Update navigation labels (includes footer links and mobile CTAs)
     updateNavigationLabels();
     
     // Update any elements with data-bn and data-en attributes
@@ -704,7 +704,7 @@ function renderCommonElements() {
 }
 
 // ============================================
-// UPDATED: Fixed Footer Links with Proper Translations
+// UPDATED: Footer Links & Mobile CTAs with Membership
 // ============================================
 function updateNavigationLabels() {
     const labels = getUILabels();
@@ -738,7 +738,7 @@ function updateNavigationLabels() {
         contactBtn.textContent = labels.contact;
     }
 
-    // Mobile nav
+    // Mobile nav list (no changes needed for membership as it's a CTA, not a list item)
     const mobileLinks = document.querySelectorAll('.nav-mobile-link');
     if (mobileLinks.length >= 9) {
         mobileLinks[0].innerHTML = `🏠 ${labels.home}`;
@@ -752,27 +752,31 @@ function updateNavigationLabels() {
         mobileLinks[8].innerHTML = `🖼️ ${labels.gallery}`;
     }
 
-    // Mobile CTA
-    const mobileCta = document.querySelector('.nav-mobile-cta .btn');
-    if (mobileCta) mobileCta.innerHTML = labels.contact;
+    // Mobile CTAs: use IDs to target only the Contact CTA, leaving Membership untouched
+    const mobileContactCta = document.querySelector('#contact-mobile-cta .btn');
+    if (mobileContactCta) {
+        mobileContactCta.innerHTML = labels.contact;
+    }
 
-    // ===== FIXED FOOTER LINKS =====
+    // ===== FIXED FOOTER LINKS (now includes Membership at index 9) =====
     const footerLinks = document.querySelectorAll('.footer-links a');
     
-    // First column (Links) - Home, About, Programs, Events
+    // First column (Links) - Home, About, Programs, Events (indices 0-3)
     if (footerLinks[0]) footerLinks[0].textContent = labels.home;
     if (footerLinks[1]) footerLinks[1].textContent = labels.about;
     if (footerLinks[2]) footerLinks[2].textContent = labels.programs;
     if (footerLinks[3]) footerLinks[3].textContent = labels.events;
     
-    // Second column (More) - Library, Updates, Committee, Achievements, Gallery, Contact
-    // Index 4-9 based on your HTML structure
-    if (footerLinks[4]) footerLinks[4].textContent = labels.library;        // Library
-    if (footerLinks[5]) footerLinks[5].textContent = labels.updates;        // Updates
-    if (footerLinks[6]) footerLinks[6].textContent = labels.committee;      // Committee
-    if (footerLinks[7]) footerLinks[7].textContent = labels.achievements;   // Sharad Samman
-    if (footerLinks[8]) footerLinks[8].textContent = labels.gallery;        // Gallery
-    if (footerLinks[9]) footerLinks[9].textContent = labels.contact;        // Contact
+    // Second column (More) - Library, Updates, Committee, Achievements, Gallery, Membership, Contact
+    // indices 4 through 10
+    if (footerLinks[4]) footerLinks[4].textContent = labels.library;
+    if (footerLinks[5]) footerLinks[5].textContent = labels.updates;
+    if (footerLinks[6]) footerLinks[6].textContent = labels.committee;
+    if (footerLinks[7]) footerLinks[7].textContent = labels.achievements;
+    if (footerLinks[8]) footerLinks[8].textContent = labels.gallery;
+    // Membership link is always English – hardcoded
+    if (footerLinks[9]) footerLinks[9].textContent = 'Membership';
+    if (footerLinks[10]) footerLinks[10].textContent = labels.contact;
 }
 
 function renderSocialLinks() {
