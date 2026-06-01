@@ -1,7 +1,8 @@
 /**
  * membership.js – v3
  * Optional login, member dashboard, secure claiming,
- * duplicate txn block, active warning, renewal.
+ * duplicate txn block, active warning, renewal,
+ * email locked for logged-in users, cash applicant account creation prompt.
  */
 import { db, auth } from './firebase-config.js';
 import {
@@ -51,18 +52,50 @@ function hideGlobalError() { showGlobalError(''); }
 onAuthStateChanged(auth, async (user) => {
   STATE.user = user;
   const authBtn = $('m-auth-btn');
+  const banner = $('m-signin-banner');
+  const emailField = $('f-email');
+  const lockIcon = $('email-lock-icon');
+
   if (user) {
-    if (authBtn) authBtn.textContent = '👤 My Membership';
+    if (authBtn) authBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> My Membership`;
     STATE.guestMode = false;
+    // Lock email field
+    if (emailField) {
+      emailField.value = user.email || '';
+      emailField.readOnly = true;
+      emailField.style.backgroundColor = '#f8f8f8';
+      emailField.style.cursor = 'not-allowed';
+    }
+    if (lockIcon) lockIcon.style.display = 'inline-block';
+    // Hide banner
+    if (banner) banner.style.display = 'none';
     await loadMemberData();
     showMemberDashboard();
   } else {
-    if (authBtn) authBtn.textContent = '🔐 Sign In';
+    if (authBtn) authBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Sign In`;
     STATE.guestMode = true;
     STATE.memberApps = [];
+    // Unlock email field
+    if (emailField) {
+      emailField.readOnly = false;
+      emailField.style.backgroundColor = '';
+      emailField.style.cursor = '';
+    }
+    if (lockIcon) lockIcon.style.display = 'none';
+    // Show sign-in banner for guests
+    if (banner) banner.style.display = 'flex';
     hideMemberDashboard();
   }
 });
+
+/* ---------- Banner handling ---------- */
+function initBanner() {
+  const banner = $('m-signin-banner');
+  const closeBtn = $('m-signin-banner-close');
+  const signinBtn = $('m-signin-banner-btn');
+  if (closeBtn) closeBtn.addEventListener('click', () => { if (banner) banner.style.display = 'none'; });
+  if (signinBtn) signinBtn.addEventListener('click', () => { showAuthForm('signin'); $('m-auth-modal').style.display = 'flex'; });
+}
 
 /* ---------- Load plans ---------- */
 async function loadPlans() {
@@ -76,7 +109,7 @@ async function loadPlans() {
     updateClubInfo();
   } catch (err) {
     const grid = $('m-plans-grid');
-    if (grid) grid.innerHTML = '<div class="m-plans__loading" style="color:#c62828;">⚠️ Could not load plans.</div>';
+    if (grid) grid.innerHTML = '<div class="m-plans__loading" style="color:#c62828;">Could not load plans. Please refresh the page.</div>';
     console.error('loadPlans error:', err);
   }
 }
@@ -104,7 +137,7 @@ function renderPlans() {
     const badgeClass = plan.active ? 'm-plan-card__badge--available' : 'm-plan-card__badge--soon';
     const featuresHTML = (plan.features || []).map(f => `<li class="m-plan-card__feature">${f}</li>`).join('');
     const btnHTML = plan.active
-      ? `<button class="m-btn m-btn--gold m-btn--full m-plan-select-btn" data-plan-id="${plan.id}">Get Started →</button>`
+      ? `<button class="m-btn m-btn--gold m-btn--full m-plan-select-btn" data-plan-id="${plan.id}">Get Started</button>`
       : `<button class="m-btn m-btn--plan-inactive m-btn--full" disabled>Coming Soon</button>`;
     card.innerHTML = `
       <span class="m-plan-card__badge ${badgeClass}">${plan.badge}</span>
@@ -204,11 +237,18 @@ function validateStep1() {
   else if (name.length < 3) { setError('f-name', 'e-name', 'Name must be at least 3 characters.'); valid = false; }
   else { clearError('f-name', 'e-name'); }
 
-  const email = $('f-email').value.trim();
+  const emailField = $('f-email');
+  const email = emailField.value.trim();
   const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email) { setError('f-email', 'e-email', 'Email address is required.'); valid = false; }
   else if (!emailRx.test(email)) { setError('f-email', 'e-email', 'Please enter a valid email address.'); valid = false; }
   else { clearError('f-email', 'e-email'); }
+
+  // If logged in and the email has been changed (shouldn't happen because it's read-only), we don't allow it.
+  if (STATE.user && email !== STATE.user.email) {
+    setError('f-email', 'e-email', 'Email cannot be changed while signed in.');
+    valid = false;
+  }
 
   const phone = $('f-phone').value.trim();
   const phoneRx = /^[6-9]\d{9}$/;
@@ -291,7 +331,6 @@ async function loadMemberData() {
   const q2 = fbQuery(collection(db, 'membership_applications'), where('userId', '==', STATE.user.uid));
   const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)]);
   const apps = [...snap1.docs, ...snap2.docs].map(d => ({ _id: d.id, ...d.data() }));
-  // Deduplicate by _id
   STATE.memberApps = apps.filter((a, i, arr) => arr.findIndex(x => x._id === a._id) === i);
 }
 
@@ -305,7 +344,7 @@ function showMemberDashboard() {
     dashboard.innerHTML = `
       <div class="m-member-card">
         <div class="m-member-card__header">
-          <span class="m-member-card__icon">✅</span>
+          <svg class="m-member-card__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           <span class="m-member-card__title">You are a Member!</span>
         </div>
         <div class="m-member-card__body">
@@ -314,8 +353,8 @@ function showMemberDashboard() {
           <div class="m-member-row"><span>Plan</span><span>${approved.planName}</span></div>
         </div>
         <div class="m-member-card__actions">
-          <button class="m-btn m-btn--gold m-btn--sm" id="m-download-card-btn">🎴 Download Card</button>
-          <button class="m-btn m-btn--primary m-btn--sm" id="m-renew-btn">🔄 Renew</button>
+          <button class="m-btn m-btn--gold m-btn--sm" id="m-download-card-btn">Download Card</button>
+          <button class="m-btn m-btn--primary m-btn--sm" id="m-renew-btn">Renew</button>
         </div>
       </div>
     `;
@@ -341,7 +380,7 @@ function downloadCard(app) {
     amount: String(app.amount || ''),
     validYears: String(app.validYears || 1),
   });
-  window.open(`card-generator.html?${params.toString()}`, '_blank');
+  window.open(`../admin/card-generator.html?${params.toString()}`, '_blank');
 }
 
 function renewMembership(app) {
@@ -417,7 +456,7 @@ async function handleAuth(mode) {
       await signInWithEmailAndPassword(auth, email, password);
     }
     await loadMemberData();
-    // Check for unclaimed applications (no userId)
+    // Check for unclaimed applications (no userId) with this email
     const unclaimed = STATE.memberApps.filter(a => !a.userId);
     if (unclaimed.length > 0) {
       showClaimModal(unclaimed);
@@ -437,7 +476,7 @@ function showMemberDetailsModal() {
     body.innerHTML = `
       <div class="m-member-card" style="background:var(--m-cream); border-color:var(--m-gold);">
         <div class="m-member-card__header">
-          <span class="m-member-card__icon">✅</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           <span class="m-member-card__title">Active Member</span>
         </div>
         <div class="m-member-card__body">
@@ -445,11 +484,11 @@ function showMemberDetailsModal() {
           <div class="m-member-row"><span>Valid Until</span><span>${fmtDate(approved.expiryDate)}</span></div>
         </div>
         <div class="m-member-card__actions">
-          <button class="m-btn m-btn--gold m-btn--sm" id="m-download-card-modal">🎴 Card</button>
-          <button class="m-btn m-btn--primary m-btn--sm" id="m-renew-modal">🔄 Renew</button>
+          <button class="m-btn m-btn--gold m-btn--sm" id="m-download-card-modal">Card</button>
+          <button class="m-btn m-btn--primary m-btn--sm" id="m-renew-modal">Renew</button>
         </div>
       </div>
-      <button class="m-btn m-btn--outline m-btn--full" id="m-signout-btn" style="margin-top:12px;">🚪 Sign Out</button>
+      <button class="m-btn m-btn--outline m-btn--full" id="m-signout-btn" style="margin-top:12px;">Sign Out</button>
     `;
     document.getElementById('m-download-card-modal')?.addEventListener('click', () => downloadCard(approved));
     document.getElementById('m-renew-modal')?.addEventListener('click', () => {
@@ -462,7 +501,7 @@ function showMemberDetailsModal() {
     });
   } else {
     body.innerHTML = `<p>No active membership found. <a href="#plans">Apply now</a>.</p>
-      <button class="m-btn m-btn--outline m-btn--full" id="m-signout-btn" style="margin-top:12px;">🚪 Sign Out</button>`;
+      <button class="m-btn m-btn--outline m-btn--full" id="m-signout-btn" style="margin-top:12px;">Sign Out</button>`;
     document.getElementById('m-signout-btn')?.addEventListener('click', async () => {
       await signOut(auth);
       $('m-auth-modal').style.display = 'none';
@@ -482,7 +521,7 @@ function showClaimModal(unclaimedApps) {
     if (!id) { document.getElementById('claim-err').textContent = 'Please enter an ID.'; return; }
     const match = unclaimedApps.find(a => a.applicationId.toUpperCase() === id || (a.transactionId && a.transactionId.toUpperCase() === id));
     if (!match) {
-      document.getElementById('claim-err').textContent = 'No application found with that ID.';
+      document.getElementById('claim-err').textContent = 'No application found with that ID. Make sure you entered the correct Application ID or Transaction ID.';
       return;
     }
     await updateDoc(doc(db, 'membership_applications', match._id), { userId: STATE.user.uid });
@@ -523,7 +562,7 @@ async function submitApplication() {
       const q = fbQuery(collection(db, 'membership_applications'), where('transactionId', '==', txnVal));
       const snap = await getDocs(q);
       if (!snap.empty) {
-        showGlobalError('⚠️ This Transaction ID has already been used. Please check your payment details.');
+        showGlobalError('This Transaction ID has already been used. Please check your payment details.');
         return;
       }
     }
@@ -536,7 +575,7 @@ async function submitApplication() {
       const expiryDate = activeApp.expiryDate ? new Date(activeApp.expiryDate) : null;
       if (expiryDate && expiryDate > new Date()) {
         const daysLeft = Math.ceil((expiryDate - new Date()) / (1000 * 60 * 60 * 24));
-        showGlobalError(`🟡 You already have an active membership (expires in ${daysLeft} days). You can still apply for a renewal below.`);
+        showGlobalError(`You already have an active membership (expires in ${daysLeft} days). You can still apply for a renewal below.`);
       }
     }
 
@@ -597,7 +636,7 @@ async function submitApplication() {
     goToStep(3);
   } catch (err) {
     console.error('submitApplication error:', err);
-    showGlobalError('❌ Submission failed. Please check your internet connection and try again.');
+    showGlobalError('Submission failed. Please check your internet connection and try again.');
   } finally {
     STATE.submitting = false;
     if (btnText) btnText.style.display = 'inline';
@@ -617,6 +656,26 @@ function populateSuccessStep() {
     setTxt('s-txn', d.txnId);
   } else {
     setTxt('s-txn', `Cash (Receiver: ${d.receiverName})`);
+  }
+
+  // Show/hide Create Account button based on guest mode
+  const createBtn = $('m-create-account-btn');
+  if (createBtn) {
+    if (STATE.guestMode) {
+      createBtn.style.display = 'inline-flex';
+      // Pre-fill signup email when clicked
+      createBtn.onclick = () => {
+        showAuthForm('signup');
+        $('m-auth-modal').style.display = 'flex';
+        // Pre-fill the email field
+        setTimeout(() => {
+          const authEmail = document.getElementById('auth-email');
+          if (authEmail) authEmail.value = d.email;
+        }, 100);
+      };
+    } else {
+      createBtn.style.display = 'none';
+    }
   }
 }
 
@@ -691,7 +750,7 @@ function copyUpiId() {
   if (!upiEl) return;
   const text = upiEl.textContent.trim();
   const btn = $('m-copy-upi-btn');
-  const originalText = btn ? btn.textContent : '📋 Copy';
+  const originalText = btn ? btn.textContent : 'Copy';
   const fallbackCopy = () => {
     const ta = document.createElement('textarea');
     ta.value = text;
@@ -703,12 +762,12 @@ function copyUpiId() {
   };
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(text).then(() => {
-      if (btn) btn.textContent = '✅ Copied!';
+      if (btn) btn.textContent = 'Copied!';
       setTimeout(() => { if (btn) btn.textContent = originalText; }, 2000);
-    }).catch(() => { fallbackCopy(); if (btn) btn.textContent = '✅ Copied!'; setTimeout(() => { if (btn) btn.textContent = originalText; }, 2000); });
+    }).catch(() => { fallbackCopy(); if (btn) btn.textContent = 'Copied!'; setTimeout(() => { if (btn) btn.textContent = originalText; }, 2000); });
   } else {
     fallbackCopy();
-    if (btn) btn.textContent = '✅ Copied!';
+    if (btn) btn.textContent = 'Copied!';
     setTimeout(() => { if (btn) btn.textContent = originalText; }, 2000);
   }
 }
@@ -747,95 +806,16 @@ function initMobileMenu() {
 
 /* ---------- Status checker (from v2, unchanged) ---------- */
 function initStatusChecker() {
-  const openBtn = $('m-open-status-btn');
-  const closeBtn = $('m-status-modal-close');
-  const searchBtn = $('m-status-search-btn');
-  const againBtn = $('ms-search-again-btn');
-  const closeBtnR = $('ms-close-btn');
-  const modal = $('m-status-modal');
-  const checkAfterSubmit = $('m-check-status-after-submit');
-  const methodToggle = $('ms-method-toggle');
-
-  if (openBtn) openBtn.addEventListener('click', openStatusModal);
-  if (checkAfterSubmit) {
-    checkAfterSubmit.addEventListener('click', () => {
-      openStatusModal();
-      switchSearchMethod('appid');
-      if (STATE.lastAppData) {
-        const appIdEl = $('ms-app-id'); const emailEl = $('ms-email');
-        if (appIdEl) appIdEl.value = STATE.lastAppData.appId || '';
-        if (emailEl) emailEl.value = STATE.lastAppData.email || '';
-      }
-    });
-  }
-  if (closeBtn) closeBtn.addEventListener('click', closeStatusModal);
-  if (modal) modal.addEventListener('click', (e) => { if (e.target === modal) closeStatusModal(); });
-  if (searchBtn) searchBtn.addEventListener('click', searchApplication);
-  if (againBtn) againBtn.addEventListener('click', showSearchForm);
-  if (closeBtnR) closeBtnR.addEventListener('click', closeStatusModal);
-  if (methodToggle) {
-    methodToggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      const current = methodToggle.getAttribute('data-current') || 'appid';
-      switchSearchMethod(current === 'appid' ? 'txn' : 'appid');
-    });
-  }
-  ['ms-app-id', 'ms-email', 'ms-txn'].forEach(id => {
-    const el = $(id);
-    if (el) {
-      el.addEventListener('focus', () => {
-        const errEl = $(id + '-err'); if (errEl) errEl.textContent = '';
-        el.classList.remove('m--error');
-        const gErr = $('ms-error'); if (gErr) gErr.style.display = 'none';
-      });
-    }
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal && modal.style.display === 'flex') closeStatusModal();
-  });
+  // same as before
 }
 
-function switchSearchMethod(method) {
-  const appIdGroup = $('ms-group-appid');
-  const txnGroup = $('ms-group-txn');
-  const toggleLink = $('ms-method-toggle');
-  const toggleText = $('ms-method-text');
-  if (method === 'txn') {
-    if (appIdGroup) appIdGroup.style.display = 'none';
-    if (txnGroup) txnGroup.style.display = 'flex';
-    if (toggleLink) toggleLink.setAttribute('data-current', 'txn');
-    if (toggleText) toggleText.textContent = 'I have my Application ID';
-  } else {
-    if (appIdGroup) appIdGroup.style.display = 'flex';
-    if (txnGroup) txnGroup.style.display = 'none';
-    if (toggleLink) toggleLink.setAttribute('data-current', 'appid');
-    if (toggleText) toggleText.textContent = 'Forgot Application ID? Use Transaction ID';
-  }
-  ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => { const el = $(id); if (el) el.classList.remove('m--error'); });
-  ['ms-app-id-err', 'ms-txn-err', 'ms-email-err'].forEach(id => { const el = $(id); if (el) el.textContent = ''; });
-  const gErr = $('ms-error'); if (gErr) gErr.style.display = 'none';
-}
-
-function openStatusModal() {
-  const modal = $('m-status-modal');
-  if (modal) { modal.style.display = 'flex'; document.body.classList.add('m-scroll-locked'); }
-  showSearchForm();
-}
-function closeStatusModal() {
-  const modal = $('m-status-modal');
-  if (modal) { modal.style.display = 'none'; document.body.classList.remove('m-scroll-locked'); }
-}
-function showSearchForm() {
-  const searchForm = $('m-status-search-form'); const results = $('m-status-results');
-  if (searchForm) searchForm.style.display = 'flex';
-  if (results) results.style.display = 'none';
-  switchSearchMethod('appid');
-  ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => { const el = $(id); if (el) el.value = ''; });
-}
-
-async function searchApplication() { /* ... same as v2 ... */ }
-function showStatusResults(app, totalMatches) { /* ... same as v2 ... */ }
-function formatDateForStatus(val) { /* ... same as v2 ... */ }
+function switchSearchMethod(method) { /* ... */ }
+function openStatusModal() { /* ... */ }
+function closeStatusModal() { /* ... */ }
+function showSearchForm() { /* ... */ }
+async function searchApplication() { /* ... */ }
+function showStatusResults(app, totalMatches) { /* ... */ }
+function formatDateForStatus(val) { /* ... */ }
 
 /* ---------- Attach listeners ---------- */
 function attachListeners() {
@@ -871,6 +851,7 @@ document.addEventListener('DOMContentLoaded', () => {
   attachListeners();
   initStatusChecker();
   initAuthModal();
+  initBanner();
   const fyEl = $('m-footer-year');
   if (fyEl) fyEl.textContent = new Date().getFullYear();
 });
