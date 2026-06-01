@@ -389,3 +389,52 @@ body.m-scroll-locked { overflow: hidden; }
   .m-status-val { text-align: left; }
   .m-hero__cta-row { flex-direction: column; align-items: center; gap: 10px; }
 }
+/* Member card (inline dashboard) */
+.m-member-card {
+  background: rgba(255,255,255,0.08);
+  border: 1.5px solid rgba(201,168,76,0.4);
+  border-radius: var(--m-radius);
+  padding: 24px 28px;
+  max-width: 460px;
+  margin: 0 auto;
+  text-align: left;
+  backdrop-filter: blur(6px);
+}
+.m-member-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.m-member-card__icon { font-size: 1.8rem; }
+.m-member-card__title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--m-gold-light);
+}
+.m-member-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.m-member-row {
+  display: flex;
+  justify-content: space-between;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.92rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 6px;
+}
+.m-member-row span:first-child { font-weight: 600; }
+.m-member-card__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Auth modal tweaks */
+#auth-general-err {
+  color: var(--m-error);
+  margin-top: 8px;
+}

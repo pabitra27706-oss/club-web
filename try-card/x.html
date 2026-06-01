@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Card Overlay Calibrator — PSS</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f1923;
+      color: #fff;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    h1 {
+      color: #f0c040;
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .subtitle {
+      color: rgba(255,255,255,0.45);
+      font-size: 0.8rem;
+      text-align: center;
+      margin-top: -16px;
+    }
+
+    /* ── Main layout ── */
+    .layout {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 1400px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ── Card preview area ── */
+    .preview-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .preview-label {
+      color: rgba(255,255,255,0.4);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    #card-wrap {
+      position: relative;
+      width: 860px;
+      height: 573px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 64px rgba(0,0,0,0.7);
+      flex-shrink: 0;
+      background: #1a3a2a;
+    }
+
+    #card-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Overlay base style ── */
+    .overlay {
+      position: absolute;
+      pointer-events: none;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    #ov-name {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a3a2a;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    #ov-id {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #c07820;
+      letter-spacing: 0.10em;
+    }
+
+    #ov-date {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a3a2a;
+      letter-spacing: 0.08em;
+    }
+
+    #ov-valid {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a3a2a;
+      letter-spacing: 0.08em;
+    }
+
+    /* ── Crosshair guides ── */
+    .guide-h, .guide-v {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .guide-h {
+      left: 0; right: 0;
+      height: 1px;
+      background: rgba(255, 80, 80, 0.7);
+    }
+    .guide-v {
+      top: 0; bottom: 0;
+      width: 1px;
+      background: rgba(255, 80, 80, 0.7);
+    }
+    #card-wrap:hover .guide-h,
+    #card-wrap:hover .guide-v {
+      opacity: 1;
+    }
+
+    /* Click coords display */
+    .click-coords {
+      background: rgba(255,80,80,0.15);
+      border: 1px solid rgba(255,80,80,0.4);
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      color: #ff9090;
+      text-align: center;
+      min-width: 260px;
+    }
+    .click-coords span { color: #fff; font-weight: 700; }
+
+    /* ── Controls panel ── */
+    .controls-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 300px;
+      width: 320px;
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .panel-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .panel-title.name  { color: #6ee7b7; }
+    .panel-title.id    { color: #fbbf24; }
+    .panel-title.date  { color: #93c5fd; }
+    .panel-title.valid { color: #f9a8d4; }
+
+    /* Field group */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* coord row: top + left side by side */
+    .coord-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .coord-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    input[type="color"] {
+      padding: 8px 10px;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      font-size: 0.88rem;
+      font-family: inherit;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+
+    input[type="number"]:focus,
+    input[type="text"]:focus {
+      border-color: #f0c040;
+    }
+
+    input[type="color"] {
+      padding: 4px 6px;
+      height: 36px;
+      cursor: pointer;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #f0c040;
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .range-val {
+      font-size: 0.78rem;
+      color: #f0c040;
+      min-width: 32px;
+      text-align: right;
+    }
+
+    /* Content input */
+    .content-input {
+      width: 100%;
+    }
+
+    /* Apply button */
+    .apply-btn {
+      width: 100%;
+      padding: 11px;
+      background: linear-gradient(135deg, #c9a84c, #f0c040);
+      color: #1a1a2e;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .apply-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .apply-btn:active { transform: translateY(0); }
+
+    /* ── Output panel ── */
+    .output-panel {
+      width: 100%;
+      max-width: 1400px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+
+    .output-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #f0c040;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+
+    .output-title span {
+      color: rgba(255,255,255,0.35);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    pre {
+      background: #0a0f18;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 0.8rem;
+      color: #a5f3fc;
+      overflow-x: auto;
+      line-height: 1.7;
+      white-space: pre;
+    }
+
+    .copy-btn {
+      margin-top: 10px;
+      padding: 8px 20px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+    .copy-btn.copied { color: #6ee7b7; border-color: #6ee7b7; }
+
+    /* ── Responsive breakpoint output ── */
+    .bp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .bp-card {
+      background: #0a0f18;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .bp-card h4 {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .bp-card pre {
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-size: 0.73rem;
+      color: #86efac;
+    }
+
+    /* ── Hint ── */
+    .hint {
+      background: rgba(240,192,64,0.08);
+      border: 1px solid rgba(240,192,64,0.2);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      max-width: 860px;
+      line-height: 1.6;
+    }
+    .hint strong { color: #f0c040; }
+
+    /* Active field indicator on card */
+    .ov-highlight {
+      outline: 2px dashed rgba(255,80,80,0.8);
+      outline-offset: 3px;
+    }
+
+    /* Dimension badge */
+    .dim-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 100px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.45);
+    }
+    .dim-badge b { color: #f0c040; }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Card Overlay Calibrator</h1>
+  <p class="subtitle">Click on the card to read coordinates · Adjust values · Copy final CSS</p>
+
+  <div class="dim-badge">
+    Card display size: <b>860 × 573 px</b> &nbsp;|&nbsp; Template: <b>1280 × 853 px</b>
+  </div>
+
+  <div class="layout">
+
+    <!-- ── LEFT: Card Preview ── -->
+    <div class="preview-col">
+      <div class="preview-label">Live Card Preview — click anywhere to read coords</div>
+
+      <div id="card-wrap">
+        <!-- Replace src with your actual template path -->
+        <img id="card-bg"
+             src="membership-card-template.jpg"
+             alt="Card Template"
+             onerror="this.style.display='none'" />
+
+        <!-- Crosshair guides -->
+        <div class="guide-h" id="guide-h"></div>
+        <div class="guide-v" id="guide-v"></div>
+
+        <!-- Overlays -->
+        <div class="overlay" id="ov-name">MEMBER NAME</div>
+        <div class="overlay" id="ov-id">PSS-2025-0000</div>
+        <div class="overlay" id="ov-date">DD / MM / YYYY</div>
+        <div class="overlay" id="ov-valid">1</div>
+      </div>
+
+      <div class="click-coords" id="click-coords">
+        Click anywhere on the card above to read coordinates
+      </div>
+
+      <div class="hint">
+        <strong>How to calibrate:</strong>
+        Click on the card where a field should appear →
+        coordinates auto-fill into the active field panel →
+        tweak Top/Left → hit <strong>Apply</strong> →
+        copy the CSS output below.
+      </div>
+    </div>
+
+    <!-- ── RIGHT: Controls ── -->
+    <div class="controls-col">
+
+      <!-- MEMBER NAME -->
+      <div class="panel" data-target="ov-name">
+        <div class="panel-title name">① Member Name</div>
+
+        <div class="field-group">
+          <label>Content (preview text)</label>
+          <input type="text" id="name-content" value="JOHN DOE" class="content-input" />
+        </div>
+
+        <div class="coord-row">
+          <div class="coord-wrap">
+            <label>Top (px)</label>
+            <input type="number" id="name-top" value="325" min="0" max="573" />
+          </div>
+          <div class="coord-wrap">
+            <label>Left (px)</label>
+            <input type="number" id="name-left" value="75" min="0" max="860" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Font Size (px)</label>
+          <div class="range-row">
+            <input type="range" id="name-size" min="8" max="40" value="22" />
+            <span class="range-val" id="name-size-val">22px</span>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Color</label>
+          <input type="color" id="name-color" value="#1a3a2a" />
+        </div>
+
+        <button class="apply-btn" onclick="applyField('name')">Apply Name</button>
+      </div>
+
+      <!-- MEMBER ID -->
+      <div class="panel" data-target="ov-id">
+        <div class="panel-title id">② Member ID</div>
+
+        <div class="field-group">
+          <label>Content (preview text)</label>
+          <input type="text" id="id-content" value="PSS-2025-4821" class="content-input" />
+        </div>
+
+        <div class="coord-row">
+          <div class="coord-wrap">
+            <label>Top (px)</label>
+            <input type="number" id="id-top" value="415" min="0" max="573" />
+          </div>
+          <div class="coord-wrap">
+            <label>Left (px)</label>
+            <input type="number" id="id-left" value="75" min="0" max="860" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Font Size (px)</label>
+          <div class="range-row">
+            <input type="range" id="id-size" min="8" max="36" value="16" />
+            <span class="range-val" id="id-size-val">16px</span>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Color</label>
+          <input type="color" id="id-color" value="#c07820" />
+        </div>
+
+        <button class="apply-btn" onclick="applyField('id')">Apply ID</button>
+      </div>
+
+      <!-- DATE OF ISSUE -->
+      <div class="panel" data-target="ov-date">
+        <div class="panel-title date">③ Date of Issue</div>
+
+        <div class="field-group">
+          <label>Content (preview text)</label>
+          <input type="text" id="date-content" value="15 / 07 / 2025" class="content-input" />
+        </div>
+
+        <div class="coord-row">
+          <div class="coord-wrap">
+            <label>Top (px)</label>
+            <input type="number" id="date-top" value="495" min="0" max="573" />
+          </div>
+          <div class="coord-wrap">
+            <label>Left (px)</label>
+            <input type="number" id="date-left" value="102" min="0" max="860" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Font Size (px)</label>
+          <div class="range-row">
+            <input type="range" id="date-size" min="8" max="30" value="15" />
+            <span class="range-val" id="date-size-val">15px</span>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Color</label>
+          <input type="color" id="date-color" value="#1a3a2a" />
+        </div>
+
+        <button class="apply-btn" onclick="applyField('date')">Apply Date</button>
+      </div>
+
+      <!-- VALIDITY -->
+      <div class="panel" data-target="ov-valid">
+        <div class="panel-title valid">④ Validity (Years)</div>
+
+        <div class="field-group">
+          <label>Content (preview text)</label>
+          <input type="text" id="valid-content" value="1" class="content-input" />
+        </div>
+
+        <div class="coord-row">
+          <div class="coord-wrap">
+            <label>Top (px)</label>
+            <input type="number" id="valid-top" value="495" min="0" max="573" />
+          </div>
+          <div class="coord-wrap">
+            <label>Left (px)</label>
+            <input type="number" id="valid-left" value="340" min="0" max="860" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Font Size (px)</label>
+          <div class="range-row">
+            <input type="range" id="valid-size" min="8" max="30" value="15" />
+            <span class="range-val" id="valid-size-val">15px</span>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Color</label>
+          <input type="color" id="valid-color" value="#1a3a2a" />
+        </div>
+
+        <button class="apply-btn" onclick="applyField('valid')">Apply Valid</button>
+      </div>
+
+      <!-- Apply All -->
+      <button class="apply-btn" style="padding:14px;font-size:1rem;"
+              onclick="applyAll()">⚡ Apply All Fields</button>
+
+    </div><!-- /controls-col -->
+  </div><!-- /layout -->
+
+  <!-- ── OUTPUT ── -->
+  <div class="output-panel">
+    <div class="output-title">
+      Generated CSS
+      <span>— copy these values into card-generator.css</span>
+    </div>
+
+    <pre id="css-output">/* Click "Apply All Fields" to generate CSS */</pre>
+    <button class="copy-btn" id="copy-btn" onclick="copyCSS()">📋 Copy CSS</button>
+
+    <div class="output-title" style="margin-top:24px;">
+      Responsive Breakpoints
+      <span>— auto-calculated from your base coordinates</span>
+    </div>
+
+    <div class="bp-grid" id="bp-grid">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <script>
+    /* ═══════════════════════════════════════════════════════════
+       STATE — current values for all 4 fields
+    ═══════════════════════════════════════════════════════════ */
+    const state = {
+      name:  { top: 325, left: 75,  size: 22, color: '#1a3a2a' },
+      id:    { top: 415, left: 75,  size: 16, color: '#c07820' },
+      date:  { top: 495, left: 102, size: 15, color: '#1a3a2a' },
+      valid: { top: 495, left: 340, size: 15, color: '#1a3a2a' },
+    };
+
+    /* Which panel is "active" for click-to-fill */
+    let activeField = 'name';
+
+    /* ═══════════════════════════════════════════════════════════
+       CARD CLICK → READ COORDINATES
+    ═══════════════════════════════════════════════════════════ */
+    const cardWrap = document.getElementById('card-wrap');
+    const guideH   = document.getElementById('guide-h');
+    const guideV   = document.getElementById('guide-v');
+    const clickDisplay = document.getElementById('click-coords');
+
+    /* Move crosshair guides on mousemove */
+    cardWrap.addEventListener('mousemove', (e) => {
+      const rect = cardWrap.getBoundingClientRect();
+      const x = Math.round(e.clientX - rect.left);
+      const y = Math.round(e.clientY - rect.top);
+      guideH.style.top  = y + 'px';
+      guideV.style.left = x + 'px';
+    });
+
+    /* On click: fill active field's top+left */
+    cardWrap.addEventListener('click', (e) => {
+      const rect = cardWrap.getBoundingClientRect();
+      const x = Math.round(e.clientX - rect.left);
+      const y = Math.round(e.clientY - rect.top);
+
+      /* Update display */
+      clickDisplay.innerHTML =
+        `Clicked: <span>top: ${y}px</span> &nbsp;|&nbsp; <span>left: ${x}px</span>
+         &nbsp;→ filled into <span>${activeField.toUpperCase()}</span> field`;
+
+      /* Fill active field inputs */
+      document.getElementById(activeField + '-top').value  = y;
+      document.getElementById(activeField + '-left').value = x;
+
+      /* Auto-apply so you see it live */
+      applyField(activeField);
+    });
+
+    /* ═══════════════════════════════════════════════════════════
+       PANEL CLICK → SET ACTIVE FIELD
+    ═══════════════════════════════════════════════════════════ */
+    document.querySelectorAll('.panel').forEach(panel => {
+      panel.addEventListener('click', () => {
+        /* Highlight active panel */
+        document.querySelectorAll('.panel')
+          .forEach(p => p.style.outline = 'none');
+        panel.style.outline = '2px solid rgba(240,192,64,0.5)';
+        panel.style.borderRadius = '12px';
+
+        activeField = panel.dataset.target.replace('ov-', '');
+        clickDisplay.innerHTML =
+          `Active field: <span>${activeField.toUpperCase()}</span>
+           — now click the card where this field should appear`;
+
+        /* Highlight the overlay element */
+        document.querySelectorAll('.overlay')
+          .forEach(o => o.classList.remove('ov-highlight'));
+        document.getElementById('ov-' + activeField)
+          ?.classList.add('ov-highlight');
+      });
+    });
+
+    /* ═══════════════════════════════════════════════════════════
+       RANGE SLIDER — live value display
+    ═══════════════════════════════════════════════════════════ */
+    ['name','id','date','valid'].forEach(f => {
+      const slider = document.getElementById(f + '-size');
+      const valEl  = document.getElementById(f + '-size-val');
+      slider.addEventListener('input', () => {
+        valEl.textContent = slider.value + 'px';
+        applyField(f);
+      });
+    });
+
+    /* ═══════════════════════════════════════════════════════════
+       LIVE PREVIEW — content inputs
+    ═══════════════════════════════════════════════════════════ */
+    ['name','id','date','valid'].forEach(f => {
+      ['content','top','left','color'].forEach(prop => {
+        const el = document.getElementById(f + '-' + prop);
+        if (el) el.addEventListener('input', () => applyField(f));
+      });
+    });
+
+    /* ═══════════════════════════════════════════════════════════
+       APPLY SINGLE FIELD
+    ═══════════════════════════════════════════════════════════ */
+    function applyField(field) {
+      const top     = parseInt(document.getElementById(field + '-top').value)   || 0;
+      const left    = parseInt(document.getElementById(field + '-left').value)  || 0;
+      const size    = parseInt(document.getElementById(field + '-size').value)  || 14;
+      const color   = document.getElementById(field + '-color').value;
+      const content = document.getElementById(field + '-content').value || getDefault(field);
+
+      /* Update state */
+      state[field] = { top, left, size, color };
+
+      /* Apply to overlay element */
+      const el = document.getElementById('ov-' + field);
+      if (!el) return;
+      el.style.top      = top  + 'px';
+      el.style.left     = left + 'px';
+      el.style.fontSize = size + 'px';
+      el.style.color    = color;
+      el.textContent    = content;
+
+      /* Regenerate CSS output */
+      generateOutput();
+    }
+
+    function getDefault(field) {
+      const defaults = {
+        name: 'MEMBER NAME', id: 'PSS-2025-0000',
+        date: 'DD / MM / YYYY', valid: '1'
+      };
+      return defaults[field];
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       APPLY ALL
+    ═══════════════════════════════════════════════════════════ */
+    function applyAll() {
+      ['name','id','date','valid'].forEach(f => applyField(f));
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       GENERATE CSS OUTPUT
+    ═══════════════════════════════════════════════════════════ */
+    function generateOutput() {
+      const s = state;
+
+      /* Base CSS */
+      const css = `/* ── Member Name overlay ── */
+.ag-overlay-name {
+  position: absolute;
+  top: ${s.name.top}px;
+  left: ${s.name.left}px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: ${s.name.size}px;
+  font-weight: 700;
+  color: ${s.name.color};
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  max-width: 480px;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Membership ID overlay ── */
+.ag-overlay-id {
+  position: absolute;
+  top: ${s.id.top}px;
+  left: ${s.id.left}px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: ${s.id.size}px;
+  font-weight: 700;
+  color: ${s.id.color};
+  letter-spacing: 0.10em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── Issue Date overlay ── */
+.ag-overlay-date {
+  position: absolute;
+  top: ${s.date.top}px;
+  left: ${s.date.left}px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: ${s.date.size}px;
+  font-weight: 700;
+  color: ${s.date.color};
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── Validity overlay ── */
+.ag-overlay-valid {
+  position: absolute;
+  top: ${s.valid.top}px;
+  left: ${s.valid.left}px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: ${s.valid.size}px;
+  font-weight: 700;
+  color: ${s.valid.color};
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  white-space: nowrap;
+}`;
+
+      document.getElementById('css-output').textContent = css;
+
+      /* Generate responsive breakpoints */
+      generateBreakpoints();
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       GENERATE RESPONSIVE BREAKPOINTS
+       Base wrap: 860 × 573
+    ═══════════════════════════════════════════════════════════ */
+    const breakpoints = [
+      { label: '1024px',  wrap: { w: 580, h: 390 },  scale: 580/860 },
+      { label: '900px',   wrap: { w: 420, h: 280 },  scale: 420/860 },
+      { label: '640px',   wrap: { w: 320, h: 214 },  scale: 320/860 },
+      { label: '400px',   wrap: { w: 280, h: 187 },  scale: 280/860 },
+    ];
+
+    function generateBreakpoints() {
+      const s = state;
+      const grid = document.getElementById('bp-grid');
+      grid.innerHTML = '';
+
+      breakpoints.forEach(bp => {
+        const sc = bp.scale;
+        const snap = (v) => Math.round(v * sc);
+        const snapSize = (v) => Math.max(6, Math.round(v * sc));
+
+        const css =
+`@media (max-width: ${bp.label}) {
+  .ag-card-wrap {
+    width: ${bp.wrap.w}px;
+    height: ${bp.wrap.h}px;
+  }
+  .ag-overlay-name {
+    top: ${snap(s.name.top)}px;
+    left: ${snap(s.name.left)}px;
+    font-size: ${snapSize(s.name.size)}px;
+  }
+  .ag-overlay-id {
+    top: ${snap(s.id.top)}px;
+    left: ${snap(s.id.left)}px;
+    font-size: ${snapSize(s.id.size)}px;
+  }
+  .ag-overlay-date {
+    top: ${snap(s.date.top)}px;
+    left: ${snap(s.date.left)}px;
+    font-size: ${snapSize(s.date.size)}px;
+  }
+  .ag-overlay-valid {
+    top: ${snap(s.valid.top)}px;
+    left: ${snap(s.valid.left)}px;
+    font-size: ${snapSize(s.valid.size)}px;
+  }
+}`;
+
+        const card = document.createElement('div');
+        card.className = 'bp-card';
+        card.innerHTML = `<h4>≤ ${bp.label} — scale ×${sc.toFixed(3)}</h4><pre>${css}</pre>`;
+        grid.appendChild(card);
+      });
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       COPY CSS
+    ═══════════════════════════════════════════════════════════ */
+    function copyCSS() {
+      const base = document.getElementById('css-output').textContent;
+      const bps  = [...document.querySelectorAll('.bp-card pre')]
+                     .map(p => p.textContent).join('\n\n');
+      navigator.clipboard.writeText(base + '\n\n' + bps).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = '✅ Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = '📋 Copy CSS';
+          btn.classList.remove('copied');
+        }, 2500);
+      });
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       INIT — apply defaults on load
+    ═══════════════════════════════════════════════════════════ */
+    window.addEventListener('DOMContentLoaded', () => {
+      applyAll();
+      /* Set first panel as active */
+      document.querySelector('.panel').click();
+    });
+  </script>
+</body>
+</html>

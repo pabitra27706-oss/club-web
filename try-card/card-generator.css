@@ -1,0 +1,518 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   card-generator.css — PSS Membership Card Generator
+   Fully self-contained: includes own reset, variables, all styles.
+   Prefix: ag-*
+   Used by: admin/card-generator.html
+   Template: membership-card-template.jpg (1280 × 853 px)
+   Display wrap: 860 × 573 px
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Reset ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; height: 100%; }
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  line-height: 1.6;
+  min-height: 100%;
+}
+img    { max-width: 100%; display: block; }
+a      { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ── CSS Variables ──────────────────────────────────────────────────────────*/
+:root {
+  --ag-dark:        #1a1a2e;
+  --ag-dark-2:      #16213e;
+  --ag-dark-3:      #0f3460;
+  --ag-gold:        #c9a84c;
+  --ag-gold-light:  #f0c040;
+  --ag-white:       #ffffff;
+  --ag-text:        #333333;
+  --ag-text-light:  #666666;
+  --ag-border:      #e0d9cc;
+  --ag-success:     #2e7d32;
+  --ag-shadow:      0 4px 24px rgba(0,0,0,0.10);
+  --ag-radius:      12px;
+  --ag-radius-sm:   8px;
+  --ag-radius-pill: 100px;
+  --ag-transition:  0.22s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PAGE BODY
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-body {
+  background: var(--ag-dark-2);
+  min-height: 100vh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PAGE TITLE
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-page-title {
+  color: var(--ag-gold-light);
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 24px;
+  letter-spacing: 0.01em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-layout {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1200px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CARD PREVIEW PANEL
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-preview-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.ag-preview-panel__label {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/*
+ * ag-card-wrap — holds template image + all overlays.
+ *
+ * Display size : 860 × 573 px
+ * Template size: 1280 × 853 px
+ * Aspect ratio : 1280/853 = 1.501  →  860 / 1.501 = 573 px height
+ *
+ * This element is captured by html2canvas for PDF export.
+ */
+.ag-card-wrap {
+  position: relative;
+  width: 860px;
+  height: 573px;          /* corrected from 560 — matches 1280×853 ratio */
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5);
+  flex-shrink: 0;
+}
+
+/* Template background image */
+.ag-card-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 20px;
+}
+
+/*
+ * ─────────────────────────────────────────────────────────────────────────
+ * OVERLAY POSITIONS
+ *
+ * Calibrated for: membership-card-template.jpg  (1280 × 853 px)
+ * Display container: .ag-card-wrap              (860  × 573 px)
+ *
+ * Fields (base — 860 × 573):
+ *   Member Name : top 310px  left  80px
+ *   Member ID   : top 384px  left  75px
+ *   Date        : top 468px  left 129px
+ *   Validity    : top 469px  left 389px
+ *
+ * To re-calibrate: open calibrator.html, adjust, copy new values here.
+ * ─────────────────────────────────────────────────────────────────────────
+ */
+
+/* ── Member Name overlay ── */
+.ag-overlay-name {
+  position: absolute;
+  top: 310px;
+  left: 80px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #000000;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  max-width: 480px;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Membership ID overlay ── */
+.ag-overlay-id {
+  position: absolute;
+  top: 384px;
+  left: 75px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 16px;
+  font-weight: 700;
+  color: #c07820;
+  letter-spacing: 0.10em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── Issue Date overlay ── */
+.ag-overlay-date {
+  position: absolute;
+  top: 468px;
+  left: 129px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a3a2a;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ── Validity overlay ── */
+.ag-overlay-valid {
+  position: absolute;
+  top: 469px;
+  left: 389px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a3a2a;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COORDINATE HINT BAR
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-hint-bar {
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: var(--ag-radius-sm);
+  padding: 10px 16px;
+  color: rgba(255,255,255,0.55);
+  font-size: 0.75rem;
+  text-align: center;
+  line-height: 1.5;
+  max-width: 860px;
+}
+.ag-hint-bar strong { color: var(--ag-gold-light); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTROLS PANEL
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-controls {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--ag-radius);
+  padding: 28px 24px;
+  min-width: 280px;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  flex-shrink: 0;
+}
+
+.ag-controls__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ag-white);
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Prefill notice */
+.ag-prefill-notice {
+  background: rgba(46,125,50,0.12);
+  border: 1px solid rgba(46,125,50,0.3);
+  border-radius: var(--ag-radius-sm);
+  padding: 10px 13px;
+  font-size: 0.78rem;
+  color: #a5d6a7;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTROL FIELDS
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-field { display: flex; flex-direction: column; gap: 5px; }
+
+.ag-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.65);
+}
+
+.ag-input {
+  padding: 9px 12px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: var(--ag-radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--ag-white);
+  background: rgba(255,255,255,0.07);
+  outline: none;
+  transition: border-color var(--ag-transition), box-shadow var(--ag-transition);
+  width: 100%;
+}
+
+.ag-input:focus {
+  border-color: var(--ag-gold);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15);
+}
+
+.ag-input[readonly] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ag-select {
+  padding: 9px 12px;
+  border: 1.5px solid rgba(255,255,255,0.15);
+  border-radius: var(--ag-radius-sm);
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--ag-white);
+  background: rgba(26,26,46,0.9);
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  transition: border-color var(--ag-transition);
+}
+.ag-select:focus { border-color: var(--ag-gold); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DOWNLOAD BUTTON
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-download-btn {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, var(--ag-gold) 0%, var(--ag-gold-light) 100%);
+  color: var(--ag-dark);
+  border: none;
+  border-radius: var(--ag-radius-sm);
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity var(--ag-transition),
+              transform var(--ag-transition),
+              box-shadow var(--ag-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.ag-download-btn:hover:not(:disabled) {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+}
+.ag-download-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BACK LINK
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-back-link {
+  display: block;
+  text-align: center;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.45);
+  transition: color var(--ag-transition);
+  cursor: pointer;
+}
+.ag-back-link:hover { color: var(--ag-gold-light); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PDF NOTE
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-pdf-note {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  line-height: 1.5;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOADING OVERLAY
+═══════════════════════════════════════════════════════════════════════════ */
+.ag-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.ag-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(201,168,76,0.3);
+  border-top-color: var(--ag-gold-light);
+  border-radius: 50%;
+  animation: ag-spin 0.8s linear infinite;
+}
+@keyframes ag-spin { to { transform: rotate(360deg); } }
+
+.ag-loading-msg {
+  color: var(--ag-white);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   Base wrap : 860 × 573 px
+   Breakpoints scale overlays proportionally from calibrated base values.
+═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── ≤ 1024px  scale ×0.674 ── */
+@media (max-width: 1024px) {
+  .ag-card-wrap {
+    width: 580px;
+    height: 390px;
+  }
+  .ag-overlay-name {
+    top: 209px;
+    left: 54px;
+    font-size: 15px;
+  }
+  .ag-overlay-id {
+    top: 259px;
+    left: 51px;
+    font-size: 11px;
+  }
+  .ag-overlay-date {
+    top: 316px;
+    left: 87px;
+    font-size: 10px;
+  }
+  .ag-overlay-valid {
+    top: 316px;
+    left: 262px;
+    font-size: 11px;
+  }
+}
+
+/* ── ≤ 900px  scale ×0.488  — stack layout ── */
+@media (max-width: 900px) {
+  .ag-card-wrap {
+    width: 420px;
+    height: 280px;
+  }
+  .ag-overlay-name {
+    top: 151px;
+    left: 39px;
+    font-size: 11px;
+    max-width: 240px;
+  }
+  .ag-overlay-id {
+    top: 188px;
+    left: 37px;
+    font-size: 8px;
+  }
+  .ag-overlay-date {
+    top: 229px;
+    left: 63px;
+    font-size: 7px;
+  }
+  .ag-overlay-valid {
+    top: 229px;
+    left: 190px;
+    font-size: 8px;
+  }
+  .ag-controls { width: 100%; min-width: unset; }
+  .ag-layout   { flex-direction: column; align-items: center; }
+}
+
+/* ── ≤ 640px  scale ×0.372 ── */
+@media (max-width: 640px) {
+  .ag-card-wrap {
+    width: 320px;
+    height: 214px;
+  }
+  .ag-overlay-name {
+    top: 115px;
+    left: 30px;
+    font-size: 8px;
+    max-width: 180px;
+  }
+  .ag-overlay-id {
+    top: 143px;
+    left: 28px;
+    font-size: 6px;
+  }
+  .ag-overlay-date {
+    top: 174px;
+    left: 48px;
+    font-size: 6px;
+  }
+  .ag-overlay-valid {
+    top: 175px;
+    left: 145px;
+    font-size: 6px;
+  }
+  .ag-body       { padding: 14px; }
+  .ag-page-title { font-size: 1.1rem; margin-bottom: 16px; }
+  .ag-controls   { padding: 20px 16px; gap: 14px; }
+}
+
+/* ── ≤ 400px  scale ×0.326 ── */
+@media (max-width: 400px) {
+  .ag-card-wrap {
+    width: 280px;
+    height: 187px;
+  }
+  .ag-overlay-name {
+    top: 101px;
+    left: 26px;
+    font-size: 7px;
+    max-width: 155px;
+  }
+  .ag-overlay-id {
+    top: 125px;
+    left: 24px;
+    font-size: 6px;
+  }
+  .ag-overlay-date {
+    top: 152px;
+    left: 42px;
+    font-size: 6px;
+  }
+  .ag-overlay-valid {
+    top: 153px;
+    left: 127px;
+    font-size: 6px;
+  }
+  .ag-body { padding: 10px; }
+}
