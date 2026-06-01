@@ -1,106 +1,139 @@
-# Netlify Configuration
+# ═══════════════════════════════════════════════════════════════════════════
+# netlify.toml — Sarberia Pally Seba Samity
 # https://docs.netlify.com/configure-builds/file-based-configuration/
+# ═══════════════════════════════════════════════════════════════════════════
 
 [build]
-  # Directory to publish (root for static sites)
-  publish = "."
-  
-  # No build command needed for static site
-  command = ""
+# Directory to publish (root for static sites)
+publish = "."
 
-# Headers for security and performance
+# No build command needed for static site
+command = ""
+
+# ═══════════════════════════════════════════════════════════════════════════
+# HEADERS
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ── Admin panel: strict security + noindex ─────────────────────────────────
+# Must come BEFORE the /* rule so it takes priority
 [[headers]]
-  for = "/*"
-  [headers.values]
-    # Security headers
-    X-Frame-Options = "SAMEORIGIN"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    
-    # Permissions policy
-    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+for = "/admin/*"
+[headers.values]
+X-Robots-Tag = "noindex, nofollow"
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
+X-XSS-Protection = "1; mode=block"
+Referrer-Policy = "no-referrer"
+Permissions-Policy = "geolocation=(), microphone=(), camera=()"
 
-# Cache static assets
+# ── Membership page ────────────────────────────────────────────────────────
 [[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+for = "/pages/membership.html"
+[headers.values]
+X-Frame-Options = "SAMEORIGIN"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
 
+# ── Global security headers for all pages ─────────────────────────────────
 [[headers]]
-  for = "/css/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+for = "/*"
+[headers.values]
+X-Frame-Options = "SAMEORIGIN"
+X-XSS-Protection = "1; mode=block"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+Permissions-Policy = "geolocation=(), microphone=(), camera=()"
 
+# ── Static assets: long-term cache ────────────────────────────────────────
 [[headers]]
-  for = "/js/*"
-  [headers.values]
-    Cache-Control = "public, max-age=86400"
+for = "/assets/*"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
 
+# ── CSS: long-term cache ───────────────────────────────────────────────────
 [[headers]]
-  for = "/data/*"
-  [headers.values]
-    Cache-Control = "public, max-age=3600"
+for = "/css/*"
+[headers.values]
+Cache-Control = "public, max-age=31536000, immutable"
 
-# Service Worker - no cache
+# ── JS: daily cache ────────────────────────────────────────────────────────
 [[headers]]
-  for = "/sw.js"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
+for = "/js/*"
+[headers.values]
+Cache-Control = "public, max-age=86400"
 
-# Manifest
+# ── Data files: hourly cache ───────────────────────────────────────────────
 [[headers]]
-  for = "/manifest.json"
-  [headers.values]
-    Content-Type = "application/manifest+json"
-    Cache-Control = "public, max-age=86400"
+for = "/data/*"
+[headers.values]
+Cache-Control = "public, max-age=3600"
 
-# Redirects for clean URLs (optional)
-[[redirects]]
-  from = "/about"
-  to = "/pages/about.html"
-  status = 200
-
-[[redirects]]
-  from = "/programs"
-  to = "/pages/programs.html"
-  status = 200
-
-[[redirects]]
-  from = "/events"
-  to = "/pages/events.html"
-  status = 200
-
-[[redirects]]
-  from = "/library"
-  to = "/pages/library.html"
-  status = 200
-
-[[redirects]]
-  from = "/updates"
-  to = "/pages/updates.html"
-  status = 200
-
-[[redirects]]
-  from = "/community"
-  to = "/pages/community.html"
-  status = 200
-
-[[redirects]]
-  from = "/contact"
-  to = "/pages/contact.html"
-  status = 200
-
-# 404 fallback
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 404
-  # Add these lines to your existing netlify.toml
-
+# ── Service Worker: never cache ────────────────────────────────────────────
 [[headers]]
-  for = "/admin/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
+for = "/sw.js"
+[headers.values]
+Cache-Control = "no-cache, no-store, must-revalidate"
+
+# ── Web Manifest ───────────────────────────────────────────────────────────
+[[headers]]
+for = "/manifest.json"
+[headers.values]
+Content-Type = "application/manifest+json"
+Cache-Control = "public, max-age=86400"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# REDIRECTS
+# ═══════════════════════════════════════════════════════════════════════════
+
+# ── Existing site pages ────────────────────────────────────────────────────
+[[redirects]]
+from = "/about"
+to = "/pages/about.html"
+status = 200
+
+[[redirects]]
+from = "/programs"
+to = "/pages/programs.html"
+status = 200
+
+[[redirects]]
+from = "/events"
+to = "/pages/events.html"
+status = 200
+
+[[redirects]]
+from = "/library"
+to = "/pages/library.html"
+status = 200
+
+[[redirects]]
+from = "/updates"
+to = "/pages/updates.html"
+status = 200
+
+[[redirects]]
+from = "/community"
+to = "/pages/community.html"
+status = 200
+
+[[redirects]]
+from = "/contact"
+to = "/pages/contact.html"
+status = 200
+
+# ── Membership system clean URLs ───────────────────────────────────────────
+[[redirects]]
+from = "/membership"
+to = "/pages/membership.html"
+status = 200
+
+[[redirects]]
+from = "/admin"
+to = "/admin/index.html"
+status = 200
+
+# ── 404 fallback (must be last) ────────────────────────────────────────────
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 404
