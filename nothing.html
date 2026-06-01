@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <!-- This style makes the page completely blank and invisible -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            /* Hide any potential scrollbar or white flash */
+            overflow: hidden;
+        }
+        /* Absolutely nothing visible — the page is a clean slate */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Make background white but instant redirect will prevent any render */
+            background-color: white;
+        }
+        /* Optional tiny fallback text, but it will never be seen if redirect works instantly.
+           Even if it flashes, it's just "loading" — but we make it nearly invisible. */
+        .hidden-message {
+            opacity: 0.01;
+            font-size: 1px;
+            color: white;
+            user-select: none;
+            pointer-events: none;
+        }
+    </style>
+    <!-- ========== THE FASTEST REDIRECT ========== -->
+    <!-- 
+        Method: HTTP-EQUIV refresh with 0 seconds.
+        This executes before the page almost renders.
+        It's supported by all browsers and is the fastest
+        client-side redirect without JavaScript overhead.
+    -->
+    <meta http-equiv="refresh" content="0; url='https://pabitra27706-oss.github.io/club-web/'">
+    <!-- 
+        Additional JavaScript instant redirect as a hyper-optimized backup.
+        It runs immediately and will preempt the meta refresh in most browsers.
+        The combination ensures the absolute fastest possible transition.
+    -->
+    <script>
+        // Use the oldest, simplest, fastest method: direct assignment
+        // This runs synchronously and will replace the current page instantly.
+        window.location.replace('https://pabitra27706-oss.github.io/club-web/');
+        // For absolute certainty, also set href (though replace is better)
+        // But we don't want to create history entry, replace is ideal.
+        // In the rare case replace fails or is ignored, fallback:
+        setTimeout(function() {
+            window.location.href = 'https://pabitra27706-oss.github.io/club-web/';
+        }, 0);
+    </script>
+</head>
+<body>
+    <!-- 
+        This content is purely theoretical. 
+        In practice, the redirect fires before the body is painted.
+        The message below is only if something catastrophic happens 
+        (e.g., JS disabled AND meta refresh ignored — impossible in modern browsers).
+        And even then it's invisible (opacity 0.01, 1px font).
+    -->
+    <div class="hidden-message">
+        Redirecting to Sarberia Pally Seba Samity...
+        If you are not redirected, <a href="https://pabitra27706-oss.github.io/club-web/" style="color:white;text-decoration:none;">click here</a>.
+    </div>
+    <!-- 
+        Final micro-optimisation: use a preconnect to the origin to potentially 
+        speed up the connection if the browser is extremely fast, but it's 
+        optional and not needed. It doesn't affect invisibility.
+    -->
+    <link rel="preconnect" href="https://pabitra27706-oss.github.io">
+</body>
+</html>

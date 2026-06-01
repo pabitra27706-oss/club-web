@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join Pally Seba Samity — Membership</title>
+  <meta name="description" content="Apply for membership at Sarberia Pally Seba Samity. Join our community dedicated to Education, Health & Culture." />
+  <link rel="icon" type="image/png" href="../assets/images/common/logo.png" />
+  <link rel="stylesheet" href="../css/membership.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     HEADER
+════════════════════════════════════════════════════════ -->
+<header class="m-header" id="m-header">
+  <div class="m-header__inner">
+    <a href="../index.html" class="m-header__brand">
+      <img src="../assets/images/common/logo.png"
+           alt="PSS Logo"
+           class="m-header__logo"
+           onerror="this.style.display='none'" />
+      <div class="m-header__brand-text">
+        <span class="m-header__club-name">Pally Seba Samity</span>
+        <span class="m-header__tagline">Education ★ Health ★ Culture</span>
+      </div>
+    </a>
+    <nav class="m-header__nav" id="m-nav">
+      <a href="../index.html" class="m-header__nav-link">Home</a>
+      <a href="../index.html#about" class="m-header__nav-link">About</a>
+      <a href="../index.html#contact" class="m-header__nav-link">Contact</a>
+    </nav>
+    <button class="m-header__hamburger" id="m-hamburger"
+            aria-label="Toggle navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════════════ -->
+<section class="m-hero">
+  <div class="m-hero__bg-overlay"></div>
+  <div class="m-hero__content">
+    <div class="m-hero__pill">🌟 Membership Open</div>
+    <h1 class="m-hero__title">Join Pally Seba Samity</h1>
+    <p class="m-hero__subtitle">
+      Become part of a vibrant community united by Education, Health &amp; Culture.
+      Together, we build a better tomorrow for Sarberia.
+    </p>
+    <a href="#plans" class="m-btn m-btn--gold m-hero__cta">
+      View Plans &darr;
+    </a>
+    <div class="m-hero__badges">
+      <div class="m-hero__badge">
+        <span class="m-hero__badge-icon">🎴</span>
+        <span>Digital Card</span>
+      </div>
+      <div class="m-hero__badge">
+        <span class="m-hero__badge-icon">⚡</span>
+        <span>Quick Process</span>
+      </div>
+      <div class="m-hero__badge">
+        <span class="m-hero__badge-icon">🔒</span>
+        <span>Secure UPI</span>
+      </div>
+      <div class="m-hero__badge">
+        <span class="m-hero__badge-icon">✅</span>
+        <span>24hr Approval</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     PLANS SECTION
+════════════════════════════════════════════════════════ -->
+<section class="m-plans" id="plans">
+  <div class="m-plans__inner">
+    <div class="m-section-header">
+      <h2 class="m-section-header__title">Choose Your Plan</h2>
+      <p class="m-section-header__sub">
+        Select the membership that suits you best.
+        More plans coming soon!
+      </p>
+    </div>
+    <!-- Plan cards rendered by JS -->
+    <div class="m-plans__grid" id="m-plans-grid">
+      <div class="m-plans__loading">Loading plans…</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     APPLICATION FORM SECTION
+════════════════════════════════════════════════════════ -->
+<section class="m-form-section" id="m-form-section" style="display:none;">
+  <div class="m-form-section__inner">
+
+    <!-- Selected plan bar -->
+    <div class="m-plan-bar" id="m-plan-bar">
+      <div class="m-plan-bar__info">
+        <span class="m-plan-bar__label">Selected Plan:</span>
+        <span class="m-plan-bar__name" id="m-plan-bar-name">—</span>
+        <span class="m-plan-bar__price" id="m-plan-bar-price">—</span>
+      </div>
+      <button class="m-btn m-btn--outline-gold m-btn--sm" id="m-change-plan-btn">
+        Change Plan
+      </button>
+    </div>
+
+    <!-- Step indicator -->
+    <div class="m-steps" id="m-steps">
+      <div class="m-step m-step--active" id="m-step-1">
+        <div class="m-step__circle">1</div>
+        <div class="m-step__label">Personal Details</div>
+      </div>
+      <div class="m-step__line"></div>
+      <div class="m-step" id="m-step-2">
+        <div class="m-step__circle">2</div>
+        <div class="m-step__label">Payment</div>
+      </div>
+      <div class="m-step__line"></div>
+      <div class="m-step" id="m-step-3">
+        <div class="m-step__circle">3</div>
+        <div class="m-step__label">Confirmation</div>
+      </div>
+    </div>
+
+    <!-- Global error message -->
+    <div class="m-global-error" id="m-global-error" style="display:none;"></div>
+
+    <!-- ─── STEP 1: Personal Details ─── -->
+    <div class="m-form-step" id="m-form-step-1">
+      <div class="m-form-card">
+        <h2 class="m-form-card__title">
+          <span class="m-form-card__icon">👤</span> Personal Details
+        </h2>
+        <p class="m-form-card__desc">
+          Please fill in your accurate personal information.
+          All fields marked <span class="m-required">*</span> are required.
+        </p>
+
+        <div class="m-form__grid">
+          <!-- Full Name -->
+          <div class="m-form__group m-form__group--full">
+            <label class="m-form__label" for="f-name">
+              Full Name <span class="m-required">*</span>
+            </label>
+            <input class="m-form__input" type="text" id="f-name"
+                   placeholder="Enter your full name"
+                   autocomplete="name" maxlength="100" />
+            <span class="m-form__error" id="e-name"></span>
+          </div>
+
+          <!-- Email -->
+          <div class="m-form__group">
+            <label class="m-form__label" for="f-email">
+              Email Address <span class="m-required">*</span>
+            </label>
+            <input class="m-form__input" type="email" id="f-email"
+                   placeholder="you@example.com"
+                   autocomplete="email" maxlength="150" />
+            <span class="m-form__error" id="e-email"></span>
+          </div>
+
+          <!-- Phone -->
+          <div class="m-form__group">
+            <label class="m-form__label" for="f-phone">
+              Phone Number <span class="m-required">*</span>
+            </label>
+            <input class="m-form__input" type="tel" id="f-phone"
+                   placeholder="10-digit mobile number"
+                   autocomplete="tel" maxlength="10" />
+            <span class="m-form__error" id="e-phone"></span>
+          </div>
+
+          <!-- Date of Birth -->
+          <div class="m-form__group">
+            <label class="m-form__label" for="f-dob">
+              Date of Birth <span class="m-required">*</span>
+            </label>
+            <input class="m-form__input" type="date" id="f-dob"
+                   autocomplete="bday" />
+            <span class="m-form__error" id="e-dob"></span>
+          </div>
+
+          <!-- Father/Guardian Name -->
+          <div class="m-form__group">
+            <label class="m-form__label" for="f-guardian">
+              Father / Guardian Name <span class="m-required">*</span>
+            </label>
+            <input class="m-form__input" type="text" id="f-guardian"
+                   placeholder="Father or guardian's full name"
+                   maxlength="100" />
+            <span class="m-form__error" id="e-guardian"></span>
+          </div>
+
+          <!-- Emergency Contact -->
+          <div class="m-form__group">
+            <label class="m-form__label" for="f-emergency">
+              Emergency Contact
+              <span class="m-form__label-hint">(optional)</span>
+            </label>
+            <input class="m-form__input" type="tel" id="f-emergency"
+                   placeholder="Alternate phone number"
+                   maxlength="15" />
+            <span class="m-form__error" id="e-emergency"></span>
+          </div>
+
+          <!-- Address -->
+          <div class="m-form__group m-form__group--full">
+            <label class="m-form__label" for="f-address">
+              Full Address <span class="m-required">*</span>
+            </label>
+            <textarea class="m-form__input m-form__textarea"
+                      id="f-address"
+                      placeholder="House no., Street, Village/Town, District, PIN code"
+                      maxlength="500" rows="3"></textarea>
+            <span class="m-form__error" id="e-address"></span>
+          </div>
+        </div>
+
+        <div class="m-form__actions">
+          <button class="m-btn m-btn--primary" id="m-step1-next">
+            Continue to Payment &rarr;
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 2: Payment ─── -->
+    <div class="m-form-step" id="m-form-step-2" style="display:none;">
+      <div class="m-form-card">
+        <h2 class="m-form-card__title">
+          <span class="m-form-card__icon">💳</span> Payment
+        </h2>
+
+        <!-- Amount banner -->
+        <div class="m-amount-banner">
+          <div class="m-amount-banner__label">Amount to Pay</div>
+          <div class="m-amount-banner__amount" id="m-amount-display">₹500</div>
+          <div class="m-amount-banner__plan" id="m-amount-plan">Annual Membership</div>
+        </div>
+
+        <!-- Payment methods -->
+        <div class="m-pay-methods">
+          <!-- UPI ID card -->
+          <div class="m-pay-card">
+            <div class="m-pay-card__icon">📱</div>
+            <h3 class="m-pay-card__title">Pay via UPI ID</h3>
+            <p class="m-pay-card__desc">Copy the UPI ID and pay from any UPI app</p>
+            <div class="m-upi-box">
+              <span class="m-upi-box__id" id="m-upi-id-text">yourname@upi</span>
+              <button class="m-btn m-btn--sm m-btn--copy" id="m-copy-upi-btn"
+                      aria-label="Copy UPI ID">
+                📋 Copy
+              </button>
+            </div>
+            <p class="m-pay-card__name" id="m-upi-name-text">
+              Sarberia Pally Seba Samity
+            </p>
+          </div>
+
+          <!-- QR Code card -->
+          <div class="m-pay-card">
+            <div class="m-pay-card__icon">📷</div>
+            <h3 class="m-pay-card__title">Scan QR Code</h3>
+            <p class="m-pay-card__desc">Scan with any UPI app to pay instantly</p>
+            <div class="m-qr-wrap">
+              <img src="../assets/images/common/payment-qr.png"
+                   alt="UPI Payment QR Code"
+                   class="m-qr-img"
+                   id="m-qr-img"
+                   onerror="handleQRError()" />
+              <div class="m-qr-fallback" id="m-qr-fallback" style="display:none;">
+                <span class="m-qr-fallback__icon">⚠️</span>
+                <p>QR unavailable.<br/>Use UPI ID above.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UPI App badges -->
+        <div class="m-upi-apps">
+          <span class="m-upi-apps__label">Works with:</span>
+          <span class="m-upi-app-badge">GPay</span>
+          <span class="m-upi-app-badge">PhonePe</span>
+          <span class="m-upi-app-badge">Paytm</span>
+          <span class="m-upi-app-badge">BHIM</span>
+          <span class="m-upi-app-badge">Any UPI</span>
+        </div>
+
+        <!-- Payment guide -->
+        <div class="m-pay-guide">
+          <h4 class="m-pay-guide__title">📋 How to Pay — Step by Step</h4>
+          <ol class="m-pay-guide__list">
+            <li>Open any UPI app (GPay, PhonePe, Paytm, BHIM, etc.)</li>
+            <li>Choose "Send Money" or "Pay via UPI ID" or "Scan QR"</li>
+            <li>Enter UPI ID <strong id="m-guide-upi">yourname@upi</strong>
+                or scan the QR above</li>
+            <li>Enter the exact amount:
+                <strong id="m-guide-amount">₹500</strong></li>
+            <li>Add note: <strong>PSS Membership</strong> (optional but helpful)</li>
+            <li>Confirm and complete the payment</li>
+            <li>Note the <strong>Transaction ID / UTR</strong> shown after payment</li>
+          </ol>
+        </div>
+
+        <!-- Transaction ID -->
+        <div class="m-form__group m-form__group--full">
+          <label class="m-form__label" for="f-txn">
+            Transaction ID / UTR Number <span class="m-required">*</span>
+          </label>
+          <input class="m-form__input" type="text" id="f-txn"
+                 placeholder="Enter the Transaction ID from your UPI app"
+                 maxlength="50" />
+          <span class="m-form__hint">
+            Find this in your UPI app under payment history / receipt.
+            Minimum 8 characters.
+          </span>
+          <span class="m-form__error" id="e-txn"></span>
+        </div>
+
+        <!-- Confirmation checkbox -->
+        <div class="m-form__group m-form__group--full">
+          <label class="m-checkbox">
+            <input type="checkbox" id="f-confirm" class="m-checkbox__input" />
+            <span class="m-checkbox__box"></span>
+            <span class="m-checkbox__label">
+              I confirm that I have completed the UPI payment of
+              <strong id="m-confirm-amount">₹500</strong> to
+              Sarberia Pally Seba Samity and the Transaction ID entered above is correct.
+            </span>
+          </label>
+          <span class="m-form__error" id="e-confirm"></span>
+        </div>
+
+        <div class="m-form__actions m-form__actions--between">
+          <button class="m-btn m-btn--outline" id="m-step2-back">
+            &larr; Back
+          </button>
+          <button class="m-btn m-btn--primary" id="m-step2-submit">
+            <span class="m-btn__text">Submit Application</span>
+            <span class="m-btn__spinner" style="display:none;">
+              <span class="m-spinner"></span> Submitting…
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 3: Success ─── -->
+    <div class="m-form-step" id="m-form-step-3" style="display:none;">
+      <div class="m-form-card m-form-card--success">
+        <div class="m-success-icon">✅</div>
+        <h2 class="m-success__title">Application Submitted!</h2>
+        <p class="m-success__subtitle">
+          Thank you for applying. Your application has been received
+          and is pending admin review.
+        </p>
+
+        <!-- Summary card -->
+        <div class="m-summary">
+          <h3 class="m-summary__title">Application Summary</h3>
+          <div class="m-summary__grid">
+            <div class="m-summary__row">
+              <span class="m-summary__key">Application ID</span>
+              <span class="m-summary__val m-summary__val--id" id="s-app-id">—</span>
+            </div>
+            <div class="m-summary__row">
+              <span class="m-summary__key">Plan</span>
+              <span class="m-summary__val" id="s-plan">—</span>
+            </div>
+            <div class="m-summary__row">
+              <span class="m-summary__key">Amount Paid</span>
+              <span class="m-summary__val" id="s-amount">—</span>
+            </div>
+            <div class="m-summary__row">
+              <span class="m-summary__key">Transaction ID</span>
+              <span class="m-summary__val m-summary__val--mono" id="s-txn">—</span>
+            </div>
+            <div class="m-summary__row">
+              <span class="m-summary__key">Status</span>
+              <span class="m-summary__val">
+                <span class="m-status-badge m-status-badge--pending">⏳ Pending</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- What happens next -->
+        <div class="m-next-steps">
+          <h3 class="m-next-steps__title">What Happens Next?</h3>
+          <div class="m-next-steps__grid">
+            <div class="m-next-step">
+              <span class="m-next-step__icon">🔍</span>
+              <p>Admin verifies your transaction ID</p>
+            </div>
+            <div class="m-next-step">
+              <span class="m-next-step__icon">✅</span>
+              <p>Your application is approved within 24 hours</p>
+            </div>
+            <div class="m-next-step">
+              <span class="m-next-step__icon">📧</span>
+              <p>You receive an email with your membership card</p>
+            </div>
+            <div class="m-next-step">
+              <span class="m-next-step__icon">🎴</span>
+              <p>Present your digital card at club events</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="m-form__actions m-form__actions--center">
+          <button class="m-btn m-btn--outline" id="m-save-confirmation-btn">
+            💾 Save Confirmation
+          </button>
+          <a href="../index.html" class="m-btn m-btn--primary">
+            Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.m-form-section__inner -->
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     HOW IT WORKS
+════════════════════════════════════════════════════════ -->
+<section class="m-how" id="how-it-works">
+  <div class="m-how__inner">
+    <div class="m-section-header m-section-header--light">
+      <h2 class="m-section-header__title">How It Works</h2>
+      <p class="m-section-header__sub">
+        Getting your membership is simple and takes just a few minutes.
+      </p>
+    </div>
+    <div class="m-how__steps">
+      <div class="m-how__step">
+        <div class="m-how__step-num">1</div>
+        <div class="m-how__step-icon">📋</div>
+        <h3 class="m-how__step-title">Choose Plan</h3>
+        <p class="m-how__step-desc">
+          Browse our membership plans and select the one that fits your needs.
+        </p>
+      </div>
+      <div class="m-how__arrow">›</div>
+      <div class="m-how__step">
+        <div class="m-how__step-num">2</div>
+        <div class="m-how__step-icon">📝</div>
+        <h3 class="m-how__step-title">Fill Details</h3>
+        <p class="m-how__step-desc">
+          Enter your personal information accurately in the application form.
+        </p>
+      </div>
+      <div class="m-how__arrow">›</div>
+      <div class="m-how__step">
+        <div class="m-how__step-num">3</div>
+        <div class="m-how__step-icon">💳</div>
+        <h3 class="m-how__step-title">Pay via UPI</h3>
+        <p class="m-how__step-desc">
+          Pay the membership fee securely using any UPI app and note your Transaction ID.
+        </p>
+      </div>
+      <div class="m-how__arrow">›</div>
+      <div class="m-how__step">
+        <div class="m-how__step-num">4</div>
+        <div class="m-how__step-icon">🎴</div>
+        <h3 class="m-how__step-title">Get Your Card</h3>
+        <p class="m-how__step-desc">
+          After approval, receive your digital membership card via email within 24 hours.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     FAQ
+════════════════════════════════════════════════════════ -->
+<section class="m-faq" id="faq">
+  <div class="m-faq__inner">
+    <div class="m-section-header">
+      <h2 class="m-section-header__title">Frequently Asked Questions</h2>
+      <p class="m-section-header__sub">Everything you need to know about membership.</p>
+    </div>
+    <div class="m-faq__list" id="m-faq-list">
+
+      <div class="m-faq__item">
+        <button class="m-faq__question">
+          <span>How long does approval take?</span>
+          <span class="m-faq__icon">+</span>
+        </button>
+        <div class="m-faq__answer">
+          <p>We typically review and approve applications within 24 hours of submission.
+          You will receive an email notification once your application is processed.</p>
+        </div>
+      </div>
+
+      <div class="m-faq__item">
+        <button class="m-faq__question">
+          <span>What if I enter the wrong Transaction ID?</span>
+          <span class="m-faq__icon">+</span>
+        </button>
+        <div class="m-faq__answer">
+          <p>If you made an error, please contact us immediately at
+          <strong id="faq-phone-1">+91 00000 00000</strong> with your correct
+          Transaction ID and Application ID. Our admin team will help you update your record.</p>
+        </div>
+      </div>
+
+      <div class="m-faq__item">
+        <button class="m-faq__question">
+          <span>Can I apply for multiple memberships?</span>
+          <span class="m-faq__icon">+</span>
+        </button>
+        <div class="m-faq__answer">
+          <p>Currently, each person can hold one active membership at a time.
+          When additional plan types (Gym, Yoga) launch, you may be able to hold
+          multiple plan types simultaneously.</p>
+        </div>
+      </div>
+
+      <div class="m-faq__item">
+        <button class="m-faq__question">
+          <span>What happens after my membership expires?</span>
+          <span class="m-faq__icon">+</span>
+        </button>
+        <div class="m-faq__answer">
+          <p>You can renew your membership by submitting a new application before or
+          after expiry. We will send a renewal reminder via email before your
+          membership expires.</p>
+        </div>
+      </div>
+
+      <div class="m-faq__item">
+        <button class="m-faq__question">
+          <span>Is my payment secure?</span>
+          <span class="m-faq__icon">+</span>
+        </button>
+        <div class="m-faq__answer">
+          <p>Yes. All payments are processed directly through your own UPI app
+          (GPay, PhonePe, Paytm, etc.) using India's official UPI infrastructure.
+          We do not store any payment credentials on our servers.</p>
+        </div>
+      </div>
+
+      <div class="m-faq__item">
+        <button class="m-faq__question">
+          <span>How do I get my digital membership card?</span>
+          <span class="m-faq__icon">+</span>
+        </button>
+        <div class="m-faq__answer">
+          <p>Once your application is approved, our admin will generate a PDF
+          membership card with your name and membership ID, and email it to the
+          address you provided. If you don't receive it within 24 hours, contact us
+          at <strong id="faq-phone-2">+91 00000 00000</strong>.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════════ -->
+<footer class="m-footer">
+  <div class="m-footer__inner">
+    <div class="m-footer__brand">
+      <img src="../assets/images/common/logo.png"
+           alt="PSS Logo"
+           class="m-footer__logo"
+           onerror="this.style.display='none'" />
+      <div>
+        <div class="m-footer__club-name">Sarberia Pally Seba Samity</div>
+        <div class="m-footer__tagline">Education ★ Health ★ Culture</div>
+        <div class="m-footer__motto">
+          "We unite for a better tomorrow through Education, Health &amp; Culture."
+        </div>
+      </div>
+    </div>
+    <div class="m-footer__links">
+      <a href="../index.html">Home</a>
+      <a href="../index.html#about">About</a>
+      <a href="#plans">Membership</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+    <div class="m-footer__copy">
+      &copy; <span id="m-footer-year"></span>
+      Sarberia Pally Seba Samity. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="../js/membership.js"></script>
+</body>
+</html>

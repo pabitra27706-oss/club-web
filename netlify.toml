@@ -96,3 +96,11 @@
   from = "/*"
   to = "/index.html"
   status = 404
+  # Add these lines to your existing netlify.toml
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"

@@ -1,0 +1,92 @@
+{
+  "club": {
+    "name": "Sarberia Pally Seba Samity",
+    "shortName": "PSS",
+    "tagline": "Education ★ Health ★ Culture",
+    "motto": "We unite for a better tomorrow through Education, Health & Culture.",
+    "president": "A. Chakraborty",
+    "location": "Sarberia, West Bengal, India",
+    "phone": "+91 00000 00000",
+    "email": "sarberiapallysebasamity@gmail.com",
+    "website": "https://sarberiapallysebasamity.netlify.app",
+    "upiId": "yourname@upi",
+    "upiName": "Sarberia Pally Seba Samity"
+  },
+
+  "plans": [
+    {
+      "id": "annual",
+      "name": "Annual Membership",
+      "price": 500,
+      "currency": "INR",
+      "currencySymbol": "₹",
+      "duration": "1 Year",
+      "validYears": 1,
+      "badge": "Available Now",
+      "active": true,
+      "featured": true,
+      "description": "Full access to all club facilities and programs for one year.",
+      "features": [
+        "Access to all club facilities",
+        "Digital membership card (PDF)",
+        "Priority event registration",
+        "Club library access",
+        "Cultural program participation",
+        "Community newsletter"
+      ]
+    },
+    {
+      "id": "gym",
+      "name": "Gym Membership",
+      "price": 800,
+      "currency": "INR",
+      "currencySymbol": "₹",
+      "duration": "1 Year",
+      "validYears": 1,
+      "badge": "Coming Soon",
+      "active": false,
+      "featured": false,
+      "description": "Full gym access with professional equipment and guidance.",
+      "features": [
+        "Full gym equipment access",
+        "Professional trainer guidance",
+        "Digital membership card (PDF)",
+        "Fitness progress tracking",
+        "Priority booking for gym slots",
+        "Health assessment sessions"
+      ]
+    },
+    {
+      "id": "yoga",
+      "name": "Yoga Membership",
+      "price": 600,
+      "currency": "INR",
+      "currencySymbol": "₹",
+      "duration": "1 Year",
+      "validYears": 1,
+      "badge": "Coming Soon",
+      "active": false,
+      "featured": false,
+      "description": "Join our yoga and wellness program led by certified instructors.",
+      "features": [
+        "Daily yoga sessions",
+        "Certified yoga instructors",
+        "Digital membership card (PDF)",
+        "Meditation & mindfulness classes",
+        "Wellness workshop access",
+        "Health and diet guidance"
+      ]
+    }
+  ],
+
+  "emailTemplates": {
+    "approval": {
+      "subject": "✅ Membership Approved — Pally Seba Samity | ID: {{MEMBERSHIP_ID}}",
+      "body": "Dear {{NAME}},\n\nWe are delighted to inform you that your membership application for Sarberia Pally Seba Samity has been APPROVED!\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📋 MEMBERSHIP DETAILS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n  Membership ID   : {{MEMBERSHIP_ID}}\n  Plan            : {{PLAN}}\n  Issue Date      : {{ISSUE_DATE}}\n  Valid Until     : {{EXPIRY_DATE}}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nYour digital membership card has been attached to this email as a PDF. Please save it safely — you may need to present it at club events.\n\nAs a valued member of our community, you now have access to:\n  • All club facilities and programs\n  • Cultural and educational events\n  • Club library resources\n  • Priority registration for special events\n\nWe look forward to seeing you at Sarberia Pally Seba Samity!\n\nFor any queries, please contact us:\n  📞 Phone : {{PHONE}}\n  📧 Email : {{EMAIL}}\n\nWarm regards,\n{{PRESIDENT}}\nPresident, Sarberia Pally Seba Samity\nSarberia, West Bengal, India\n\n\"We unite for a better tomorrow through Education, Health & Culture.\""
+    },
+    "rejection": {
+      "subject": "❌ Membership Application Update — Pally Seba Samity | Ref: {{APP_ID}}",
+      "body": "Dear {{NAME}},\n\nThank you for applying for membership at Sarberia Pally Seba Samity.\n\nAfter careful review, we regret to inform you that your membership application could not be approved at this time.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📋 APPLICATION DETAILS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n  Application ID  : {{APP_ID}}\n  Transaction ID  : {{TRANSACTION_ID}}\n  Amount          : ₹{{AMOUNT}}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n📝 REASON FOR REJECTION\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n  {{REASON}}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nIf you believe this decision was made in error, or if you have already made a payment, please contact us immediately with your Transaction ID and we will resolve the matter promptly.\n\nYou are welcome to re-apply after addressing the above concern.\n\nFor any queries, please contact us:\n  📞 Phone : {{PHONE}}\n  📧 Email : {{EMAIL}}\n\nWe apologize for any inconvenience caused.\n\nWarm regards,\n{{PRESIDENT}}\nPresident, Sarberia Pally Seba Samity\nSarberia, West Bengal, India\n\n\"We unite for a better tomorrow through Education, Health & Culture.\""
+    }
+  }
+}

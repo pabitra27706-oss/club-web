@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Card Generator — PSS Admin</title>
+  <link rel="icon" type="image/png" href="../assets/images/common/logo.png" />
+  <link rel="stylesheet" href="../css/admin.css" />
+
+  <!-- html2canvas: captures the card DOM element as canvas -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- jsPDF: converts canvas to PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="ag-body">
+
+  <!-- Page title -->
+  <h1 class="ag-page-title">🎴 Membership Card Generator</h1>
+
+  <!-- Main layout -->
+  <div class="ag-layout">
+
+    <!-- ── Card Preview Panel ── -->
+    <div class="ag-preview-panel">
+      <div class="ag-preview-panel__label">Card Preview (860 × 560 px)</div>
+
+      <!--
+        ag-card-wrap: THIS element is captured by html2canvas.
+        Size is fixed at 860×560px to match the template image.
+        All overlay divs are positioned absolutely inside it.
+      -->
+      <div class="ag-card-wrap" id="ag-card-wrap">
+
+        <!-- Template background image -->
+        <img class="ag-card-bg"
+             src="../assets/images/common/membership-card-template.png"
+             alt="Membership Card Template"
+             id="ag-card-bg"
+             onerror="handleTemplateError()" />
+
+        <!--
+          Dynamic text overlays — positioned over the template.
+          Adjust top/left in css/admin.css under the ag-overlay-* classes.
+          Reference: card is 860px wide × 560px tall.
+        -->
+
+        <!-- Member Name: edit .ag-overlay-name in admin.css to reposition -->
+        <div class="ag-overlay-name" id="ag-overlay-name">MEMBER NAME</div>
+
+        <!-- Membership ID: edit .ag-overlay-id in admin.css to reposition -->
+        <div class="ag-overlay-id" id="ag-overlay-id">PSS-0000-0000</div>
+
+        <!-- Issue Date: edit .ag-overlay-date in admin.css to reposition -->
+        <div class="ag-overlay-date" id="ag-overlay-date">DD / MM / YYYY</div>
+
+        <!-- Valid For (years): edit .ag-overlay-valid in admin.css -->
+        <div class="ag-overlay-valid" id="ag-overlay-valid">1</div>
+
+      </div><!-- /#ag-card-wrap -->
+
+      <!-- Coordinate hint bar -->
+      <div class="ag-hint-bar">
+        💡 To adjust text positions: open <strong>css/admin.css</strong> →
+        find <strong>.ag-overlay-name / .ag-overlay-id / .ag-overlay-date /
+        .ag-overlay-valid</strong> → edit <strong>top</strong> and
+        <strong>left</strong> values → save &amp; refresh.
+        Card dimensions: <strong>860 × 560 px</strong>.
+      </div>
+    </div>
+    <!-- /.ag-preview-panel -->
+
+    <!-- ── Controls Panel ── -->
+    <div class="ag-controls">
+      <div class="ag-controls__title">⚙️ Card Details</div>
+
+      <!-- Pre-fill notice (shown if URL params are present) -->
+      <div class="ag-prefill-notice" id="ag-prefill-notice" style="display:none;">
+        <span>✅</span>
+        <span>Details pre-filled from dashboard. Review and download.</span>
+      </div>
+
+      <!-- Member Name -->
+      <div class="ag-field">
+        <label class="ag-label" for="ag-name">Member Name</label>
+        <input class="ag-input" type="text" id="ag-name"
+               placeholder="Full name as on card"
+               maxlength="60" />
+      </div>
+
+      <!-- Membership ID (readonly — auto or from URL) -->
+      <div class="ag-field">
+        <label class="ag-label" for="ag-mid">Membership ID</label>
+        <input class="ag-input" type="text" id="ag-mid"
+               placeholder="PSS-YYYY-XXXX"
+               readonly />
+      </div>
+
+      <!-- Issue Date -->
+      <div class="ag-field">
+        <label class="ag-label" for="ag-date">Issue Date</label>
+        <input class="ag-input" type="date" id="ag-date" />
+      </div>
+
+      <!-- Valid For -->
+      <div class="ag-field">
+        <label class="ag-label" for="ag-valid">Valid For</label>
+        <select class="ag-select" id="ag-valid">
+          <option value="1">1 Year</option>
+          <option value="2">2 Years</option>
+          <option value="3">3 Years</option>
+        </select>
+      </div>
+
+      <!-- Member Email (reference only) -->
+      <div class="ag-field">
+        <label class="ag-label" for="ag-email">
+          Member Email <span style="opacity:0.5;font-weight:400;">(reference)</span>
+        </label>
+        <input class="ag-input" type="email" id="ag-email"
+               placeholder="member@example.com" />
+      </div>
+
+      <!-- Application ID (readonly, reference) -->
+      <div class="ag-field">
+        <label class="ag-label" for="ag-appid">
+          Application ID <span style="opacity:0.5;font-weight:400;">(reference)</span>
+        </label>
+        <input class="ag-input" type="text" id="ag-appid"
+               placeholder="APP-YYYY-XXXXXX"
+               readonly />
+      </div>
+
+      <!-- Download button -->
+      <button class="ag-download-btn" id="ag-download-btn">
+        ⬇ Download Card as PDF
+      </button>
+
+      <!-- Back to dashboard -->
+      <a class="ag-back-link" href="dashboard.html">
+        ← Back to Dashboard
+      </a>
+
+      <!-- PDF note -->
+      <p class="ag-pdf-note">
+        After downloading, go back to the dashboard, open the Email Template,
+        and attach this PDF before sending.
+      </p>
+    </div>
+    <!-- /.ag-controls -->
+
+  </div><!-- /.ag-layout -->
+
+  <!-- Loading overlay (shown during PDF generation) -->
+  <div class="ag-loading-overlay" id="ag-loading-overlay" style="display:none;">
+    <div class="ag-loading-spinner"></div>
+    <div class="ag-loading-msg">Generating PDF… please wait</div>
+  </div>
+
+  <script type="module" src="../js/card-generator.js"></script>
+</body>
+</html>

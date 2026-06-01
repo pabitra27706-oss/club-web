@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Dashboard — PSS Admin</title>
+  <link rel="icon" type="image/png" href="../assets/images/common/logo.png" />
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body class="ad-body">
+
+<!-- ═══════════════════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════════════════════ -->
+<aside class="ad-sidebar" id="ad-sidebar">
+
+  <!-- Brand -->
+  <div class="ad-sidebar__brand">
+    <img src="../assets/images/common/logo.png"
+         alt="PSS Logo"
+         class="ad-sidebar__logo"
+         onerror="this.style.display='none'" />
+    <div class="ad-sidebar__brand-text">
+      <div class="ad-sidebar__club-name">Pally Seba Samity</div>
+      <div class="ad-sidebar__panel-label">Admin Panel</div>
+    </div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="ad-sidebar__nav">
+    <button class="ad-nav-btn ad-nav-btn--active" id="nav-applications"
+            data-view="applications">
+      <span class="ad-nav-btn__icon">📋</span>
+      <span class="ad-nav-btn__label">Applications</span>
+      <span class="ad-nav-btn__badge" id="pending-count-badge"
+            style="display:none;">0</span>
+    </button>
+    <button class="ad-nav-btn" id="nav-members" data-view="members">
+      <span class="ad-nav-btn__icon">👥</span>
+      <span class="ad-nav-btn__label">Members</span>
+    </button>
+    <button class="ad-nav-btn" id="nav-statistics" data-view="statistics">
+      <span class="ad-nav-btn__icon">📊</span>
+      <span class="ad-nav-btn__label">Statistics</span>
+    </button>
+  </nav>
+
+  <!-- Sidebar footer -->
+  <div class="ad-sidebar__footer">
+    <div class="ad-sidebar__user">
+      <span class="ad-sidebar__user-icon">👤</span>
+      <span class="ad-sidebar__user-email" id="ad-user-email">admin@…</span>
+    </div>
+    <button class="ad-logout-btn" id="ad-logout-btn">
+      🚪 Logout
+    </button>
+  </div>
+
+</aside>
+
+<!-- Sidebar overlay (mobile) -->
+<div class="ad-sidebar-overlay" id="ad-sidebar-overlay"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN
+════════════════════════════════════════════════════════ -->
+<main class="ad-main" id="ad-main">
+
+  <!-- Topbar -->
+  <div class="ad-topbar">
+    <button class="ad-topbar__hamburger" id="ad-hamburger"
+            aria-label="Toggle sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <h1 class="ad-topbar__title" id="ad-page-title">Applications</h1>
+    <div class="ad-topbar__right">
+      <div class="ad-live-indicator">
+        <span class="ad-live-dot"></span>
+        <span class="ad-live-label">Live</span>
+      </div>
+      <a href="../index.html" target="_blank" class="ad-topbar__site-link">
+        View Site ↗
+      </a>
+    </div>
+  </div>
+
+  <!-- Content area -->
+  <div class="ad-content">
+
+    <!-- ── STAT CARDS ── -->
+    <div class="ad-stats-grid">
+      <div class="ad-stat-card ad-stat-card--grey">
+        <div class="ad-stat-card__icon">📋</div>
+        <div class="ad-stat-card__body">
+          <div class="ad-stat-card__num" id="stat-total">0</div>
+          <div class="ad-stat-card__label">Total Applications</div>
+        </div>
+      </div>
+      <div class="ad-stat-card ad-stat-card--gold">
+        <div class="ad-stat-card__icon">⏳</div>
+        <div class="ad-stat-card__body">
+          <div class="ad-stat-card__num" id="stat-pending">0</div>
+          <div class="ad-stat-card__label">Pending</div>
+        </div>
+      </div>
+      <div class="ad-stat-card ad-stat-card--green">
+        <div class="ad-stat-card__icon">✅</div>
+        <div class="ad-stat-card__body">
+          <div class="ad-stat-card__num" id="stat-approved">0</div>
+          <div class="ad-stat-card__label">Approved</div>
+        </div>
+      </div>
+      <div class="ad-stat-card ad-stat-card--red">
+        <div class="ad-stat-card__icon">❌</div>
+        <div class="ad-stat-card__body">
+          <div class="ad-stat-card__num" id="stat-rejected">0</div>
+          <div class="ad-stat-card__label">Rejected</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         VIEW: APPLICATIONS
+    ══════════════════════════════════════════════ -->
+    <div class="ad-view" id="view-applications">
+
+      <!-- Filters -->
+      <div class="ad-filters">
+        <select class="ad-select" id="filter-status">
+          <option value="all">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <select class="ad-select" id="filter-plan">
+          <option value="all">All Plans</option>
+          <option value="annual">Annual</option>
+          <option value="gym">Gym</option>
+          <option value="yoga">Yoga</option>
+        </select>
+        <div class="ad-search-wrap">
+          <span class="ad-search-wrap__icon">🔍</span>
+          <input class="ad-search-input" type="text"
+                 id="filter-search"
+                 placeholder="Search name, email, App ID…" />
+        </div>
+        <button class="ad-refresh-btn" id="ad-refresh-btn"
+                title="Refresh data">
+          🔄 Refresh
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="ad-table-wrap">
+        <table class="ad-table" id="applications-table">
+          <thead>
+            <tr>
+              <th>App ID</th>
+              <th>Name</th>
+              <th>Contact</th>
+              <th>Plan</th>
+              <th>Amount</th>
+              <th>Transaction ID</th>
+              <th>Submitted</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="applications-tbody">
+            <tr>
+              <td colspan="9" class="ad-table__empty">
+                <div class="ad-empty-state">
+                  <div class="ad-empty-state__icon">📭</div>
+                  <div class="ad-empty-state__msg">Loading applications…</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         VIEW: MEMBERS
+    ══════════════════════════════════════════════ -->
+    <div class="ad-view" id="view-members" style="display:none;">
+
+      <div class="ad-filters">
+        <div class="ad-search-wrap">
+          <span class="ad-search-wrap__icon">🔍</span>
+          <input class="ad-search-input" type="text"
+                 id="members-search"
+                 placeholder="Search members…" />
+        </div>
+      </div>
+
+      <div class="ad-table-wrap">
+        <table class="ad-table" id="members-table">
+          <thead>
+            <tr>
+              <th>Member ID</th>
+              <th>Name</th>
+              <th>Contact</th>
+              <th>Plan</th>
+              <th>Issue Date</th>
+              <th>Expiry</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="members-tbody">
+            <tr>
+              <td colspan="7" class="ad-table__empty">
+                <div class="ad-empty-state">
+                  <div class="ad-empty-state__icon">👥</div>
+                  <div class="ad-empty-state__msg">No approved members yet.</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         VIEW: STATISTICS
+    ══════════════════════════════════════════════ -->
+    <div class="ad-view" id="view-statistics" style="display:none;">
+
+      <!-- Metric cards -->
+      <div class="ad-metrics-grid">
+        <div class="ad-metric-card">
+          <div class="ad-metric-card__icon">💰</div>
+          <div class="ad-metric-card__body">
+            <div class="ad-metric-card__val" id="metric-revenue">₹0</div>
+            <div class="ad-metric-card__label">Total Revenue (Approved)</div>
+          </div>
+        </div>
+        <div class="ad-metric-card">
+          <div class="ad-metric-card__icon">🏆</div>
+          <div class="ad-metric-card__body">
+            <div class="ad-metric-card__val" id="metric-active">0</div>
+            <div class="ad-metric-card__label">Active Members</div>
+          </div>
+        </div>
+        <div class="ad-metric-card">
+          <div class="ad-metric-card__icon">📅</div>
+          <div class="ad-metric-card__body">
+            <div class="ad-metric-card__val" id="metric-month">0</div>
+            <div class="ad-metric-card__label">This Month Applications</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue by plan -->
+      <div class="ad-stats-section">
+        <h3 class="ad-stats-section__title">Revenue by Plan</h3>
+        <div class="ad-plan-bars" id="plan-bars">
+          <div class="ad-plan-bar-empty">No data yet.</div>
+        </div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="ad-stats-section">
+        <h3 class="ad-stats-section__title">Recent Activity</h3>
+        <div class="ad-activity-list" id="activity-list">
+          <div class="ad-plan-bar-empty">No activity yet.</div>
+        </div>
+      </div>
+
+    </div>
+    <!-- /view-statistics -->
+
+  </div><!-- /.ad-content -->
+</main>
+
+<!-- ═══════════════════════════════════════════════════════
+     MODAL: APPLICATION DETAIL
+════════════════════════════════════════════════════════ -->
+<div class="ad-modal-overlay" id="modal-detail" style="display:none;">
+  <div class="ad-modal ad-modal--wide">
+    <div class="ad-modal__header">
+      <h2 class="ad-modal__title">Application Details</h2>
+      <button class="ad-modal__close" id="modal-detail-close">✕</button>
+    </div>
+    <div class="ad-modal__body" id="modal-detail-body">
+      <!-- Rendered by JS -->
+    </div>
+    <div class="ad-modal__footer" id="modal-detail-footer">
+      <!-- Rendered by JS based on status -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MODAL: REJECT REASON
+════════════════════════════════════════════════════════ -->
+<div class="ad-modal-overlay" id="modal-reject" style="display:none;">
+  <div class="ad-modal">
+    <div class="ad-modal__header">
+      <h2 class="ad-modal__title">❌ Reject Application</h2>
+      <button class="ad-modal__close" id="modal-reject-close">✕</button>
+    </div>
+    <div class="ad-modal__body">
+      <div class="ad-reject-info" id="reject-info">
+        <!-- Populated by JS -->
+      </div>
+      <div class="ad-field">
+        <label class="ad-label" for="reject-reason">
+          Reason for Rejection <span style="color:#c62828;">*</span>
+        </label>
+        <textarea class="ad-input ad-textarea" id="reject-reason"
+                  placeholder="Provide a clear reason (e.g. Transaction ID not found, incorrect amount, duplicate application…)"
+                  rows="4" maxlength="500"></textarea>
+        <span class="ad-field__error" id="reject-reason-error"></span>
+      </div>
+    </div>
+    <div class="ad-modal__footer">
+      <button class="ad-btn ad-btn--outline" id="modal-reject-cancel">
+        Cancel
+      </button>
+      <button class="ad-btn ad-btn--danger" id="modal-reject-confirm">
+        ❌ Confirm Rejection
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MODAL: EMAIL TEMPLATE
+════════════════════════════════════════════════════════ -->
+<div class="ad-modal-overlay" id="modal-email" style="display:none;">
+  <div class="ad-modal ad-modal--wide">
+    <div class="ad-modal__header">
+      <h2 class="ad-modal__title">📧 Email Template</h2>
+      <button class="ad-modal__close" id="modal-email-close">✕</button>
+    </div>
+    <div class="ad-modal__body">
+
+      <!-- 3-step guide -->
+      <div class="ad-email-steps">
+        <div class="ad-email-step">
+          <div class="ad-email-step__num">1</div>
+          <div class="ad-email-step__text">Generate &amp; download card PDF</div>
+        </div>
+        <div class="ad-email-step__arrow">→</div>
+        <div class="ad-email-step">
+          <div class="ad-email-step__num">2</div>
+          <div class="ad-email-step__text">Copy email or open in app</div>
+        </div>
+        <div class="ad-email-step__arrow">→</div>
+        <div class="ad-email-step">
+          <div class="ad-email-step__num">3</div>
+          <div class="ad-email-step__text">Attach PDF and send</div>
+        </div>
+      </div>
+
+      <!-- Card generator button (shown for approved only) -->
+      <div id="email-card-btn-wrap" style="display:none;">
+        <a class="ad-btn ad-btn--gold ad-btn--full" id="email-card-link"
+           target="_blank">
+          🎴 Generate Membership Card PDF
+        </a>
+      </div>
+
+      <!-- Email fields -->
+      <div class="ad-email-field">
+        <div class="ad-email-field__header">
+          <span class="ad-email-field__lbl">To:</span>
+          <button class="ad-copy-btn" id="copy-to-btn">📋 Copy</button>
+        </div>
+        <div class="ad-email-field__val" id="email-to">—</div>
+      </div>
+
+      <div class="ad-email-field">
+        <div class="ad-email-field__header">
+          <span class="ad-email-field__lbl">Subject:</span>
+          <button class="ad-copy-btn" id="copy-subject-btn">📋 Copy</button>
+        </div>
+        <div class="ad-email-field__val" id="email-subject">—</div>
+      </div>
+
+      <div class="ad-email-field">
+        <div class="ad-email-field__header">
+          <span class="ad-email-field__lbl">Body:</span>
+          <button class="ad-copy-btn" id="copy-body-btn">📋 Copy</button>
+        </div>
+        <pre class="ad-email-body" id="email-body">—</pre>
+      </div>
+
+      <!-- Warning -->
+      <div class="ad-email-warning">
+        ⚠️ Remember to <strong>attach the PDF card</strong> before sending
+        (for approved members).
+      </div>
+
+    </div>
+    <div class="ad-modal__footer">
+      <button class="ad-btn ad-btn--outline" id="modal-email-close-2">
+        Close
+      </button>
+      <button class="ad-btn ad-btn--outline" id="copy-all-btn">
+        📋 Copy All
+      </button>
+      <a class="ad-btn ad-btn--primary" id="open-email-app-btn" href="#">
+        📨 Open in Email App
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TOAST NOTIFICATIONS
+════════════════════════════════════════════════════════ -->
+<div class="ad-toast-container" id="ad-toast-container"></div>
+
+<script type="module" src="../js/admin.js"></script>
+</body>
+</html>

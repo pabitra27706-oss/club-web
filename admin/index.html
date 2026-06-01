@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin Login — Pally Seba Samity</title>
+  <link rel="icon" type="image/png" href="../assets/images/common/logo.png" />
+  <link rel="stylesheet" href="../css/admin.css" />
+</head>
+<body class="al-body">
+
+  <!-- Lockout warning bar (hidden by default) -->
+  <div class="al-lockout-bar" id="al-lockout-bar" style="display:none;">
+    <span class="al-lockout-bar__icon">🔒</span>
+    <span id="al-lockout-msg">Too many failed attempts. Please wait.</span>
+  </div>
+
+  <!-- Login card -->
+  <div class="al-card">
+
+    <!-- Logo -->
+    <div class="al-logo-wrap">
+      <img src="../assets/images/common/logo.png"
+           alt="PSS Logo"
+           class="al-logo"
+           onerror="this.style.display='none'" />
+    </div>
+
+    <!-- Title -->
+    <h1 class="al-title">Admin Panel</h1>
+    <p class="al-subtitle">Pally Seba Samity — Authorized Access Only</p>
+
+    <!-- Error message -->
+    <div class="al-error" id="al-error" style="display:none;"></div>
+
+    <!-- Form -->
+    <form class="al-form" id="al-form" novalidate autocomplete="off">
+
+      <!-- Email -->
+      <div class="al-field">
+        <label class="al-label" for="al-email">Email Address</label>
+        <input class="al-input" type="email" id="al-email"
+               name="admin-email"
+               placeholder="admin@example.com"
+               autocomplete="username"
+               required />
+      </div>
+
+      <!-- Password -->
+      <div class="al-field">
+        <label class="al-label" for="al-password">Password</label>
+        <div class="al-input-wrap">
+          <input class="al-input al-input--password" type="password"
+                 id="al-password"
+                 name="admin-password"
+                 placeholder="Enter your password"
+                 autocomplete="current-password"
+                 required />
+          <button type="button" class="al-eye-btn" id="al-eye-btn"
+                  aria-label="Toggle password visibility">
+            <span id="al-eye-icon">👁</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="al-submit-btn" id="al-submit-btn">
+        <span class="al-submit-btn__text">Login</span>
+        <span class="al-submit-btn__spinner" style="display:none;">
+          <span class="al-spinner"></span> Signing in…
+        </span>
+      </button>
+
+    </form>
+
+    <!-- Back link -->
+    <a href="../index.html" class="al-back-link">← Back to Website</a>
+
+    <!-- Security note -->
+    <p class="al-security-note">
+      🔒 This area is restricted to authorized administrators only.
+    </p>
+
+  </div>
+
+  <script type="module" src="../js/admin.js"></script>
+</body>
+</html>
