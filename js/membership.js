@@ -1,6 +1,6 @@
 /**
- * membership.js – v4
- * All features + complete status checker.
+ * membership.js – v4.1
+ * All features + complete status checker + optional DOB.
  */
 import { db, auth } from './firebase-config.js';
 import {
@@ -249,16 +249,22 @@ function validateStep1() {
   else if (!phoneRx.test(phone)) { setError('f-phone', 'e-phone', 'Enter a valid 10-digit Indian mobile number.'); valid = false; }
   else { clearError('f-phone', 'e-phone'); }
 
+  // DOB is optional; validate only if provided
   const dob = $('f-dob').value;
-  if (!dob) { setError('f-dob', 'e-dob', 'Date of birth is required.'); valid = false; }
-  else {
+  if (dob) {
     const birthDate = new Date(dob);
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
-    if (age < 5 || age > 100) { setError('f-dob', 'e-dob', 'Age must be between 5 and 100 years.'); valid = false; }
-    else { clearError('f-dob', 'e-dob'); }
+    if (age < 5 || age > 100) {
+      setError('f-dob', 'e-dob', 'Age must be between 5 and 100 years.');
+      valid = false;
+    } else {
+      clearError('f-dob', 'e-dob');
+    }
+  } else {
+    clearError('f-dob', 'e-dob');
   }
 
   const guardian = $('f-guardian').value.trim();
@@ -587,7 +593,7 @@ async function submitApplication() {
       email: emailVal,
       emailLower: emailVal,
       phone: $('f-phone').value.trim(),
-      dob: $('f-dob').value,
+      dob: $('f-dob').value,                    // can be empty string
       guardian: $('f-guardian').value.trim(),
       emergencyContact: $('f-emergency').value.trim() || null,
       address: $('f-address').value.trim(),
