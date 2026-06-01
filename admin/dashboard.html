@@ -10,31 +10,20 @@
 </head>
 <body class="ad-body">
 
-<!-- ═══════════════════════════════════════════════════════
-     SIDEBAR
-════════════════════════════════════════════════════════ -->
+<!-- SIDEBAR -->
 <aside class="ad-sidebar" id="ad-sidebar">
-
-  <!-- Brand -->
   <div class="ad-sidebar__brand">
-    <img src="../assets/images/common/logo.png"
-         alt="PSS Logo"
-         class="ad-sidebar__logo"
-         onerror="this.style.display='none'" />
+    <img src="../assets/images/common/logo.png" alt="PSS Logo" class="ad-sidebar__logo" onerror="this.style.display='none'" />
     <div class="ad-sidebar__brand-text">
       <div class="ad-sidebar__club-name">Pally Seba Samity</div>
       <div class="ad-sidebar__panel-label">Admin Panel</div>
     </div>
   </div>
-
-  <!-- Nav -->
   <nav class="ad-sidebar__nav">
-    <button class="ad-nav-btn ad-nav-btn--active" id="nav-applications"
-            data-view="applications">
+    <button class="ad-nav-btn ad-nav-btn--active" id="nav-applications" data-view="applications">
       <span class="ad-nav-btn__icon">📋</span>
       <span class="ad-nav-btn__label">Applications</span>
-      <span class="ad-nav-btn__badge" id="pending-count-badge"
-            style="display:none;">0</span>
+      <span class="ad-nav-btn__badge" id="pending-count-badge" style="display:none;">0</span>
     </button>
     <button class="ad-nav-btn" id="nav-members" data-view="members">
       <span class="ad-nav-btn__icon">👥</span>
@@ -45,32 +34,20 @@
       <span class="ad-nav-btn__label">Statistics</span>
     </button>
   </nav>
-
-  <!-- Sidebar footer -->
   <div class="ad-sidebar__footer">
     <div class="ad-sidebar__user">
       <span class="ad-sidebar__user-icon">👤</span>
       <span class="ad-sidebar__user-email" id="ad-user-email">admin@…</span>
     </div>
-    <button class="ad-logout-btn" id="ad-logout-btn">
-      🚪 Logout
-    </button>
+    <button class="ad-logout-btn" id="ad-logout-btn">🚪 Logout</button>
   </div>
-
 </aside>
-
-<!-- Sidebar overlay (mobile) -->
 <div class="ad-sidebar-overlay" id="ad-sidebar-overlay"></div>
 
-<!-- ═══════════════════════════════════════════════════════
-     MAIN
-════════════════════════════════════════════════════════ -->
+<!-- MAIN -->
 <main class="ad-main" id="ad-main">
-
-  <!-- Topbar -->
   <div class="ad-topbar">
-    <button class="ad-topbar__hamburger" id="ad-hamburger"
-            aria-label="Toggle sidebar">
+    <button class="ad-topbar__hamburger" id="ad-hamburger" aria-label="Toggle sidebar">
       <span></span><span></span><span></span>
     </button>
     <h1 class="ad-topbar__title" id="ad-page-title">Applications</h1>
@@ -79,16 +56,11 @@
         <span class="ad-live-dot"></span>
         <span class="ad-live-label">Live</span>
       </div>
-      <a href="../index.html" target="_blank" class="ad-topbar__site-link">
-        View Site ↗
-      </a>
+      <a href="../index.html" target="_blank" class="ad-topbar__site-link">View Site ↗</a>
     </div>
   </div>
 
-  <!-- Content area -->
   <div class="ad-content">
-
-    <!-- ── STAT CARDS ── -->
     <div class="ad-stats-grid">
       <div class="ad-stat-card ad-stat-card--grey">
         <div class="ad-stat-card__icon">📋</div>
@@ -120,12 +92,8 @@
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-         VIEW: APPLICATIONS
-    ══════════════════════════════════════════════ -->
+    <!-- Applications View -->
     <div class="ad-view" id="view-applications">
-
-      <!-- Filters -->
       <div class="ad-filters">
         <select class="ad-select" id="filter-status">
           <option value="all">All Status</option>
@@ -139,19 +107,17 @@
           <option value="gym">Gym</option>
           <option value="yoga">Yoga</option>
         </select>
+        <select class="ad-select" id="filter-payment">
+          <option value="all">All Payment</option>
+          <option value="upi">UPI</option>
+          <option value="cash">Cash</option>
+        </select>
         <div class="ad-search-wrap">
           <span class="ad-search-wrap__icon">🔍</span>
-          <input class="ad-search-input" type="text"
-                 id="filter-search"
-                 placeholder="Search name, email, App ID…" />
+          <input class="ad-search-input" type="text" id="filter-search" placeholder="Search name, email, App ID…" />
         </div>
-        <button class="ad-refresh-btn" id="ad-refresh-btn"
-                title="Refresh data">
-          🔄 Refresh
-        </button>
+        <button class="ad-refresh-btn" id="ad-refresh-btn" title="Refresh data">🔄 Refresh</button>
       </div>
-
-      <!-- Table -->
       <div class="ad-table-wrap">
         <table class="ad-table" id="applications-table">
           <thead>
@@ -161,7 +127,7 @@
               <th>Contact</th>
               <th>Plan</th>
               <th>Amount</th>
-              <th>Transaction ID</th>
+              <th>Transaction</th>
               <th>Submitted</th>
               <th>Status</th>
               <th>Actions</th>
@@ -181,20 +147,14 @@
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-         VIEW: MEMBERS
-    ══════════════════════════════════════════════ -->
+    <!-- Members View -->
     <div class="ad-view" id="view-members" style="display:none;">
-
       <div class="ad-filters">
         <div class="ad-search-wrap">
           <span class="ad-search-wrap__icon">🔍</span>
-          <input class="ad-search-input" type="text"
-                 id="members-search"
-                 placeholder="Search members…" />
+          <input class="ad-search-input" type="text" id="members-search" placeholder="Search members…" />
         </div>
       </div>
-
       <div class="ad-table-wrap">
         <table class="ad-table" id="members-table">
           <thead>
@@ -222,12 +182,8 @@
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-         VIEW: STATISTICS
-    ══════════════════════════════════════════════ -->
+    <!-- Statistics View -->
     <div class="ad-view" id="view-statistics" style="display:none;">
-
-      <!-- Metric cards -->
       <div class="ad-metrics-grid">
         <div class="ad-metric-card">
           <div class="ad-metric-card__icon">💰</div>
@@ -251,50 +207,35 @@
           </div>
         </div>
       </div>
-
-      <!-- Revenue by plan -->
       <div class="ad-stats-section">
         <h3 class="ad-stats-section__title">Revenue by Plan</h3>
         <div class="ad-plan-bars" id="plan-bars">
           <div class="ad-plan-bar-empty">No data yet.</div>
         </div>
       </div>
-
-      <!-- Recent activity -->
       <div class="ad-stats-section">
         <h3 class="ad-stats-section__title">Recent Activity</h3>
         <div class="ad-activity-list" id="activity-list">
           <div class="ad-plan-bar-empty">No activity yet.</div>
         </div>
       </div>
-
     </div>
-    <!-- /view-statistics -->
-
-  </div><!-- /.ad-content -->
+  </div>
 </main>
 
-<!-- ═══════════════════════════════════════════════════════
-     MODAL: APPLICATION DETAIL
-════════════════════════════════════════════════════════ -->
+<!-- DETAIL MODAL -->
 <div class="ad-modal-overlay" id="modal-detail" style="display:none;">
   <div class="ad-modal ad-modal--wide">
     <div class="ad-modal__header">
       <h2 class="ad-modal__title">Application Details</h2>
       <button class="ad-modal__close" id="modal-detail-close">✕</button>
     </div>
-    <div class="ad-modal__body" id="modal-detail-body">
-      <!-- Rendered by JS -->
-    </div>
-    <div class="ad-modal__footer" id="modal-detail-footer">
-      <!-- Rendered by JS based on status -->
-    </div>
+    <div class="ad-modal__body" id="modal-detail-body"></div>
+    <div class="ad-modal__footer" id="modal-detail-footer"></div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     MODAL: REJECT REASON
-════════════════════════════════════════════════════════ -->
+<!-- REJECT MODAL -->
 <div class="ad-modal-overlay" id="modal-reject" style="display:none;">
   <div class="ad-modal">
     <div class="ad-modal__header">
@@ -302,33 +243,21 @@
       <button class="ad-modal__close" id="modal-reject-close">✕</button>
     </div>
     <div class="ad-modal__body">
-      <div class="ad-reject-info" id="reject-info">
-        <!-- Populated by JS -->
-      </div>
+      <div class="ad-reject-info" id="reject-info"></div>
       <div class="ad-field">
-        <label class="ad-label" for="reject-reason">
-          Reason for Rejection <span style="color:#c62828;">*</span>
-        </label>
-        <textarea class="ad-input ad-textarea" id="reject-reason"
-                  placeholder="Provide a clear reason (e.g. Transaction ID not found, incorrect amount, duplicate application…)"
-                  rows="4" maxlength="500"></textarea>
+        <label class="ad-label" for="reject-reason">Reason for Rejection <span style="color:#c62828;">*</span></label>
+        <textarea class="ad-input ad-textarea" id="reject-reason" placeholder="Provide a clear reason…" rows="4" maxlength="500"></textarea>
         <span class="ad-field__error" id="reject-reason-error"></span>
       </div>
     </div>
     <div class="ad-modal__footer">
-      <button class="ad-btn ad-btn--outline" id="modal-reject-cancel">
-        Cancel
-      </button>
-      <button class="ad-btn ad-btn--danger" id="modal-reject-confirm">
-        ❌ Confirm Rejection
-      </button>
+      <button class="ad-btn ad-btn--outline" id="modal-reject-cancel">Cancel</button>
+      <button class="ad-btn ad-btn--danger" id="modal-reject-confirm">❌ Confirm Rejection</button>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     MODAL: EMAIL TEMPLATE
-════════════════════════════════════════════════════════ -->
+<!-- EMAIL MODAL -->
 <div class="ad-modal-overlay" id="modal-email" style="display:none;">
   <div class="ad-modal ad-modal--wide">
     <div class="ad-modal__header">
@@ -336,82 +265,38 @@
       <button class="ad-modal__close" id="modal-email-close">✕</button>
     </div>
     <div class="ad-modal__body">
-
-      <!-- 3-step guide -->
       <div class="ad-email-steps">
-        <div class="ad-email-step">
-          <div class="ad-email-step__num">1</div>
-          <div class="ad-email-step__text">Generate &amp; download card PDF</div>
-        </div>
+        <div class="ad-email-step"><div class="ad-email-step__num">1</div><div class="ad-email-step__text">Generate &amp; download card PDF</div></div>
         <div class="ad-email-step__arrow">→</div>
-        <div class="ad-email-step">
-          <div class="ad-email-step__num">2</div>
-          <div class="ad-email-step__text">Copy email or open in app</div>
-        </div>
+        <div class="ad-email-step"><div class="ad-email-step__num">2</div><div class="ad-email-step__text">Copy email or open in app</div></div>
         <div class="ad-email-step__arrow">→</div>
-        <div class="ad-email-step">
-          <div class="ad-email-step__num">3</div>
-          <div class="ad-email-step__text">Attach PDF and send</div>
-        </div>
+        <div class="ad-email-step"><div class="ad-email-step__num">3</div><div class="ad-email-step__text">Attach PDF and send</div></div>
       </div>
-
-      <!-- Card generator button (shown for approved only) -->
       <div id="email-card-btn-wrap" style="display:none;">
-        <a class="ad-btn ad-btn--gold ad-btn--full" id="email-card-link"
-           target="_blank">
-          🎴 Generate Membership Card PDF
-        </a>
+        <a class="ad-btn ad-btn--gold ad-btn--full" id="email-card-link" target="_blank">🎴 Generate Membership Card PDF</a>
       </div>
-
-      <!-- Email fields -->
       <div class="ad-email-field">
-        <div class="ad-email-field__header">
-          <span class="ad-email-field__lbl">To:</span>
-          <button class="ad-copy-btn" id="copy-to-btn">📋 Copy</button>
-        </div>
+        <div class="ad-email-field__header"><span class="ad-email-field__lbl">To:</span><button class="ad-copy-btn" id="copy-to-btn">📋 Copy</button></div>
         <div class="ad-email-field__val" id="email-to">—</div>
       </div>
-
       <div class="ad-email-field">
-        <div class="ad-email-field__header">
-          <span class="ad-email-field__lbl">Subject:</span>
-          <button class="ad-copy-btn" id="copy-subject-btn">📋 Copy</button>
-        </div>
+        <div class="ad-email-field__header"><span class="ad-email-field__lbl">Subject:</span><button class="ad-copy-btn" id="copy-subject-btn">📋 Copy</button></div>
         <div class="ad-email-field__val" id="email-subject">—</div>
       </div>
-
       <div class="ad-email-field">
-        <div class="ad-email-field__header">
-          <span class="ad-email-field__lbl">Body:</span>
-          <button class="ad-copy-btn" id="copy-body-btn">📋 Copy</button>
-        </div>
+        <div class="ad-email-field__header"><span class="ad-email-field__lbl">Body:</span><button class="ad-copy-btn" id="copy-body-btn">📋 Copy</button></div>
         <pre class="ad-email-body" id="email-body">—</pre>
       </div>
-
-      <!-- Warning -->
-      <div class="ad-email-warning">
-        ⚠️ Remember to <strong>attach the PDF card</strong> before sending
-        (for approved members).
-      </div>
-
+      <div class="ad-email-warning">⚠️ Remember to <strong>attach the PDF card</strong> before sending (for approved members).</div>
     </div>
     <div class="ad-modal__footer">
-      <button class="ad-btn ad-btn--outline" id="modal-email-close-2">
-        Close
-      </button>
-      <button class="ad-btn ad-btn--outline" id="copy-all-btn">
-        📋 Copy All
-      </button>
-      <a class="ad-btn ad-btn--primary" id="open-email-app-btn" href="#">
-        📨 Open in Email App
-      </a>
+      <button class="ad-btn ad-btn--outline" id="modal-email-close-2">Close</button>
+      <button class="ad-btn ad-btn--outline" id="copy-all-btn">📋 Copy All</button>
+      <a class="ad-btn ad-btn--primary" id="open-email-app-btn" href="#">📨 Open in Email App</a>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════
-     TOAST NOTIFICATIONS
-════════════════════════════════════════════════════════ -->
 <div class="ad-toast-container" id="ad-toast-container"></div>
 
 <script type="module" src="../js/admin.js"></script>

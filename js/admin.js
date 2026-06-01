@@ -1,57 +1,37 @@
 /**
- * admin.js
- * Handles BOTH admin/index.html (login) and admin/dashboard.html (dashboard)
- * Page is detected via window.location.pathname
+ * admin.js – v2
+ * Handles admin/dashboard.html (and login, card-generator)
+ * Added: payment method filter, cash badge, start date at approval
  */
-
 import { auth, db } from './firebase-config.js';
 import {
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
+  signInWithEmailAndPassword, signOut, onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
 import {
-  collection,
-  doc,
-  getDoc,
-  updateDoc,
-  onSnapshot,
-  query,
-  orderBy,
-  serverTimestamp
+  collection, doc, getDoc, updateDoc, onSnapshot, query, orderBy, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   PAGE DETECTION
-   ═══════════════════════════════════════════════════════════════════════════ */
-const PATH       = window.location.pathname;
-const IS_LOGIN   = PATH.includes('index.html') || PATH.endsWith('/admin/') || PATH.endsWith('/admin');
-const IS_DASH    = PATH.includes('dashboard.html');
-const IS_CARD    = PATH.includes('card-generator.html');
+const PATH = window.location.pathname;
+const IS_LOGIN = PATH.includes('index.html') || PATH.endsWith('/admin/') || PATH.endsWith('/admin');
+const IS_DASH = PATH.includes('dashboard.html');
+const IS_CARD = PATH.includes('card-generator.html');
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   GLOBAL STATE (dashboard)
-   ═══════════════════════════════════════════════════════════════════════════ */
 const G = {
-  allApps:        [],      // all Firestore docs
-  planData:       {},      // from membership-plans.json
-  clubData:       {},      // club info
-  emailTemplates: {},      // email templates
-  currentView:    'applications',
-  activeAppId:    null,    // doc ID of open detail modal
-  rejectTargetId: null,    // doc ID being rejected
-  emailTargetId:  null,    // doc ID for email modal
-  unsubscribe:    null,    // Firestore listener cleanup
+  allApps: [],
+  planData: {},
+  clubData: {},
+  emailTemplates: {},
+  currentView: 'applications',
+  activeAppId: null,
+  rejectTargetId: null,
+  emailTargetId: null,
+  unsubscribe: null,
 };
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   DOM HELPERS
-   ═══════════════════════════════════════════════════════════════════════════ */
-const $  = (id)  => document.getElementById(id);
+const $ = (id) => document.getElementById(id);
 const $q = (sel) => document.querySelector(sel);
-
-function showEl(id)  { const e = $(id); if (e) e.style.display = ''; }
-function hideEl(id)  { const e = $(id); if (e) e.style.display = 'none'; }
+function showEl(id) { const e = $(id); if (e) e.style.display = ''; }
+function hideEl(id) { const e = $(id); if (e) e.style.display = 'none'; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    AUTH STATE LISTENER
@@ -60,12 +40,8 @@ onAuthStateChanged(auth, async (user) => {
   if (IS_LOGIN) {
     if (user) {
       const isAdmin = await checkAdmin(user.uid);
-      if (isAdmin) {
-        window.location.href = 'dashboard.html';
-      }
-      // else: not admin, stay on login, show error handled elsewhere
+      if (isAdmin) window.location.href = 'dashboard.html';
     }
-    // No user → stay on login page
   }
 
   if (IS_DASH) {
@@ -79,7 +55,6 @@ onAuthStateChanged(auth, async (user) => {
       window.location.href = 'index.html';
       return;
     }
-    // Valid admin — initialize dashboard
     const emailEl = $('ad-user-email');
     if (emailEl) emailEl.textContent = user.email || 'admin';
     initDashboard();
@@ -91,16 +66,10 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
     const isAdmin = await checkAdmin(user.uid);
-    if (!isAdmin) {
-      window.location.href = 'index.html';
-    }
-    // card-generator.js handles its own init
+    if (!isAdmin) window.location.href = 'index.html';
   }
 });
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   CHECK ADMIN
-   ═══════════════════════════════════════════════════════════════════════════ */
 async function checkAdmin(uid) {
   try {
     const snap = await getDoc(doc(db, 'admin_users', uid));
@@ -111,14 +80,13 @@ async function checkAdmin(uid) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   ██  LOGIN PAGE LOGIC
+   LOGIN PAGE LOGIC
    ═══════════════════════════════════════════════════════════════════════════ */
 if (IS_LOGIN) {
-  // Lockout state (client-side)
   let failCount   = 0;
   let lockoutEnd  = 0;
   const MAX_FAILS = 5;
-  const LOCK_MS   = 5 * 60 * 1000; // 5 minutes
+  const LOCK_MS   = 5 * 60 * 1000;
   let lockTimer   = null;
 
   function showLoginError(msg) {
@@ -186,7 +154,6 @@ if (IS_LOGIN) {
     return map[code] || 'Login failed. Please check your credentials and try again.';
   }
 
-  // Password toggle
   document.addEventListener('DOMContentLoaded', () => {
     const eyeBtn  = $('al-eye-btn');
     const pwdInp  = $('al-password');
@@ -199,7 +166,6 @@ if (IS_LOGIN) {
       });
     }
 
-    // Form submit
     const form = $('al-form');
     if (form) {
       form.addEventListener('submit', async (e) => {
@@ -227,7 +193,6 @@ if (IS_LOGIN) {
             showLoginError('Access denied. You are not an authorized administrator.');
             return;
           }
-          // Success — onAuthStateChanged will redirect
         } catch (err) {
           failCount++;
           if (failCount >= MAX_FAILS) startLockout();
@@ -238,7 +203,6 @@ if (IS_LOGIN) {
       });
     }
 
-    // Clear error on input
     [$('al-email'), $('al-password')].forEach(el => {
       if (el) el.addEventListener('input', hideLoginError);
     });
@@ -246,7 +210,7 @@ if (IS_LOGIN) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   ██  DASHBOARD LOGIC
+   DASHBOARD LOGIC
    ═══════════════════════════════════════════════════════════════════════════ */
 async function initDashboard() {
   await loadPlanData();
@@ -304,7 +268,6 @@ function updateStatCards() {
   set('stat-approved', approved);
   set('stat-rejected', rejected);
 
-  // Pending badge on sidebar nav
   const badge = $('pending-count-badge');
   if (badge) {
     badge.textContent    = pending;
@@ -314,13 +277,15 @@ function updateStatCards() {
 
 /* ── Filters ─────────────────────────────────────────────────────────────── */
 function getFilteredApps() {
-  const status = ($('filter-status') || {}).value || 'all';
-  const plan   = ($('filter-plan')   || {}).value || 'all';
-  const search = (($('filter-search') || {}).value || '').toLowerCase().trim();
+  const status  = ($('filter-status')  || {}).value || 'all';
+  const plan    = ($('filter-plan')    || {}).value || 'all';
+  const payment = ($('filter-payment') || {}).value || 'all';
+  const search  = (($('filter-search') || {}).value || '').toLowerCase().trim();
 
   return G.allApps.filter(app => {
-    if (status !== 'all' && app.status !== status) return false;
-    if (plan   !== 'all' && app.planId !== plan)   return false;
+    if (status  !== 'all' && app.status !== status) return false;
+    if (plan    !== 'all' && app.planId !== plan)   return false;
+    if (payment !== 'all' && (app.paymentMethod || 'upi') !== payment) return false;
     if (search) {
       const haystack = [
         app.name, app.email, app.applicationId,
@@ -333,14 +298,13 @@ function getFilteredApps() {
 }
 
 function initFilters() {
-  ['filter-status', 'filter-plan', 'filter-search'].forEach(id => {
+  ['filter-status', 'filter-plan', 'filter-search', 'filter-payment'].forEach(id => {
     const el = $(id);
     if (el) el.addEventListener('input', renderApplicationsTable);
   });
   const refreshBtn = $('ad-refresh-btn');
   if (refreshBtn) {
     refreshBtn.addEventListener('click', () => {
-      // The onSnapshot listener auto-updates; just re-render
       renderApplicationsTable();
       showToast('🔄 Data refreshed.', 'info');
     });
@@ -350,15 +314,14 @@ function initFilters() {
 /* ── Format Date ─────────────────────────────────────────────────────────── */
 function fmtDate(val) {
   if (!val) return '—';
-  // Firestore Timestamp
   if (val && typeof val.toDate === 'function') {
     return val.toDate().toLocaleDateString('en-IN', {
       day: '2-digit', month: 'short', year: 'numeric'
     });
   }
-  // ISO string
   if (typeof val === 'string') {
-    return new Date(val).toLocaleDateString('en-IN', {
+    const d = new Date(val);
+    return isNaN(d.getTime()) ? val : d.toLocaleDateString('en-IN', {
       day: '2-digit', month: 'short', year: 'numeric'
     });
   }
@@ -407,12 +370,19 @@ function renderApplicationsTable() {
 
   tbody.innerHTML = apps.map(app => {
     const rowCls = app.status === 'pending' ? 'ad-row--pending' : '';
-    const txnShort = (app.transactionId || '—').slice(0, 16) +
-      ((app.transactionId || '').length > 16 ? '…' : '');
+    const isCash = (app.paymentMethod || 'upi') === 'cash';
+
+    let txnCell;
+    if (isCash) {
+      txnCell = `<span class="ad-cash-badge">💵 Cash</span><br><small>Rcvr: ${esc(app.receiverName || '—')}</small>`;
+    } else {
+      const txnShort = (app.transactionId || '—').slice(0, 16) +
+        ((app.transactionId || '').length > 16 ? '…' : '');
+      txnCell = `<span class="ad-cell-txn" title="${esc(app.transactionId || '')}">${esc(txnShort)}</span>`;
+    }
 
     const cardBtn = app.status === 'approved'
-      ? `<button class="ad-tbl-btn ad-tbl-btn--card"
-                 data-action="card" data-id="${app._id}">🎴 Card</button>`
+      ? `<button class="ad-tbl-btn ad-tbl-btn--card" data-action="card" data-id="${app._id}">🎴 Card</button>`
       : '';
 
     return `
@@ -427,11 +397,7 @@ function renderApplicationsTable() {
         </td>
         <td>${planBadgeHTML(app.planId, app.planName)}</td>
         <td><span class="ad-cell-amount">₹${app.amount || 0}</span></td>
-        <td>
-          <span class="ad-cell-txn" title="${esc(app.transactionId || '')}">
-            ${esc(txnShort)}
-          </span>
-        </td>
+        <td>${txnCell}</td>
         <td><span class="ad-cell-date">${fmtDate(app.submittedAt)}</span></td>
         <td>${statusBadgeHTML(app.status)}</td>
         <td>
@@ -506,8 +472,7 @@ function renderMembersTable(searchVal) {
           <button class="ad-tbl-btn" data-action="view" data-id="${app._id}">
             Details
           </button>
-          <button class="ad-tbl-btn ad-tbl-btn--card"
-                  data-action="card" data-id="${app._id}">
+          <button class="ad-tbl-btn ad-tbl-btn--card" data-action="card" data-id="${app._id}">
             🎴 Card
           </button>
         </div>
@@ -595,23 +560,19 @@ function renderStatistics() {
    SIDEBAR NAVIGATION
    ═══════════════════════════════════════════════════════════════════════════ */
 function initSidebar() {
-  // Nav buttons
   document.querySelectorAll('.ad-nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const view = btn.getAttribute('data-view');
       switchView(view);
-      // Close sidebar on mobile
       if (window.innerWidth <= 900) closeSidebar();
     });
   });
 
-  // Hamburger
   const hamburger = $('ad-hamburger');
   if (hamburger) {
     hamburger.addEventListener('click', toggleSidebar);
   }
 
-  // Overlay
   const overlay = $('ad-sidebar-overlay');
   if (overlay) {
     overlay.addEventListener('click', closeSidebar);
@@ -621,19 +582,16 @@ function initSidebar() {
 function switchView(viewName) {
   G.currentView = viewName;
 
-  // Show/hide views
   ['applications', 'members', 'statistics'].forEach(v => {
     const el = $(`view-${v}`);
     if (el) el.style.display = v === viewName ? 'block' : 'none';
   });
 
-  // Update nav active state
   document.querySelectorAll('.ad-nav-btn').forEach(btn => {
     btn.classList.toggle('ad-nav-btn--active',
       btn.getAttribute('data-view') === viewName);
   });
 
-  // Update page title
   const titles = {
     applications: 'Applications',
     members:      'Members',
@@ -642,7 +600,6 @@ function switchView(viewName) {
   const titleEl = $('ad-page-title');
   if (titleEl) titleEl.textContent = titles[viewName] || viewName;
 
-  // Re-render the target view
   if (viewName === 'members')    renderMembersTable();
   if (viewName === 'statistics') renderStatistics();
 }
@@ -730,10 +687,8 @@ function attachModalCloseListeners() {
 
   // Email actions
   const copyAllBtn     = $('copy-all-btn');
-  const openEmailBtn   = $('open-email-app-btn');
   if (copyAllBtn)   copyAllBtn.addEventListener('click', copyAllEmail);
 
-  // Individual copy buttons
   ['copy-to-btn', 'copy-subject-btn', 'copy-body-btn'].forEach(btnId => {
     const btn = $(btnId);
     if (!btn) return;
@@ -761,15 +716,20 @@ function openDetailModal(docId) {
   const footer = $('modal-detail-footer');
   if (!body || !footer) return;
 
-  // Build detail grid
+  const isCash = (app.paymentMethod || 'upi') === 'cash';
+  const paymentDetail = isCash
+    ? `<div class="ad-detail-row"><span class="ad-detail-key">Payment Method</span><span class="ad-detail-val">💵 Cash</span></div>
+       <div class="ad-detail-row"><span class="ad-detail-key">Receiver Name</span><span class="ad-detail-val">${esc(app.receiverName || '—')}</span></div>
+       ${app.cashNote ? `<div class="ad-detail-row"><span class="ad-detail-key">Note</span><span class="ad-detail-val">${esc(app.cashNote)}</span></div>` : ''}`
+    : `<div class="ad-detail-row"><span class="ad-detail-key">Transaction ID</span><span class="ad-detail-val ad-detail-val--mono">${esc(app.transactionId || '—')}</span></div>`;
+
   body.innerHTML = `
     <!-- Personal Info -->
     <div class="ad-detail-section">
       <div class="ad-detail-section__title">👤 Personal Information</div>
       <div class="ad-detail-grid">
         ${detailRow('Full Name',        app.name)}
-        ${detailRow('Email',
-          `<a href="mailto:${esc(app.email)}">${esc(app.email)}</a>`, true)}
+        ${detailRow('Email', `<a href="mailto:${esc(app.email)}">${esc(app.email)}</a>`, true)}
         ${detailRow('Phone',            app.phone)}
         ${detailRow('Date of Birth',    app.dob)}
         ${detailRow('Father/Guardian',  app.guardian)}
@@ -785,10 +745,7 @@ function openDetailModal(docId) {
         ${detailRow('Plan',          app.planName)}
         ${detailRow('Amount',        `₹${app.amount}`)}
         ${detailRow('Duration',      app.duration)}
-        ${detailRow('Transaction ID',
-          `<span class="ad-detail-val--mono">${esc(app.transactionId || '—')}</span>`,
-          true)}
-        ${detailRow('Screenshot',    '—')}
+        ${paymentDetail}
         ${detailRow('Start Date',    fmtDate(app.startDate))}
         ${detailRow('Expiry Date',   fmtDate(app.expiryDate))}
       </div>
@@ -852,10 +809,10 @@ function openDetailModal(docId) {
 }
 
 function detailRow(key, val, isHTML = false, isFull = false, isFullGrid = false) {
-  const fullCls = (isFull || isFullGrid) ? 'ad-detail-row--full' : '';
+  const fullCls = (isFull || isFullGrid) ? ' ad-detail-row--full' : '';
   const content = isHTML ? val : `<span>${esc(String(val ?? '—'))}</span>`;
   return `
-    <div class="ad-detail-row ${fullCls}">
+    <div class="ad-detail-row${fullCls}">
       <span class="ad-detail-key">${key}</span>
       <span class="ad-detail-val">${content}</span>
     </div>`;
@@ -892,15 +849,21 @@ async function confirmApprove(docId) {
   );
   if (!confirmed) return;
 
+  const validYears = app.validYears || 1;
+  const start = new Date();
+  const expiry = new Date(start);
+  expiry.setFullYear(expiry.getFullYear() + validYears);
+
   try {
     await updateDoc(doc(db, 'membership_applications', docId), {
       status:       'approved',
       membershipId,
       verifiedAt:   serverTimestamp(),
       verifiedBy:   auth.currentUser?.email || 'admin',
+      startDate:    start.toISOString().split('T')[0],
+      expiryDate:   expiry.toISOString().split('T')[0],
     });
     showToast(`✅ ${app.name} approved successfully!`, 'success');
-    // Auto-open email template after short delay
     setTimeout(() => openEmailModal(docId), 700);
   } catch (err) {
     console.error('Approve error:', err);
@@ -956,7 +919,6 @@ async function confirmReject() {
     });
     hideModal('modal-reject');
     showToast(`❌ ${app.name}'s application rejected.`, 'error');
-    // Auto-open email template after short delay
     setTimeout(() => openEmailModal(docId), 700);
   } catch (err) {
     console.error('Reject error:', err);
@@ -968,7 +930,6 @@ async function confirmReject() {
    EMAIL TEMPLATE MODAL
    ═══════════════════════════════════════════════════════════════════════════ */
 function openEmailModal(docId) {
-  // Re-fetch from allApps (may have just been updated)
   const app = G.allApps.find(a => a._id === docId);
   if (!app) return;
   G.emailTargetId = docId;
@@ -977,7 +938,6 @@ function openEmailModal(docId) {
   const tmplKey  = app.status === 'approved' ? 'approval' : 'rejection';
   const tmpl     = G.emailTemplates[tmplKey] || {};
 
-  // Replace placeholders
   const replacements = {
     '{{NAME}}':          app.name            || '',
     '{{MEMBERSHIP_ID}}': app.membershipId    || '',
@@ -1003,13 +963,11 @@ function openEmailModal(docId) {
   const subject = fillTmpl(tmpl.subject || '');
   const body    = fillTmpl(tmpl.body    || '');
 
-  // Populate modal fields
   const setTxt = (id, val) => { const e = $(id); if (e) e.textContent = val; };
   setTxt('email-to',      app.email  || '');
   setTxt('email-subject', subject);
   setTxt('email-body',    body);
 
-  // Card generator button (approved only)
   const cardWrap = $('email-card-btn-wrap');
   const cardLink = $('email-card-link');
   if (cardWrap && cardLink) {
@@ -1021,7 +979,6 @@ function openEmailModal(docId) {
     }
   }
 
-  // Open in email app button
   const mailtoBtn = $('open-email-app-btn');
   if (mailtoBtn) {
     const mailto = `mailto:${encodeURIComponent(app.email || '')}` +
@@ -1042,17 +999,17 @@ function copyAllEmail() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   CARD GENERATOR — open in new tab with URL params
+   CARD GENERATOR
    ═══════════════════════════════════════════════════════════════════════════ */
 function buildCardURL(app) {
   const params = new URLSearchParams({
-    name:        app.name          || '',
-    email:       app.email         || '',
-    appId:       app.applicationId || '',
-    membershipId:app.membershipId  || '',
-    planName:    app.planName      || '',
-    amount:      String(app.amount || ''),
-    validYears:  String(app.validYears || 1),
+    name:         app.name          || '',
+    email:        app.email         || '',
+    appId:        app.applicationId || '',
+    membershipId: app.membershipId  || '',
+    planName:     app.planName      || '',
+    amount:       String(app.amount || ''),
+    validYears:   String(app.validYears || 1),
   });
   return `card-generator.html?${params.toString()}`;
 }
@@ -1080,10 +1037,8 @@ function showToast(message, type = 'info') {
 
   container.appendChild(toast);
 
-  // Click to dismiss
   toast.addEventListener('click', () => removeToast(toast));
 
-  // Auto-dismiss after 4s
   setTimeout(() => removeToast(toast), 4000);
 }
 
