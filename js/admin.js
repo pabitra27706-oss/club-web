@@ -1,7 +1,7 @@
 /**
- * admin.js – v2
+ * admin.js – v3
  * Handles admin/dashboard.html (and login, card-generator)
- * Added: payment method filter, cash badge, start date at approval
+ * Renewal logic: if member already has active membership, extend it.
  */
 import { auth, db } from './firebase-config.js';
 import {
@@ -411,7 +411,6 @@ function renderApplicationsTable() {
       </tr>`;
   }).join('');
 
-  // Attach row action listeners
   tbody.querySelectorAll('[data-action]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -512,7 +511,6 @@ function renderStatistics() {
   set('metric-active',  approved.length);
   set('metric-month',   thisMonth);
 
-  // Revenue by plan bars
   const planBarsEl = $('plan-bars');
   if (planBarsEl) {
     const planRevMap = {};
@@ -538,7 +536,6 @@ function renderStatistics() {
     }
   }
 
-  // Recent activity (last 10)
   const actEl = $('activity-list');
   if (actEl) {
     const recent = [...G.allApps].slice(0, 10);
@@ -653,23 +650,19 @@ function hideModal(id) {
 }
 
 function attachModalCloseListeners() {
-  // Detail modal
   const detailClose = $('modal-detail-close');
   if (detailClose) detailClose.addEventListener('click', () => hideModal('modal-detail'));
 
-  // Reject modal
   const rejectClose  = $('modal-reject-close');
   const rejectCancel = $('modal-reject-cancel');
   if (rejectClose)  rejectClose.addEventListener('click',  () => hideModal('modal-reject'));
   if (rejectCancel) rejectCancel.addEventListener('click', () => hideModal('modal-reject'));
 
-  // Email modal
   const emailClose  = $('modal-email-close');
   const emailClose2 = $('modal-email-close-2');
   if (emailClose)  emailClose.addEventListener('click',  () => hideModal('modal-email'));
   if (emailClose2) emailClose2.addEventListener('click', () => hideModal('modal-email'));
 
-  // Close modals on overlay click
   ['modal-detail', 'modal-reject', 'modal-email'].forEach(id => {
     const el = $(id);
     if (el) {
@@ -679,13 +672,11 @@ function attachModalCloseListeners() {
     }
   });
 
-  // Reject confirm
   const rejectConfirm = $('modal-reject-confirm');
   if (rejectConfirm) {
     rejectConfirm.addEventListener('click', confirmReject);
   }
 
-  // Email actions
   const copyAllBtn     = $('copy-all-btn');
   if (copyAllBtn)   copyAllBtn.addEventListener('click', copyAllEmail);
 
@@ -724,7 +715,6 @@ function openDetailModal(docId) {
     : `<div class="ad-detail-row"><span class="ad-detail-key">Transaction ID</span><span class="ad-detail-val ad-detail-val--mono">${esc(app.transactionId || '—')}</span></div>`;
 
   body.innerHTML = `
-    <!-- Personal Info -->
     <div class="ad-detail-section">
       <div class="ad-detail-section__title">👤 Personal Information</div>
       <div class="ad-detail-grid">
@@ -737,8 +727,6 @@ function openDetailModal(docId) {
         ${detailRow('Address',          app.address, false, true)}
       </div>
     </div>
-
-    <!-- Plan & Payment -->
     <div class="ad-detail-section">
       <div class="ad-detail-section__title">💳 Plan & Payment</div>
       <div class="ad-detail-grid">
@@ -750,8 +738,6 @@ function openDetailModal(docId) {
         ${detailRow('Expiry Date',   fmtDate(app.expiryDate))}
       </div>
     </div>
-
-    <!-- Application Record -->
     <div class="ad-detail-section">
       <div class="ad-detail-section__title">📋 Application Record</div>
       <div class="ad-detail-grid">
@@ -765,9 +751,7 @@ function openDetailModal(docId) {
     </div>
   `;
 
-  // Build footer buttons based on status
   footer.innerHTML = '';
-
   const closeBtn = makeBtn('Close', 'ad-btn--outline', () => hideModal('modal-detail'));
   footer.appendChild(closeBtn);
 
@@ -827,7 +811,7 @@ function makeBtn(label, cls, onClick) {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   APPROVE FLOW
+   APPROVE FLOW (with renewal extension)
    ═══════════════════════════════════════════════════════════════════════════ */
 function generateMembershipId() {
   const year   = new Date().getFullYear();
@@ -839,20 +823,52 @@ async function confirmApprove(docId) {
   const app = G.allApps.find(a => a._id === docId);
   if (!app) return;
 
-  const membershipId = generateMembershipId();
-  const confirmed = confirm(
-    `Approve this application?\n\n` +
-    `Name     : ${app.name}\n` +
-    `Plan     : ${app.planName}\n` +
-    `Amount   : ₹${app.amount}\n\n` +
-    `Membership ID will be: ${membershipId}`
+  // Check if this email already has an active, unexpired membership
+  const existingActive = G.allApps.find(a =>
+    a._id !== docId &&
+    a.email === app.email &&
+    a.status === 'approved' &&
+    a.expiryDate && new Date(a.expiryDate) > new Date()
   );
-  if (!confirmed) return;
 
+  let membershipId;
+  let start, expiry;
   const validYears = app.validYears || 1;
-  const start = new Date();
-  const expiry = new Date(start);
-  expiry.setFullYear(expiry.getFullYear() + validYears);
+
+  if (existingActive) {
+    // RENEWAL: extend from existing expiry
+    start = new Date(existingActive.expiryDate);
+    start.setDate(start.getDate() + 1);          // day after current expiry
+    membershipId = existingActive.membershipId;  // keep same membership ID
+    expiry = new Date(start);
+    expiry.setFullYear(expiry.getFullYear() + validYears);
+
+    const confirmed = confirm(
+      `RENEWAL DETECTED\n\n` +
+      `Member: ${app.name}\n` +
+      `Current Expiry: ${fmtDate(existingActive.expiryDate)}\n` +
+      `New Start: ${start.toLocaleDateString('en-IN')}\n` +
+      `New Expiry: ${expiry.toLocaleDateString('en-IN')}\n` +
+      `Membership ID: ${membershipId}\n\n` +
+      `Approve renewal?`
+    );
+    if (!confirmed) return;
+  } else {
+    // FRESH APPROVAL
+    membershipId = generateMembershipId();
+    start = new Date();
+    expiry = new Date(start);
+    expiry.setFullYear(expiry.getFullYear() + validYears);
+
+    const confirmed = confirm(
+      `Approve this application?\n\n` +
+      `Name: ${app.name}\n` +
+      `Plan: ${app.planName}\n` +
+      `Amount: ₹${app.amount}\n\n` +
+      `Membership ID will be: ${membershipId}`
+    );
+    if (!confirmed) return;
+  }
 
   try {
     await updateDoc(doc(db, 'membership_applications', docId), {
