@@ -1,6 +1,6 @@
 /**
- * membership.js – v4.1
- * All features + complete status checker + optional DOB.
+ * membership.js – v5
+ * All features + status checker with Membership ID, Phone, Transaction ID.
  */
 import { db, auth } from './firebase-config.js';
 import {
@@ -223,7 +223,7 @@ function switchPaymentMethod(method) {
   ['f-txn', 'f-receiver'].forEach(id => { const el = $(id); if (el) el.classList.remove('m--error'); });
 }
 
-/* ---------- Validation ---------- */
+/* ---------- Validation (DOB optional) ---------- */
 function validateStep1() {
   let valid = true;
   const name = $('f-name').value.trim();
@@ -249,7 +249,7 @@ function validateStep1() {
   else if (!phoneRx.test(phone)) { setError('f-phone', 'e-phone', 'Enter a valid 10-digit Indian mobile number.'); valid = false; }
   else { clearError('f-phone', 'e-phone'); }
 
-  // DOB is optional; validate only if provided
+  // DOB is optional
   const dob = $('f-dob').value;
   if (dob) {
     const birthDate = new Date(dob);
@@ -257,12 +257,8 @@ function validateStep1() {
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
-    if (age < 5 || age > 100) {
-      setError('f-dob', 'e-dob', 'Age must be between 5 and 100 years.');
-      valid = false;
-    } else {
-      clearError('f-dob', 'e-dob');
-    }
+    if (age < 5 || age > 100) { setError('f-dob', 'e-dob', 'Age must be between 5 and 100 years.'); valid = false; }
+    else { clearError('f-dob', 'e-dob'); }
   } else {
     clearError('f-dob', 'e-dob');
   }
@@ -593,7 +589,7 @@ async function submitApplication() {
       email: emailVal,
       emailLower: emailVal,
       phone: $('f-phone').value.trim(),
-      dob: $('f-dob').value,                    // can be empty string
+      dob: $('f-dob').value,
       guardian: $('f-guardian').value.trim(),
       emergencyContact: $('f-emergency').value.trim() || null,
       address: $('f-address').value.trim(),
@@ -795,7 +791,7 @@ function initMobileMenu() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   STATUS CHECKER (full)
+   STATUS CHECKER (3‑option dropdown: membershipId, phone, transactionId)
    ═══════════════════════════════════════════════════════════════════════════ */
 function initStatusChecker() {
   const openBtn = $('m-open-status-btn');
@@ -805,16 +801,44 @@ function initStatusChecker() {
   const closeBtnR = $('ms-close-btn');
   const modal = $('m-status-modal');
   const checkAfterSubmit = $('m-check-status-after-submit');
-  const methodToggle = $('ms-method-toggle');
+  const methodSelect = $('ms-search-method');
+
+  // Update hint and placeholder when method changes
+  if (methodSelect) {
+    methodSelect.addEventListener('change', () => {
+      const method = methodSelect.value;
+      const labelEl = document.querySelector('#ms-group-dynamic .m-form__label');
+      const inputEl = $('ms-dynamic-id');
+      const hintEl = $('ms-dynamic-hint');
+      const errEl = $('ms-dynamic-err');
+      if (errEl) errEl.textContent = '';
+      if (inputEl) inputEl.classList.remove('m--error');
+      if (labelEl) {
+        if (method === 'membershipId') labelEl.innerHTML = 'Membership ID <span class="m-required">*</span>';
+        else if (method === 'phone') labelEl.innerHTML = 'Phone Number <span class="m-required">*</span>';
+        else labelEl.innerHTML = 'Transaction ID / UTR <span class="m-required">*</span>';
+      }
+      if (inputEl) {
+        if (method === 'membershipId') inputEl.placeholder = 'PSS-YYYY-XXXX';
+        else if (method === 'phone') inputEl.placeholder = '10‑digit mobile number';
+        else inputEl.placeholder = 'Enter UPI Transaction ID / UTR number';
+      }
+      if (hintEl) {
+        if (method === 'membershipId') hintEl.textContent = 'Found on your membership card or approval email.';
+        else if (method === 'phone') hintEl.textContent = 'The phone number you used during application.';
+        else hintEl.textContent = 'Found in your UPI app → Payment History → Transaction ID / UTR.';
+      }
+    });
+  }
 
   if (openBtn) openBtn.addEventListener('click', openStatusModal);
   if (checkAfterSubmit) {
     checkAfterSubmit.addEventListener('click', () => {
       openStatusModal();
-      switchSearchMethod('appid');
+      if (methodSelect) methodSelect.value = 'membershipId';
+      methodSelect.dispatchEvent(new Event('change'));
       if (STATE.lastAppData) {
-        const appIdEl = $('ms-app-id'); const emailEl = $('ms-email');
-        if (appIdEl) appIdEl.value = STATE.lastAppData.appId || '';
+        const emailEl = $('ms-email');
         if (emailEl) emailEl.value = STATE.lastAppData.email || '';
       }
     });
@@ -824,14 +848,8 @@ function initStatusChecker() {
   if (searchBtn) searchBtn.addEventListener('click', searchApplication);
   if (againBtn) againBtn.addEventListener('click', showSearchForm);
   if (closeBtnR) closeBtnR.addEventListener('click', closeStatusModal);
-  if (methodToggle) {
-    methodToggle.addEventListener('click', (e) => {
-      e.preventDefault();
-      const current = methodToggle.getAttribute('data-current') || 'appid';
-      switchSearchMethod(current === 'appid' ? 'txn' : 'appid');
-    });
-  }
-  ['ms-app-id', 'ms-email', 'ms-txn'].forEach(id => {
+
+  ['ms-dynamic-id', 'ms-email'].forEach(id => {
     const el = $(id);
     if (el) {
       el.addEventListener('focus', () => {
@@ -846,27 +864,6 @@ function initStatusChecker() {
       closeStatusModal();
     }
   });
-}
-
-function switchSearchMethod(method) {
-  const appIdGroup = $('ms-group-appid');
-  const txnGroup = $('ms-group-txn');
-  const toggleLink = $('ms-method-toggle');
-  const toggleText = $('ms-method-text');
-  if (method === 'txn') {
-    if (appIdGroup) appIdGroup.style.display = 'none';
-    if (txnGroup) txnGroup.style.display = 'flex';
-    if (toggleLink) toggleLink.setAttribute('data-current', 'txn');
-    if (toggleText) toggleText.textContent = 'I have my Application ID';
-  } else {
-    if (appIdGroup) appIdGroup.style.display = 'flex';
-    if (txnGroup) txnGroup.style.display = 'none';
-    if (toggleLink) toggleLink.setAttribute('data-current', 'appid');
-    if (toggleText) toggleText.textContent = 'Forgot Application ID? Use Transaction ID';
-  }
-  ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => { const el = $(id); if (el) el.classList.remove('m--error'); });
-  ['ms-app-id-err', 'ms-txn-err', 'ms-email-err'].forEach(id => { const el = $(id); if (el) el.textContent = ''; });
-  const gErr = $('ms-error'); if (gErr) gErr.style.display = 'none';
 }
 
 function openStatusModal() {
@@ -885,30 +882,56 @@ function showSearchForm() {
   const results = $('m-status-results');
   if (searchForm) searchForm.style.display = 'flex';
   if (results) results.style.display = 'none';
-  switchSearchMethod('appid');
-  ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => { const el = $(id); if (el) el.value = ''; });
+  const methodSelect = $('ms-search-method');
+  if (methodSelect) {
+    methodSelect.value = 'membershipId';
+    methodSelect.dispatchEvent(new Event('change'));
+  }
+  ['ms-dynamic-id', 'ms-email'].forEach(id => { const el = $(id); if (el) el.value = ''; });
+  const errEl = $('ms-error'); if (errEl) errEl.style.display = 'none';
 }
 
 async function searchApplication() {
-  const toggleLink = $('ms-method-toggle');
-  const method = (toggleLink?.getAttribute('data-current')) || 'appid';
+  const method = $('ms-search-method')?.value || 'membershipId';
   const emailEl = $('ms-email');
   const errEl = $('ms-error');
   const email = (emailEl?.value || '').trim().toLowerCase();
   let valid = true;
-  if (!email) { const e = $('ms-email-err'); if (e) e.textContent = 'Email address is required.'; emailEl?.classList.add('m--error'); valid = false; }
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { const e = $('ms-email-err'); if (e) e.textContent = 'Please enter a valid email.'; emailEl?.classList.add('m--error'); valid = false; }
-  let searchField = ''; let searchValue = '';
-  if (method === 'appid') {
-    const appIdEl = $('ms-app-id'); const appId = (appIdEl?.value || '').trim().toUpperCase();
-    if (!appId) { const e = $('ms-app-id-err'); if (e) e.textContent = 'Application ID is required.'; appIdEl?.classList.add('m--error'); valid = false; }
-    searchField = 'applicationId'; searchValue = appId;
-  } else {
-    const txnEl = $('ms-txn'); const txn = (txnEl?.value || '').trim();
-    if (!txn) { const e = $('ms-txn-err'); if (e) e.textContent = 'Transaction ID is required.'; txnEl?.classList.add('m--error'); valid = false; }
-    else if (txn.length < 8) { const e = $('ms-txn-err'); if (e) e.textContent = 'Transaction ID must be at least 8 characters.'; txnEl?.classList.add('m--error'); valid = false; }
-    searchField = 'transactionId'; searchValue = txn;
+
+  if (!email) {
+    const e = $('ms-email-err'); if (e) e.textContent = 'Email address is required.'; emailEl?.classList.add('m--error');
+    valid = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    const e = $('ms-email-err'); if (e) e.textContent = 'Please enter a valid email.'; emailEl?.classList.add('m--error');
+    valid = false;
   }
+
+  const dynamicIdEl = $('ms-dynamic-id');
+  const dynamicId = (dynamicIdEl?.value || '').trim();
+  if (!dynamicId) {
+    const e = $('ms-dynamic-err');
+    if (e) {
+      if (method === 'membershipId') e.textContent = 'Membership ID is required.';
+      else if (method === 'phone') e.textContent = 'Phone number is required.';
+      else e.textContent = 'Transaction ID is required.';
+    }
+    dynamicIdEl?.classList.add('m--error');
+    valid = false;
+  } else {
+    if (method === 'phone' && !/^[6-9]\d{9}$/.test(dynamicId)) {
+      const e = $('ms-dynamic-err');
+      if (e) e.textContent = 'Enter a valid 10-digit Indian mobile number.';
+      dynamicIdEl?.classList.add('m--error');
+      valid = false;
+    }
+    if (method === 'transactionId' && dynamicId.length < 8) {
+      const e = $('ms-dynamic-err');
+      if (e) e.textContent = 'Transaction ID must be at least 8 characters.';
+      dynamicIdEl?.classList.add('m--error');
+      valid = false;
+    }
+  }
+
   if (!valid) return;
 
   const searchBtn = $('m-status-search-btn');
@@ -921,6 +944,14 @@ async function searchApplication() {
 
   try {
     let foundDoc = null; let totalMatches = 0;
+    const searchField = method; // 'membershipId', 'phone', 'transactionId'
+    let searchValue = dynamicId;
+    if (method === 'phone') {
+      // phone numbers stored as strings, so use as-is
+      searchValue = dynamicId;
+    }
+
+    // Strategy 1: exact query (field + email)
     const q1 = fbQuery(collection(db, 'membership_applications'), where(searchField, '==', searchValue), where('email', '==', email));
     const snap1 = await getDocs(q1);
     if (!snap1.empty) {
@@ -928,6 +959,8 @@ async function searchApplication() {
       if (docs.length > 1) docs.sort((a,b) => (b.submittedAt?.toDate?.()||0) - (a.submittedAt?.toDate?.()||0));
       foundDoc = docs[0]; totalMatches = docs.length;
     }
+
+    // Strategy 2: field only + client filter email
     if (!foundDoc) {
       const q2 = fbQuery(collection(db, 'membership_applications'), where(searchField, '==', searchValue));
       const snap2 = await getDocs(q2);
@@ -940,44 +973,43 @@ async function searchApplication() {
         }
       }
     }
-    if (!foundDoc && method === 'txn') {
+
+    // Strategy 3: email only + client filter field
+    if (!foundDoc) {
       const q3 = fbQuery(collection(db, 'membership_applications'), where('email', '==', email));
       const snap3 = await getDocs(q3);
       if (!snap3.empty) {
         const allDocs = snap3.docs.map(d => d.data());
-        const matched = allDocs.filter(d => (d.transactionId||'').toLowerCase().trim() === searchValue.toLowerCase().trim());
-        if (matched.length) { foundDoc = matched[0]; totalMatches = matched.length; }
-      }
-    }
-    if (!foundDoc && method === 'appid') {
-      const q4 = fbQuery(collection(db, 'membership_applications'), where('email', '==', email));
-      const snap4 = await getDocs(q4);
-      if (!snap4.empty) {
-        const allDocs = snap4.docs.map(d => d.data());
-        const matched = allDocs.filter(d => (d.applicationId||'').toUpperCase().trim() === searchValue.toUpperCase().trim());
-        if (matched.length) { foundDoc = matched[0]; totalMatches = matched.length; }
+        const matched = allDocs.filter(d => {
+          const val = d[searchField];
+          if (typeof val !== 'string') return false;
+          return val.trim() === searchValue;
+        });
+        if (matched.length) {
+          if (matched.length > 1) matched.sort((a,b) => (b.submittedAt?.toDate?.()||0) - (a.submittedAt?.toDate?.()||0));
+          foundDoc = matched[0]; totalMatches = matched.length;
+        }
       }
     }
 
     if (foundDoc) {
       showStatusResults(foundDoc, totalMatches > 1 ? totalMatches : 0);
     } else {
-      const fieldLabel = method === 'appid' ? 'Application ID' : 'Transaction ID';
+      const fieldLabel = method === 'membershipId' ? 'Membership ID' : (method === 'phone' ? 'Phone Number' : 'Transaction ID');
       if (errEl) {
         errEl.innerHTML = `❌ No application found matching this <strong>${fieldLabel}</strong> and <strong>Email</strong> combination.<br><br>
           <strong>Tips:</strong><br>
           ▪ Make sure the email is exactly what you used during application<br>
           ▪ Check for typos in your ${fieldLabel}<br>
-          ${method === 'appid' ? '▪ Try searching by Transaction ID instead (click the link above)<br>' : '▪ Try searching by Application ID instead (click the link above)<br>'}
-          ▪ Check your UPI app for the exact Transaction ID<br>
-          ▪ If you downloaded the confirmation .txt file, check it for your details`;
+          ▪ If you forgot your Membership ID, try searching by Phone Number or Transaction ID<br>
+          ▪ Check your UPI app for the exact Transaction ID`;
         errEl.style.display = 'block';
       }
     }
   } catch (err) {
     console.error('[Status Checker] Error:', err);
     if (err.message && err.message.includes('index')) {
-      if (errEl) errEl.innerHTML = '🔧 Search index is being set up. This is a one-time process.<br><br>Please try again in 2-3 minutes. If the problem persists, try searching by <strong>Application ID</strong> instead.';
+      if (errEl) errEl.innerHTML = '🔧 Search index is being set up. This is a one-time process.<br><br>Please try again in 2-3 minutes. If the problem persists, try a different search option.';
     } else {
       if (errEl) errEl.textContent = '⚠️ Something went wrong. Please check your internet connection and try again.';
     }
