@@ -4,6 +4,7 @@
  * - Loads plans from JSON
  * - Step navigation + validation
  * - Firebase Firestore submission
+ * - Status checker (search by App ID + Email)
  * - FAQ accordion, mobile menu, footer year
  */
 
@@ -11,7 +12,10 @@ import { db } from './firebase-config.js';
 import {
   collection,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
+  query as fbQuery,
+  where,
+  getDocs
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -23,7 +27,7 @@ const STATE = {
   selectedPlan: null,
   currentStep:  1,
   submitting:   false,
-  lastAppData:  null   // stored after successful submit for step 3
+  lastAppData:  null
 };
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -88,7 +92,6 @@ function updateClubInfo() {
   const c = STATE.clubData;
   if (!c) return;
 
-  // UPI ID in payment step
   const upiText = $('m-upi-id-text');
   if (upiText) upiText.textContent = c.upiId || 'yourname@upi';
 
@@ -98,13 +101,11 @@ function updateClubInfo() {
   const guideUpi = $('m-guide-upi');
   if (guideUpi) guideUpi.textContent = c.upiId || 'yourname@upi';
 
-  // FAQ phone numbers
   const faqP1 = $('faq-phone-1');
   if (faqP1) faqP1.textContent = c.phone || '';
   const faqP2 = $('faq-phone-2');
   if (faqP2) faqP2.textContent = c.phone || '';
 
-  // Footer year
   const fyEl = $('m-footer-year');
   if (fyEl) fyEl.textContent = new Date().getFullYear();
 }
@@ -159,7 +160,6 @@ function renderPlans() {
     grid.appendChild(card);
   });
 
-  // Attach click listeners to active plan buttons
   document.querySelectorAll('.m-plan-select-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const planId = btn.getAttribute('data-plan-id');
@@ -175,13 +175,11 @@ function renderPlans() {
 function selectPlan(plan) {
   STATE.selectedPlan = plan;
 
-  // Update plan bar
   const barName  = $('m-plan-bar-name');
   const barPrice = $('m-plan-bar-price');
   if (barName)  barName.textContent  = plan.name;
   if (barPrice) barPrice.textContent = `${plan.currencySymbol}${plan.price}`;
 
-  // Update payment step amounts
   const amtDisplay = $('m-amount-display');
   const amtPlan    = $('m-amount-plan');
   const guideAmt   = $('m-guide-amount');
@@ -191,14 +189,11 @@ function selectPlan(plan) {
   if (guideAmt)   guideAmt.textContent   = `${plan.currencySymbol}${plan.price}`;
   if (confirmAmt) confirmAmt.textContent = `${plan.currencySymbol}${plan.price}`;
 
-  // Show form section
   const formSection = $('m-form-section');
   if (formSection) formSection.style.display = 'block';
 
-  // Go to step 1 (reset if coming back from another plan)
   goToStep(1);
 
-  // Smooth scroll to form
   setTimeout(() => {
     formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 80);
@@ -211,13 +206,11 @@ function goToStep(step) {
   STATE.currentStep = step;
   hideGlobalError();
 
-  // Show/hide step panels
   [1, 2, 3].forEach((n) => {
     const panel = $(`m-form-step-${n}`);
     if (panel) panel.style.display = n === step ? 'block' : 'none';
   });
 
-  // Update step indicator circles
   [1, 2, 3].forEach((n) => {
     const stepEl = $(`m-step-${n}`);
     if (!stepEl) return;
@@ -225,14 +218,12 @@ function goToStep(step) {
     if (n < step)       stepEl.classList.add('m-step--done');
     else if (n === step) stepEl.classList.add('m-step--active');
 
-    // Replace circle text with checkmark for done steps
     const circle = stepEl.querySelector('.m-step__circle');
     if (circle) {
       circle.textContent = n < step ? '' : String(n);
     }
   });
 
-  // Scroll to top of form section
   const formSection = $('m-form-section');
   if (formSection) {
     setTimeout(() => {
@@ -247,7 +238,6 @@ function goToStep(step) {
 function validateStep1() {
   let valid = true;
 
-  // Full Name
   const name = $('f-name').value.trim();
   if (!name) {
     setError('f-name', 'e-name', 'Full name is required.');
@@ -259,7 +249,6 @@ function validateStep1() {
     clearError('f-name', 'e-name');
   }
 
-  // Email
   const email = $('f-email').value.trim();
   const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email) {
@@ -272,7 +261,6 @@ function validateStep1() {
     clearError('f-email', 'e-email');
   }
 
-  // Phone
   const phone = $('f-phone').value.trim();
   const phoneRx = /^[6-9]\d{9}$/;
   if (!phone) {
@@ -285,7 +273,6 @@ function validateStep1() {
     clearError('f-phone', 'e-phone');
   }
 
-  // Date of Birth
   const dob = $('f-dob').value;
   if (!dob) {
     setError('f-dob', 'e-dob', 'Date of birth is required.');
@@ -302,7 +289,6 @@ function validateStep1() {
     }
   }
 
-  // Guardian
   const guardian = $('f-guardian').value.trim();
   if (!guardian) {
     setError('f-guardian', 'e-guardian', 'Father/Guardian name is required.');
@@ -311,7 +297,6 @@ function validateStep1() {
     clearError('f-guardian', 'e-guardian');
   }
 
-  // Emergency contact — optional but validate if filled
   const emergency = $('f-emergency').value.trim();
   if (emergency && !/^\d{10,15}$/.test(emergency)) {
     setError('f-emergency', 'e-emergency', 'Enter a valid phone number (10-15 digits).');
@@ -320,7 +305,6 @@ function validateStep1() {
     clearError('f-emergency', 'e-emergency');
   }
 
-  // Address
   const address = $('f-address').value.trim();
   if (!address) {
     setError('f-address', 'e-address', 'Full address is required.');
@@ -341,7 +325,6 @@ function validateStep1() {
 function validateStep2() {
   let valid = true;
 
-  // Transaction ID
   const txn = $('f-txn').value.trim();
   const txnRx = /^[a-zA-Z0-9]{8,}$/;
   if (!txn) {
@@ -355,7 +338,6 @@ function validateStep2() {
     clearError('f-txn', 'e-txn');
   }
 
-  // Confirmation checkbox
   const confirmed = $('f-confirm').checked;
   if (!confirmed) {
     const errEl = $('e-confirm');
@@ -401,7 +383,6 @@ async function submitApplication() {
   STATE.submitting = true;
   hideGlobalError();
 
-  // Show spinner on button
   const submitBtn  = $('m-step2-submit');
   const btnText    = submitBtn ? submitBtn.querySelector('.m-btn__text')    : null;
   const btnSpinner = submitBtn ? submitBtn.querySelector('.m-btn__spinner') : null;
@@ -420,7 +401,7 @@ async function submitApplication() {
       submittedAt:      serverTimestamp(),
 
       name:             $('f-name').value.trim(),
-      email:            $('f-email').value.trim(),
+      email:            $('f-email').value.trim().toLowerCase(),
       phone:            $('f-phone').value.trim(),
       dob:              $('f-dob').value,
       guardian:         $('f-guardian').value.trim(),
@@ -434,7 +415,7 @@ async function submitApplication() {
       validYears:       plan.validYears,
 
       transactionId:    $('f-txn').value.trim(),
-      screenshotURL:    null,   // Storage removed — always null
+      screenshotURL:    null,
 
       startDate,
       expiryDate,
@@ -447,8 +428,12 @@ async function submitApplication() {
 
     await addDoc(collection(db, 'membership_applications'), docData);
 
-    // Store for step 3 display
-    STATE.lastAppData = { appId, plan, txnId: docData.transactionId };
+    STATE.lastAppData = {
+      appId,
+      plan,
+      txnId: docData.transactionId,
+      email: docData.email
+    };
     populateSuccessStep();
     goToStep(3);
 
@@ -480,8 +465,7 @@ function populateSuccessStep() {
 
   if (sAppId)  sAppId.textContent  = d.appId;
   if (sPlan)   sPlan.textContent   = d.plan.name;
-  if (sAmount) sAmount.textContent =
-    `${d.plan.currencySymbol}${d.plan.price}`;
+  if (sAmount) sAmount.textContent = `${d.plan.currencySymbol}${d.plan.price}`;
   if (sTxn)    sTxn.textContent    = d.txnId;
 }
 
@@ -517,6 +501,13 @@ function saveConfirmation() {
     '4. Present your card at club events.',
     '',
     '───────────────────────────────────────────────',
+    '   CHECK YOUR STATUS',
+    '───────────────────────────────────────────────',
+    'Visit the membership page and click "Check Status".',
+    `Enter Application ID: ${d.appId}`,
+    `Enter Email: ${d.email || ''}`,
+    '',
+    '───────────────────────────────────────────────',
     '   CONTACT',
     '───────────────────────────────────────────────',
     `Phone   : ${club.phone || '+91 00000 00000'}`,
@@ -543,7 +534,7 @@ function saveConfirmation() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   QR ERROR FALLBACK (called from HTML onerror)
+   QR ERROR FALLBACK
    ═══════════════════════════════════════════════════════════════════════════ */
 window.handleQRError = function () {
   const img      = $('m-qr-img');
@@ -599,9 +590,7 @@ function initFAQ() {
     if (!btn) return;
     btn.addEventListener('click', () => {
       const isOpen = item.classList.contains('m--open');
-      // Close all
       items.forEach(i => i.classList.remove('m--open'));
-      // Open clicked if it was closed
       if (!isOpen) item.classList.add('m--open');
     });
   });
@@ -621,7 +610,6 @@ function initMobileMenu() {
     hamburger.setAttribute('aria-expanded', String(isOpen));
   });
 
-  // Close on nav link click
   nav.querySelectorAll('.m-header__nav-link').forEach((link) => {
     link.addEventListener('click', () => {
       nav.classList.remove('m--open');
@@ -629,6 +617,293 @@ function initMobileMenu() {
       hamburger.setAttribute('aria-expanded', 'false');
     });
   });
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STATUS CHECKER
+   ═══════════════════════════════════════════════════════════════════════════ */
+function initStatusChecker() {
+  const openBtn   = $('m-open-status-btn');
+  const closeBtn  = $('m-status-modal-close');
+  const searchBtn = $('m-status-search-btn');
+  const againBtn  = $('ms-search-again-btn');
+  const closeBtnR = $('ms-close-btn');
+  const modal     = $('m-status-modal');
+
+  // "Check Status" button after submit (step 3)
+  const checkAfterSubmit = $('m-check-status-after-submit');
+
+  if (openBtn) {
+    openBtn.addEventListener('click', openStatusModal);
+  }
+
+  if (checkAfterSubmit) {
+    checkAfterSubmit.addEventListener('click', () => {
+      openStatusModal();
+      // Pre-fill with last submission data
+      if (STATE.lastAppData) {
+        const appIdEl = $('ms-app-id');
+        const emailEl = $('ms-email');
+        if (appIdEl) appIdEl.value = STATE.lastAppData.appId || '';
+        if (emailEl) emailEl.value = STATE.lastAppData.email || '';
+      }
+    });
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeStatusModal);
+  }
+
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeStatusModal();
+    });
+  }
+
+  if (searchBtn) {
+    searchBtn.addEventListener('click', searchApplication);
+  }
+
+  if (againBtn) {
+    againBtn.addEventListener('click', showSearchForm);
+  }
+
+  if (closeBtnR) {
+    closeBtnR.addEventListener('click', closeStatusModal);
+  }
+
+  // Clear errors on focus
+  ['ms-app-id', 'ms-email'].forEach(id => {
+    const el = $(id);
+    if (el) {
+      el.addEventListener('focus', () => {
+        const errEl = $(id + '-err');
+        if (errEl) errEl.textContent = '';
+        el.classList.remove('m--error');
+        const gErr = $('ms-error');
+        if (gErr) gErr.style.display = 'none';
+      });
+    }
+  });
+}
+
+function openStatusModal() {
+  const modal = $('m-status-modal');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.body.classList.add('m-scroll-locked');
+  }
+  showSearchForm();
+}
+
+function closeStatusModal() {
+  const modal = $('m-status-modal');
+  if (modal) {
+    modal.style.display = 'none';
+    document.body.classList.remove('m-scroll-locked');
+  }
+}
+
+function showSearchForm() {
+  const searchForm = $('m-status-search-form');
+  const results    = $('m-status-results');
+  if (searchForm) searchForm.style.display = 'flex';
+  if (results)    results.style.display    = 'none';
+
+  const appIdEl = $('ms-app-id');
+  const emailEl = $('ms-email');
+  if (appIdEl) appIdEl.value = '';
+  if (emailEl) emailEl.value = '';
+
+  ['ms-app-id-err', 'ms-email-err'].forEach(id => {
+    const el = $(id);
+    if (el) el.textContent = '';
+  });
+  const gErr = $('ms-error');
+  if (gErr) gErr.style.display = 'none';
+}
+
+function formatDateForStatus(val) {
+  if (!val) return '—';
+  if (val && typeof val.toDate === 'function') {
+    return val.toDate().toLocaleDateString('en-IN', {
+      day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+  }
+  if (typeof val === 'string') {
+    const d = new Date(val);
+    if (isNaN(d.getTime())) return val;
+    return d.toLocaleDateString('en-IN', {
+      day: '2-digit', month: 'short', year: 'numeric'
+    });
+  }
+  return String(val);
+}
+
+async function searchApplication() {
+  const appIdEl = $('ms-app-id');
+  const emailEl = $('ms-email');
+  const errEl   = $('ms-error');
+
+  const appId = (appIdEl?.value || '').trim().toUpperCase();
+  const email = (emailEl?.value || '').trim().toLowerCase();
+
+  // Validate
+  let valid = true;
+  if (!appId) {
+    const e = $('ms-app-id-err');
+    if (e) e.textContent = 'Application ID is required.';
+    appIdEl?.classList.add('m--error');
+    valid = false;
+  }
+  if (!email) {
+    const e = $('ms-email-err');
+    if (e) e.textContent = 'Email address is required.';
+    emailEl?.classList.add('m--error');
+    valid = false;
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    const e = $('ms-email-err');
+    if (e) e.textContent = 'Please enter a valid email.';
+    emailEl?.classList.add('m--error');
+    valid = false;
+  }
+  if (!valid) return;
+
+  // Show loading
+  const searchBtn = $('m-status-search-btn');
+  const btnText   = searchBtn?.querySelector('.m-btn__text');
+  const btnSpin   = searchBtn?.querySelector('.m-btn__spinner');
+  if (btnText)   btnText.style.display   = 'none';
+  if (btnSpin)   btnSpin.style.display   = 'inline-flex';
+  if (searchBtn) searchBtn.disabled      = true;
+  if (errEl)     errEl.style.display     = 'none';
+
+  try {
+    const q = fbQuery(
+      collection(db, 'membership_applications'),
+      where('applicationId', '==', appId),
+      where('email', '==', email)
+    );
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      if (errEl) {
+        errEl.textContent =
+          '❌ No application found with this ID and email combination. ' +
+          'Please check your Application ID and email address and try again.';
+        errEl.style.display = 'block';
+      }
+      return;
+    }
+
+    const docData = snapshot.docs[0].data();
+    showStatusResults(docData);
+
+  } catch (err) {
+    console.error('Status search error:', err);
+    if (errEl) {
+      errEl.textContent =
+        '⚠️ Something went wrong. Please check your internet connection and try again.';
+      errEl.style.display = 'block';
+    }
+  } finally {
+    if (btnText)   btnText.style.display   = 'inline';
+    if (btnSpin)   btnSpin.style.display   = 'none';
+    if (searchBtn) searchBtn.disabled      = false;
+  }
+}
+
+function showStatusResults(app) {
+  const searchForm = $('m-status-search-form');
+  const results    = $('m-status-results');
+  if (searchForm) searchForm.style.display = 'none';
+  if (results)    results.style.display    = 'flex';
+
+  // Banner
+  const banner     = $('ms-banner');
+  const bannerIcon = $('ms-banner-icon');
+  const bannerStat = $('ms-banner-status');
+
+  if (banner) {
+    banner.classList.remove(
+      'm-status-banner--pending',
+      'm-status-banner--approved',
+      'm-status-banner--rejected'
+    );
+  }
+
+  const statusMap = {
+    pending: {
+      cls:   'm-status-banner--pending',
+      icon:  '⏳',
+      label: 'Pending Review',
+      msg:   'Your application is currently under review. Our admin team will ' +
+             'verify your payment and process your application within 24 hours. ' +
+             'You will receive an email once it is approved.'
+    },
+    approved: {
+      cls:   'm-status-banner--approved',
+      icon:  '✅',
+      label: 'Approved',
+      msg:   'Congratulations! Your membership has been approved. You should ' +
+             'receive (or have already received) an email with your digital ' +
+             'membership card (PDF) attached. If you haven\'t received it yet, ' +
+             'please contact us with your Application ID.'
+    },
+    rejected: {
+      cls:   'm-status-banner--rejected',
+      icon:  '❌',
+      label: 'Rejected',
+      msg:   'Unfortunately, your application was not approved. Please check the ' +
+             'rejection reason below. If you believe this is an error or you have ' +
+             'questions, please contact us with your Application ID.'
+    }
+  };
+
+  const info = statusMap[app.status] || statusMap.pending;
+  if (banner)     banner.classList.add(info.cls);
+  if (bannerIcon) bannerIcon.textContent  = info.icon;
+  if (bannerStat) bannerStat.textContent  = info.label;
+
+  // Status message
+  const msgEl = $('ms-message');
+  if (msgEl) msgEl.textContent = info.msg;
+
+  // Application details
+  const set = (id, val) => {
+    const el = $(id);
+    if (el) el.textContent = val || '—';
+  };
+
+  set('ms-r-appid',     app.applicationId);
+  set('ms-r-name',      app.name);
+  set('ms-r-plan',      app.planName);
+  set('ms-r-amount',    `₹${app.amount || 0}`);
+  set('ms-r-txn',       app.transactionId);
+  set('ms-r-submitted', formatDateForStatus(app.submittedAt));
+
+  // Approved details
+  const approvedBlock = $('ms-approved-details');
+  if (approvedBlock) {
+    approvedBlock.style.display = app.status === 'approved' ? 'block' : 'none';
+  }
+  if (app.status === 'approved') {
+    set('ms-r-mid',      app.membershipId);
+    set('ms-r-start',    formatDateForStatus(app.startDate));
+    set('ms-r-expiry',   formatDateForStatus(app.expiryDate));
+    set('ms-r-verified', formatDateForStatus(app.verifiedAt));
+  }
+
+  // Rejected details
+  const rejectedBlock = $('ms-rejected-details');
+  if (rejectedBlock) {
+    rejectedBlock.style.display = app.status === 'rejected' ? 'block' : 'none';
+  }
+  if (app.status === 'rejected') {
+    set('ms-r-reason',        app.adminNotes || 'No reason provided.');
+    set('ms-r-rejected-date', formatDateForStatus(app.verifiedAt));
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -678,7 +953,7 @@ function attachListeners() {
     saveBtn.addEventListener('click', saveConfirmation);
   }
 
-  // Real-time error clearing on focus for all form inputs
+  // Real-time error clearing
   const clearMap = [
     ['f-name',      'e-name'],
     ['f-email',     'e-email'],
@@ -723,8 +998,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initFAQ();
   initMobileMenu();
   attachListeners();
+  initStatusChecker();
 
-  // Footer year fallback (also set in updateClubInfo but just in case)
   const fyEl = $('m-footer-year');
   if (fyEl) fyEl.textContent = new Date().getFullYear();
 });

@@ -28,6 +28,8 @@
     <nav class="m-header__nav" id="m-nav">
       <a href="../index.html" class="m-header__nav-link">Home</a>
       <a href="../index.html#about" class="m-header__nav-link">About</a>
+      <a href="#plans" class="m-header__nav-link">Plans</a>
+      <a href="#status-checker" class="m-header__nav-link">Check Status</a>
       <a href="../index.html#contact" class="m-header__nav-link">Contact</a>
     </nav>
     <button class="m-header__hamburger" id="m-hamburger"
@@ -49,9 +51,14 @@
       Become part of a vibrant community united by Education, Health &amp; Culture.
       Together, we build a better tomorrow for Sarberia.
     </p>
-    <a href="#plans" class="m-btn m-btn--gold m-hero__cta">
-      View Plans &darr;
-    </a>
+    <div class="m-hero__cta-row">
+      <a href="#plans" class="m-btn m-btn--gold m-hero__cta">
+        View Plans &darr;
+      </a>
+      <a href="#status-checker" class="m-btn m-btn--outline-hero m-hero__cta">
+        Check Status 🔍
+      </a>
+    </div>
     <div class="m-hero__badges">
       <div class="m-hero__badge">
         <span class="m-hero__badge-icon">🎴</span>
@@ -85,7 +92,6 @@
         More plans coming soon!
       </p>
     </div>
-    <!-- Plan cards rendered by JS -->
     <div class="m-plans__grid" id="m-plans-grid">
       <div class="m-plans__loading">Loading plans…</div>
     </div>
@@ -417,6 +423,9 @@
           <button class="m-btn m-btn--outline" id="m-save-confirmation-btn">
             💾 Save Confirmation
           </button>
+          <button class="m-btn m-btn--gold" id="m-check-status-after-submit">
+            🔍 Check Status
+          </button>
           <a href="../index.html" class="m-btn m-btn--primary">
             Back to Home
           </a>
@@ -424,7 +433,7 @@
       </div>
     </div>
 
-  </div><!-- /.m-form-section__inner -->
+  </div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════
@@ -474,6 +483,32 @@
           After approval, receive your digital membership card via email within 24 hours.
         </p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     STATUS CHECKER SECTION
+════════════════════════════════════════════════════════ -->
+<section class="m-status-section" id="status-checker">
+  <div class="m-status-section__inner">
+    <div class="m-section-header">
+      <h2 class="m-section-header__title">Check Application Status</h2>
+      <p class="m-section-header__sub">
+        Already applied? Enter your Application ID and email to track your application.
+      </p>
+    </div>
+
+    <div class="m-status-card">
+      <div class="m-status-card__icon">🔍</div>
+      <h3 class="m-status-card__title">Track Your Application</h3>
+      <p class="m-status-card__desc">
+        Enter the Application ID you received after submission and
+        the email address you used during registration.
+      </p>
+      <button class="m-btn m-btn--gold" id="m-open-status-btn">
+        Check Status →
+      </button>
     </div>
   </div>
 </section>
@@ -550,6 +585,19 @@
 
       <div class="m-faq__item">
         <button class="m-faq__question">
+          <span>How do I check my application status?</span>
+          <span class="m-faq__icon">+</span>
+        </button>
+        <div class="m-faq__answer">
+          <p>Scroll down to the "Check Application Status" section on this page,
+          or click the "Check Status" button above. Enter your Application ID
+          and email address to see your current status, membership details,
+          and approval history.</p>
+        </div>
+      </div>
+
+      <div class="m-faq__item">
+        <button class="m-faq__question">
           <span>How do I get my digital membership card?</span>
           <span class="m-faq__icon">+</span>
         </button>
@@ -564,6 +612,159 @@
     </div>
   </div>
 </section>
+
+<!-- ═══════════════════════════════════════════════════════
+     MODAL: STATUS CHECKER
+════════════════════════════════════════════════════════ -->
+<div class="m-modal-overlay" id="m-status-modal" style="display:none;">
+  <div class="m-modal">
+
+    <!-- Modal Header -->
+    <div class="m-modal__header">
+      <h2 class="m-modal__title">🔍 Check Application Status</h2>
+      <button class="m-modal__close" id="m-status-modal-close">✕</button>
+    </div>
+
+    <!-- Search Form -->
+    <div class="m-modal__body" id="m-status-search-form">
+      <p class="m-modal__desc">
+        Enter your Application ID (e.g. APP-2024-XXXXXX) and the email
+        address you used when applying.
+      </p>
+
+      <div class="m-form__group">
+        <label class="m-form__label" for="ms-app-id">
+          Application ID <span class="m-required">*</span>
+        </label>
+        <input class="m-form__input" type="text" id="ms-app-id"
+               placeholder="APP-2024-XXXXXX"
+               maxlength="20"
+               style="font-family:'Courier New',monospace;letter-spacing:0.05em;" />
+        <span class="m-form__error" id="ms-app-id-err"></span>
+      </div>
+
+      <div class="m-form__group">
+        <label class="m-form__label" for="ms-email">
+          Email Address <span class="m-required">*</span>
+        </label>
+        <input class="m-form__input" type="email" id="ms-email"
+               placeholder="you@example.com"
+               maxlength="150" />
+        <span class="m-form__error" id="ms-email-err"></span>
+      </div>
+
+      <!-- Error message -->
+      <div class="m-status-error" id="ms-error" style="display:none;"></div>
+
+      <button class="m-btn m-btn--primary m-btn--full" id="m-status-search-btn">
+        <span class="m-btn__text">Search Application</span>
+        <span class="m-btn__spinner" style="display:none;">
+          <span class="m-spinner"></span> Searching…
+        </span>
+      </button>
+    </div>
+
+    <!-- Results (hidden until search succeeds) -->
+    <div class="m-modal__body" id="m-status-results" style="display:none;">
+
+      <!-- Status banner -->
+      <div class="m-status-banner" id="ms-banner">
+        <div class="m-status-banner__icon" id="ms-banner-icon">⏳</div>
+        <div class="m-status-banner__text">
+          <div class="m-status-banner__label">Application Status</div>
+          <div class="m-status-banner__status" id="ms-banner-status">Pending</div>
+        </div>
+      </div>
+
+      <!-- Status message -->
+      <div class="m-status-message" id="ms-message"></div>
+
+      <!-- Details grid -->
+      <div class="m-status-details">
+        <div class="m-status-details__title">📋 Application Details</div>
+        <div class="m-status-details__grid">
+          <div class="m-status-row">
+            <span class="m-status-key">Application ID</span>
+            <span class="m-status-val m-status-val--mono" id="ms-r-appid">—</span>
+          </div>
+          <div class="m-status-row">
+            <span class="m-status-key">Name</span>
+            <span class="m-status-val" id="ms-r-name">—</span>
+          </div>
+          <div class="m-status-row">
+            <span class="m-status-key">Plan</span>
+            <span class="m-status-val" id="ms-r-plan">—</span>
+          </div>
+          <div class="m-status-row">
+            <span class="m-status-key">Amount</span>
+            <span class="m-status-val" id="ms-r-amount">—</span>
+          </div>
+          <div class="m-status-row">
+            <span class="m-status-key">Transaction ID</span>
+            <span class="m-status-val m-status-val--mono" id="ms-r-txn">—</span>
+          </div>
+          <div class="m-status-row">
+            <span class="m-status-key">Submitted</span>
+            <span class="m-status-val" id="ms-r-submitted">—</span>
+          </div>
+        </div>
+
+        <!-- Approved-only details -->
+        <div id="ms-approved-details" style="display:none;">
+          <div class="m-status-details__title m-status-details__title--success">
+            ✅ Membership Details
+          </div>
+          <div class="m-status-details__grid">
+            <div class="m-status-row">
+              <span class="m-status-key">Membership ID</span>
+              <span class="m-status-val m-status-val--highlight" id="ms-r-mid">—</span>
+            </div>
+            <div class="m-status-row">
+              <span class="m-status-key">Valid From</span>
+              <span class="m-status-val" id="ms-r-start">—</span>
+            </div>
+            <div class="m-status-row">
+              <span class="m-status-key">Valid Until</span>
+              <span class="m-status-val" id="ms-r-expiry">—</span>
+            </div>
+            <div class="m-status-row">
+              <span class="m-status-key">Approved On</span>
+              <span class="m-status-val" id="ms-r-verified">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rejected-only details -->
+        <div id="ms-rejected-details" style="display:none;">
+          <div class="m-status-details__title m-status-details__title--error">
+            ❌ Rejection Details
+          </div>
+          <div class="m-status-details__grid">
+            <div class="m-status-row">
+              <span class="m-status-key">Reason</span>
+              <span class="m-status-val" id="ms-r-reason">—</span>
+            </div>
+            <div class="m-status-row">
+              <span class="m-status-key">Reviewed On</span>
+              <span class="m-status-val" id="ms-r-rejected-date">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="m-status-actions">
+        <button class="m-btn m-btn--outline" id="ms-search-again-btn">
+          ← Search Another
+        </button>
+        <button class="m-btn m-btn--primary" id="ms-close-btn">
+          Close
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════════
      FOOTER
@@ -587,6 +788,7 @@
       <a href="../index.html">Home</a>
       <a href="../index.html#about">About</a>
       <a href="#plans">Membership</a>
+      <a href="#status-checker">Check Status</a>
       <a href="../index.html#contact">Contact</a>
     </div>
     <div class="m-footer__copy">
