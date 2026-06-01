@@ -4,8 +4,12 @@
  * - Loads plans from JSON
  * - Step navigation + validation
  * - Firebase Firestore submission
- * - Status checker (search by Email + Transaction ID)
+ * - Status checker (search by App ID + Email OR Transaction ID + Email)
  * - FAQ accordion, mobile menu, footer year
+ *
+ * FIX: Status checker now handles case-insensitive matching,
+ *      trims whitespace, and falls back to client-side filtering
+ *      when Firestore query returns empty due to casing mismatch.
  */
 
 import { db } from './firebase-config.js';
@@ -15,7 +19,8 @@ import {
   serverTimestamp,
   query as fbQuery,
   where,
-  getDocs
+  getDocs,
+  orderBy
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -215,7 +220,7 @@ function goToStep(step) {
     const stepEl = $(`m-step-${n}`);
     if (!stepEl) return;
     stepEl.classList.remove('m-step--active', 'm-step--done');
-    if (n < step)       stepEl.classList.add('m-step--done');
+    if (n < step)        stepEl.classList.add('m-step--done');
     else if (n === step) stepEl.classList.add('m-step--active');
 
     const circle = stepEl.querySelector('.m-step__circle');
@@ -245,9 +250,7 @@ function validateStep1() {
   } else if (name.length < 3) {
     setError('f-name', 'e-name', 'Name must be at least 3 characters.');
     valid = false;
-  } else {
-    clearError('f-name', 'e-name');
-  }
+  } else { clearError('f-name', 'e-name'); }
 
   const email = $('f-email').value.trim();
   const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -257,9 +260,7 @@ function validateStep1() {
   } else if (!emailRx.test(email)) {
     setError('f-email', 'e-email', 'Please enter a valid email address.');
     valid = false;
-  } else {
-    clearError('f-email', 'e-email');
-  }
+  } else { clearError('f-email', 'e-email'); }
 
   const phone = $('f-phone').value.trim();
   const phoneRx = /^[6-9]\d{9}$/;
@@ -269,41 +270,31 @@ function validateStep1() {
   } else if (!phoneRx.test(phone)) {
     setError('f-phone', 'e-phone', 'Enter a valid 10-digit Indian mobile number.');
     valid = false;
-  } else {
-    clearError('f-phone', 'e-phone');
-  }
+  } else { clearError('f-phone', 'e-phone'); }
 
   const dob = $('f-dob').value;
   if (!dob) {
     setError('f-dob', 'e-dob', 'Date of birth is required.');
     valid = false;
   } else {
-    const dobDate = new Date(dob);
-    const today   = new Date();
-    const age     = today.getFullYear() - dobDate.getFullYear();
+    const age = new Date().getFullYear() - new Date(dob).getFullYear();
     if (age < 5 || age > 100) {
       setError('f-dob', 'e-dob', 'Age must be between 5 and 100 years.');
       valid = false;
-    } else {
-      clearError('f-dob', 'e-dob');
-    }
+    } else { clearError('f-dob', 'e-dob'); }
   }
 
   const guardian = $('f-guardian').value.trim();
   if (!guardian) {
     setError('f-guardian', 'e-guardian', 'Father/Guardian name is required.');
     valid = false;
-  } else {
-    clearError('f-guardian', 'e-guardian');
-  }
+  } else { clearError('f-guardian', 'e-guardian'); }
 
   const emergency = $('f-emergency').value.trim();
   if (emergency && !/^\d{10,15}$/.test(emergency)) {
     setError('f-emergency', 'e-emergency', 'Enter a valid phone number (10-15 digits).');
     valid = false;
-  } else {
-    clearError('f-emergency', 'e-emergency');
-  }
+  } else { clearError('f-emergency', 'e-emergency'); }
 
   const address = $('f-address').value.trim();
   if (!address) {
@@ -312,9 +303,7 @@ function validateStep1() {
   } else if (address.length < 10) {
     setError('f-address', 'e-address', 'Please enter a more complete address (min 10 characters).');
     valid = false;
-  } else {
-    clearError('f-address', 'e-address');
-  }
+  } else { clearError('f-address', 'e-address'); }
 
   return valid;
 }
@@ -331,12 +320,9 @@ function validateStep2() {
     setError('f-txn', 'e-txn', 'Transaction ID is required.');
     valid = false;
   } else if (!txnRx.test(txn)) {
-    setError('f-txn', 'e-txn',
-      'Enter a valid Transaction ID (min 8 alphanumeric characters).');
+    setError('f-txn', 'e-txn', 'Enter a valid Transaction ID (min 8 alphanumeric characters).');
     valid = false;
-  } else {
-    clearError('f-txn', 'e-txn');
-  }
+  } else { clearError('f-txn', 'e-txn'); }
 
   const confirmed = $('f-confirm').checked;
   if (!confirmed) {
@@ -395,13 +381,18 @@ async function submitApplication() {
     const appId      = generateAppId();
     const { startDate, expiryDate } = calculateDates(plan.validYears);
 
+    // Store email and txn in lowercase for consistent searching
+    const emailVal = $('f-email').value.trim().toLowerCase();
+    const txnVal   = $('f-txn').value.trim();
+
     const docData = {
       applicationId:    appId,
       status:           'pending',
       submittedAt:      serverTimestamp(),
 
       name:             $('f-name').value.trim(),
-      email:            $('f-email').value.trim().toLowerCase(),
+      email:            emailVal,
+      emailLower:       emailVal,  // explicit lowercase field for queries
       phone:            $('f-phone').value.trim(),
       dob:              $('f-dob').value,
       guardian:         $('f-guardian').value.trim(),
@@ -414,7 +405,7 @@ async function submitApplication() {
       duration:         plan.duration,
       validYears:       plan.validYears,
 
-      transactionId:    $('f-txn').value.trim(),
+      transactionId:    txnVal,
       screenshotURL:    null,
 
       startDate,
@@ -431,8 +422,8 @@ async function submitApplication() {
     STATE.lastAppData = {
       appId,
       plan,
-      txnId: docData.transactionId,
-      email: docData.email
+      txnId: txnVal,
+      email: emailVal
     };
     populateSuccessStep();
     goToStep(3);
@@ -625,7 +616,13 @@ function initMobileMenu() {
    STATUS CHECKER
    Two search methods:
      1. Application ID + Email
-     2. Transaction ID + Email (for users who forgot their App ID)
+     2. Transaction ID + Email (for users who forgot App ID)
+
+   STRATEGY:
+     - First try exact Firestore query with where() clauses
+     - If that returns empty, FALLBACK to fetching by email only
+       and doing client-side comparison (handles casing issues,
+       old data without emailLower, etc.)
    ═══════════════════════════════════════════════════════════════════════════ */
 function initStatusChecker() {
   const openBtn          = $('m-open-status-btn');
@@ -644,7 +641,6 @@ function initStatusChecker() {
   if (checkAfterSubmit) {
     checkAfterSubmit.addEventListener('click', () => {
       openStatusModal();
-      // Pre-fill with last submission data — use App ID method
       switchSearchMethod('appid');
       if (STATE.lastAppData) {
         const appIdEl = $('ms-app-id');
@@ -677,17 +673,14 @@ function initStatusChecker() {
     closeBtnR.addEventListener('click', closeStatusModal);
   }
 
-  // Method toggle link
   if (methodToggle) {
     methodToggle.addEventListener('click', (e) => {
       e.preventDefault();
-      const currentMethod = methodToggle.getAttribute('data-current') || 'appid';
-      const newMethod = currentMethod === 'appid' ? 'txn' : 'appid';
-      switchSearchMethod(newMethod);
+      const current = methodToggle.getAttribute('data-current') || 'appid';
+      switchSearchMethod(current === 'appid' ? 'txn' : 'appid');
     });
   }
 
-  // Clear errors on focus
   ['ms-app-id', 'ms-email', 'ms-txn'].forEach(id => {
     const el = $(id);
     if (el) {
@@ -703,31 +696,26 @@ function initStatusChecker() {
 }
 
 function switchSearchMethod(method) {
-  const appIdGroup  = $('ms-group-appid');
-  const txnGroup    = $('ms-group-txn');
-  const toggleLink  = $('ms-method-toggle');
-  const toggleText  = $('ms-method-text');
+  const appIdGroup = $('ms-group-appid');
+  const txnGroup   = $('ms-group-txn');
+  const toggleLink = $('ms-method-toggle');
+  const toggleText = $('ms-method-text');
 
   if (method === 'txn') {
-    // Show Transaction ID field, hide App ID field
     if (appIdGroup) appIdGroup.style.display = 'none';
     if (txnGroup)   txnGroup.style.display   = 'flex';
     if (toggleLink) toggleLink.setAttribute('data-current', 'txn');
     if (toggleText) toggleText.textContent   = 'I have my Application ID';
   } else {
-    // Show App ID field, hide Transaction ID field
     if (appIdGroup) appIdGroup.style.display = 'flex';
     if (txnGroup)   txnGroup.style.display   = 'none';
     if (toggleLink) toggleLink.setAttribute('data-current', 'appid');
     if (toggleText) toggleText.textContent   = 'Forgot Application ID? Use Transaction ID';
   }
 
-  // Clear values and errors
   ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => {
     const el = $(id);
-    if (el) {
-      el.classList.remove('m--error');
-    }
+    if (el) el.classList.remove('m--error');
   });
   ['ms-app-id-err', 'ms-txn-err', 'ms-email-err'].forEach(id => {
     const el = $(id);
@@ -760,10 +748,8 @@ function showSearchForm() {
   if (searchForm) searchForm.style.display = 'flex';
   if (results)    results.style.display    = 'none';
 
-  // Reset to App ID method by default
   switchSearchMethod('appid');
 
-  // Clear all fields
   ['ms-app-id', 'ms-txn', 'ms-email'].forEach(id => {
     const el = $(id);
     if (el) el.value = '';
@@ -795,7 +781,7 @@ async function searchApplication() {
   const errEl      = $('ms-error');
   const email      = (emailEl?.value || '').trim().toLowerCase();
 
-  // Validate email (common to both methods)
+  // Validate email
   let valid = true;
   if (!email) {
     const e = $('ms-email-err');
@@ -853,47 +839,160 @@ async function searchApplication() {
   if (errEl)     errEl.style.display     = 'none';
 
   try {
-    const q = fbQuery(
+    let foundDoc = null;
+    let totalMatches = 0;
+
+    // ─── STRATEGY 1: Exact Firestore query ───
+    console.log('[Status Checker] Trying exact query:', searchField, '=', searchValue, '+ email =', email);
+
+    const q1 = fbQuery(
       collection(db, 'membership_applications'),
       where(searchField, '==', searchValue),
       where('email', '==', email)
     );
-    const snapshot = await getDocs(q);
+    const snap1 = await getDocs(q1);
 
-    if (snapshot.empty) {
+    if (!snap1.empty) {
+      console.log('[Status Checker] Found via exact query:', snap1.size, 'docs');
+      let docs = snap1.docs.map(d => d.data());
+      if (docs.length > 1) {
+        docs.sort((a, b) => {
+          const da = a.submittedAt?.toDate?.() || new Date(0);
+          const db2 = b.submittedAt?.toDate?.() || new Date(0);
+          return db2 - da;
+        });
+      }
+      foundDoc = docs[0];
+      totalMatches = docs.length;
+    }
+
+    // ─── STRATEGY 2: Fallback — query by field only, filter email client-side ───
+    if (!foundDoc) {
+      console.log('[Status Checker] Exact query empty. Trying fallback: query by', searchField, 'only, then filter email client-side');
+
+      const q2 = fbQuery(
+        collection(db, 'membership_applications'),
+        where(searchField, '==', searchValue)
+      );
+      const snap2 = await getDocs(q2);
+
+      if (!snap2.empty) {
+        console.log('[Status Checker] Found', snap2.size, 'docs by', searchField, '— filtering by email client-side');
+        const allDocs = snap2.docs.map(d => d.data());
+        const matched = allDocs.filter(d =>
+          (d.email || '').toLowerCase().trim() === email
+        );
+
+        if (matched.length > 0) {
+          if (matched.length > 1) {
+            matched.sort((a, b) => {
+              const da = a.submittedAt?.toDate?.() || new Date(0);
+              const db2 = b.submittedAt?.toDate?.() || new Date(0);
+              return db2 - da;
+            });
+          }
+          foundDoc = matched[0];
+          totalMatches = matched.length;
+          console.log('[Status Checker] Found via fallback email match:', totalMatches);
+        } else {
+          console.log('[Status Checker] Found docs by', searchField, 'but email mismatch. Stored emails:', allDocs.map(d => d.email));
+        }
+      }
+    }
+
+    // ─── STRATEGY 3: If searching by txn failed, try email-only query + client filter txn ───
+    if (!foundDoc && method === 'txn') {
+      console.log('[Status Checker] Trying email-only query + client-side txn filter');
+
+      const q3 = fbQuery(
+        collection(db, 'membership_applications'),
+        where('email', '==', email)
+      );
+      const snap3 = await getDocs(q3);
+
+      if (!snap3.empty) {
+        console.log('[Status Checker] Found', snap3.size, 'docs by email — filtering by txn client-side');
+        const allDocs = snap3.docs.map(d => d.data());
+        const matched = allDocs.filter(d =>
+          (d.transactionId || '').toLowerCase().trim() === searchValue.toLowerCase().trim()
+        );
+
+        if (matched.length > 0) {
+          foundDoc = matched[0];
+          totalMatches = matched.length;
+          console.log('[Status Checker] Found via email + client txn match');
+        } else {
+          console.log('[Status Checker] Email match found but txn mismatch. Stored txns:', allDocs.map(d => d.transactionId));
+        }
+      }
+    }
+
+    // ─── STRATEGY 4: If searching by appId failed, try email-only query + client filter appId ───
+    if (!foundDoc && method === 'appid') {
+      console.log('[Status Checker] Trying email-only query + client-side appId filter');
+
+      const q4 = fbQuery(
+        collection(db, 'membership_applications'),
+        where('email', '==', email)
+      );
+      const snap4 = await getDocs(q4);
+
+      if (!snap4.empty) {
+        console.log('[Status Checker] Found', snap4.size, 'docs by email — filtering by appId client-side');
+        const allDocs = snap4.docs.map(d => d.data());
+        const matched = allDocs.filter(d =>
+          (d.applicationId || '').toUpperCase().trim() === searchValue.toUpperCase().trim()
+        );
+
+        if (matched.length > 0) {
+          foundDoc = matched[0];
+          totalMatches = matched.length;
+          console.log('[Status Checker] Found via email + client appId match');
+        } else {
+          console.log('[Status Checker] Email match found but appId mismatch. Stored appIds:', allDocs.map(d => d.applicationId));
+        }
+      }
+    }
+
+    // ─── Show results or error ───
+    if (foundDoc) {
+      showStatusResults(foundDoc, totalMatches > 1 ? totalMatches : 0);
+    } else {
+      const fieldLabel = method === 'appid' ? 'Application ID' : 'Transaction ID';
       if (errEl) {
-        const fieldLabel = method === 'appid' ? 'Application ID' : 'Transaction ID';
         errEl.innerHTML =
           `❌ No application found matching this <strong>${fieldLabel}</strong> ` +
           `and <strong>Email</strong> combination.<br><br>` +
-          `Please double-check your details and try again. ` +
+          `<strong>Tips:</strong><br>` +
+          `• Make sure the email is exactly what you used during application<br>` +
+          `• Check for typos in your ${fieldLabel}<br>` +
           (method === 'appid'
-            ? 'If you forgot your Application ID, click the link below to search by Transaction ID instead.'
-            : 'If you have your Application ID, click the link below to search by that instead.');
+            ? '• Try searching by Transaction ID instead (click the link above)<br>'
+            : '• Try searching by Application ID instead (click the link above)<br>') +
+          `• Check your UPI app for the exact Transaction ID<br>` +
+          `• If you downloaded the confirmation .txt file, check it for your details`;
         errEl.style.display = 'block';
       }
-      return;
     }
-
-    // If multiple results found (unlikely but possible with txn search),
-    // show the most recent one
-    let docs = snapshot.docs.map(d => d.data());
-    if (docs.length > 1) {
-      docs.sort((a, b) => {
-        const da = a.submittedAt?.toDate?.() || new Date(0);
-        const db2 = b.submittedAt?.toDate?.() || new Date(0);
-        return db2 - da;
-      });
-    }
-
-    showStatusResults(docs[0], docs.length > 1 ? docs.length : 0);
 
   } catch (err) {
-    console.error('Status search error:', err);
-    if (errEl) {
-      errEl.textContent =
-        '⚠️ Something went wrong. Please check your internet connection and try again.';
-      errEl.style.display = 'block';
+    console.error('[Status Checker] Error:', err);
+
+    // Check if it's an index error
+    if (err.message && err.message.includes('index')) {
+      if (errEl) {
+        errEl.innerHTML =
+          '⚠️ Search index is being set up. This is a one-time process.<br><br>' +
+          'Please try again in 2-3 minutes. If the problem persists, ' +
+          'try searching by <strong>Application ID</strong> instead.';
+        errEl.style.display = 'block';
+      }
+    } else {
+      if (errEl) {
+        errEl.textContent =
+          '⚠️ Something went wrong. Please check your internet connection and try again.';
+        errEl.style.display = 'block';
+      }
     }
   } finally {
     if (btnText)   btnText.style.display   = 'inline';
@@ -969,7 +1068,6 @@ function showStatusResults(app, totalMatches) {
   const msgEl = $('ms-message');
   if (msgEl) msgEl.textContent = info.msg;
 
-  // Application details
   const set = (id, val) => {
     const el = $(id);
     if (el) el.textContent = val || '—';
@@ -982,7 +1080,6 @@ function showStatusResults(app, totalMatches) {
   set('ms-r-txn',       app.transactionId);
   set('ms-r-submitted', formatDateForStatus(app.submittedAt));
 
-  // Approved details
   const approvedBlock = $('ms-approved-details');
   if (approvedBlock) {
     approvedBlock.style.display = app.status === 'approved' ? 'block' : 'none';
@@ -994,7 +1091,6 @@ function showStatusResults(app, totalMatches) {
     set('ms-r-verified', formatDateForStatus(app.verifiedAt));
   }
 
-  // Rejected details
   const rejectedBlock = $('ms-rejected-details');
   if (rejectedBlock) {
     rejectedBlock.style.display = app.status === 'rejected' ? 'block' : 'none';
