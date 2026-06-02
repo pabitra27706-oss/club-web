@@ -1,6 +1,8 @@
 /**
- * membership.js – v5
- * All features + status checker with Membership ID, Phone, Transaction ID.
+ * membership.js – v6
+ * + QR download button
+ * + Claim modal supports Application ID, Transaction ID, Phone Number
+ * + Status checker with 3 options: Membership ID, Phone, Transaction ID
  */
 import { db, auth } from './firebase-config.js';
 import {
@@ -82,7 +84,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-/* ---------- Banner handling ---------- */
+/* ---------- Banner ---------- */
 function initBanner() {
   const banner = $('m-signin-banner');
   const closeBtn = $('m-signin-banner-close');
@@ -318,7 +320,7 @@ async function generateUniqueAppId() {
   return `APP-${year}-${timestamp}`;
 }
 
-/* ---------- Member data (for logged-in users) ---------- */
+/* ---------- Member data (logged-in users) ---------- */
 async function loadMemberData() {
   if (!STATE.user) return;
   const email = STATE.user.email.toLowerCase();
@@ -503,21 +505,62 @@ function showMemberDetailsModal() {
   }
 }
 
-/* ---------- Claim modal ---------- */
+/* ---------- Claim modal (multi‑method) ---------- */
 function showClaimModal(unclaimedApps) {
   const modal = $('m-claim-modal');
+  const methodSelect = $('claim-method');
+  const inputField = $('claim-id');
+  const hintEl = $('claim-hint');
+  const labelEl = document.querySelector('#claim-input-group .m-form__label');
+
   modal.style.display = 'flex';
-  document.getElementById('claim-id').value = '';
-  document.getElementById('claim-err').textContent = '';
+  inputField.value = '';
+  $('claim-err').textContent = '';
+  methodSelect.value = 'appId';
+
+  function updateClaimUI() {
+    const method = methodSelect.value;
+    if (method === 'appId') {
+      labelEl.innerHTML = 'Application ID <span class="m-required">*</span>';
+      inputField.placeholder = 'APP-2025-XXXXXX';
+      hintEl.textContent = 'Your unique application reference (from confirmation).';
+    } else if (method === 'txnId') {
+      labelEl.innerHTML = 'Transaction ID / UTR <span class="m-required">*</span>';
+      inputField.placeholder = 'Enter UPI Transaction ID';
+      hintEl.textContent = 'The UPI Transaction ID / UTR number of your payment.';
+    } else {
+      labelEl.innerHTML = 'Phone Number <span class="m-required">*</span>';
+      inputField.placeholder = '10‑digit mobile number';
+      hintEl.textContent = 'The phone number you used when applying.';
+    }
+  }
+
+  methodSelect.onchange = updateClaimUI;
+  updateClaimUI();
 
   document.getElementById('m-claim-submit').onclick = async () => {
-    const id = document.getElementById('claim-id').value.trim().toUpperCase();
-    if (!id) { document.getElementById('claim-err').textContent = 'Please enter an ID.'; return; }
-    const match = unclaimedApps.find(a => a.applicationId.toUpperCase() === id || (a.transactionId && a.transactionId.toUpperCase() === id));
-    if (!match) {
-      document.getElementById('claim-err').textContent = 'No application found with that ID. Make sure you entered the correct Application ID or Transaction ID.';
+    const method = methodSelect.value;
+    const val = inputField.value.trim().toUpperCase();
+    if (!val) {
+      $('claim-err').textContent = 'Please enter the required information.';
       return;
     }
+
+    let match = null;
+    if (method === 'appId') {
+      match = unclaimedApps.find(a => a.applicationId.toUpperCase() === val);
+    } else if (method === 'txnId') {
+      match = unclaimedApps.find(a => a.transactionId && a.transactionId.toUpperCase() === val);
+    } else {
+      // phone: match exactly against stored phone (numbers only)
+      match = unclaimedApps.find(a => a.phone && a.phone.replace(/\D/g, '') === val.replace(/\D/g, ''));
+    }
+
+    if (!match) {
+      $('claim-err').textContent = 'No application found with that information. Please try again or use a different method.';
+      return;
+    }
+
     await updateDoc(doc(db, 'membership_applications', match._id), { userId: STATE.user.uid });
     modal.style.display = 'none';
     await loadMemberData();
@@ -722,7 +765,26 @@ function saveConfirmation() {
   setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
 }
 
-/* ---------- QR error ---------- */
+/* ---------- QR code download ---------- */
+function initQRDownload() {
+  const downloadBtn = $('m-download-qr-btn');
+  if (!downloadBtn) return;
+  downloadBtn.addEventListener('click', () => {
+    const img = $('m-qr-img');
+    if (!img || img.style.display === 'none') return;
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    const a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = 'PSS-Payment-QR.png';
+    a.click();
+  });
+}
+
+/* ---------- QR error fallback ---------- */
 window.handleQRError = function () {
   const img = $('m-qr-img');
   const fallback = $('m-qr-fallback');
@@ -803,7 +865,6 @@ function initStatusChecker() {
   const checkAfterSubmit = $('m-check-status-after-submit');
   const methodSelect = $('ms-search-method');
 
-  // Update hint and placeholder when method changes
   if (methodSelect) {
     methodSelect.addEventListener('change', () => {
       const method = methodSelect.value;
@@ -944,10 +1005,9 @@ async function searchApplication() {
 
   try {
     let foundDoc = null; let totalMatches = 0;
-    const searchField = method; // 'membershipId', 'phone', 'transactionId'
+    const searchField = method;
     let searchValue = dynamicId;
     if (method === 'phone') {
-      // phone numbers stored as strings, so use as-is
       searchValue = dynamicId;
     }
 
@@ -1120,6 +1180,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initStatusChecker();
   initAuthModal();
   initBanner();
+  initQRDownload();
   const fyEl = $('m-footer-year');
   if (fyEl) fyEl.textContent = new Date().getFullYear();
 });

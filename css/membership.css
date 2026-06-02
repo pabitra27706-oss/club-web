@@ -557,3 +557,7 @@ body.m-scroll-locked { overflow: hidden; }
   vertical-align: middle;
   margin-right: 4px;
 }
+#m-download-qr-btn {
+  width: 100%;
+  text-align: center;
+}

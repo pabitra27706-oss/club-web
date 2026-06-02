@@ -26,7 +26,7 @@
     <a href="../index.html" class="m-header__brand">
       <img src="../assets/images/common/logo.png" alt="PSS Logo" class="m-header__logo" onerror="this.style.display='none'" />
       <div class="m-header__brand-text">
-        <span class="m-header__club-name">Sarberia Pally Seba Samity</span>
+        <span class="m-header__club-name">Pally Seba Samity</span>
         <span class="m-header__tagline">Education · Health · Culture</span>
       </div>
     </a>
@@ -58,7 +58,7 @@
   </div>
 </div>
 
-<!-- CLAIM MEMBERSHIP MODAL -->
+<!-- CLAIM MEMBERSHIP MODAL (multi‑method) -->
 <div class="m-modal-overlay" id="m-claim-modal" style="display:none;">
   <div class="m-modal">
     <div class="m-modal__header">
@@ -69,16 +69,25 @@
       <button class="m-modal__close" id="m-claim-modal-close">✕</button>
     </div>
     <div class="m-modal__body">
-      <p class="m-modal__desc">We found an existing application with your email. To verify it's yours, please enter your <strong>Application ID</strong> (or Transaction ID if you paid via UPI).</p>
-      <p class="m-modal__desc" style="font-size:0.8rem; color: var(--m-text-light);">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <strong>Cash applicants:</strong> you must use your Application ID.
-      </p>
+      <p class="m-modal__desc">We found an existing application with your email. To verify it's yours, please provide one of the following:</p>
+
+      <!-- Verification method selector -->
       <div class="m-form__group">
-        <label class="m-form__label" for="claim-id">Application ID or Transaction ID</label>
-        <input class="m-form__input" type="text" id="claim-id" placeholder="APP-2025-XXXXXX or UPI Transaction ID" />
+        <label class="m-form__label" for="claim-method">Verify using</label>
+        <select class="m-select" id="claim-method">
+          <option value="appId">Application ID</option>
+          <option value="txnId">Transaction ID</option>
+          <option value="phone">Phone Number</option>
+        </select>
+      </div>
+
+      <div class="m-form__group" id="claim-input-group">
+        <label class="m-form__label" for="claim-id">Application ID <span class="m-required">*</span></label>
+        <input class="m-form__input" type="text" id="claim-id" placeholder="APP-2025-XXXXXX" />
+        <span class="m-form__hint" id="claim-hint">Your unique application reference.</span>
         <span class="m-form__error" id="claim-err"></span>
       </div>
+
       <button class="m-btn m-btn--primary m-btn--full" id="m-claim-submit">Confirm &amp; Link Membership</button>
       <button class="m-btn m-btn--outline m-btn--full" id="m-claim-skip" style="margin-top:8px;">Skip (I'll start a new application)</button>
     </div>
@@ -93,7 +102,7 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
       Membership Open
     </div>
-    <h1 class="m-hero__title">Join Sarberia Pally Seba Samity</h1>
+    <h1 class="m-hero__title">Join Pally Seba Samity</h1>
     <p class="m-hero__subtitle">Become part of a vibrant community united by Education, Health &amp; Culture. Together, we build a better tomorrow for Sarberia.</p>
     <div class="m-hero__cta-row">
       <a href="#plans" class="m-btn m-btn--gold m-hero__cta">
@@ -277,6 +286,8 @@
                   <p>QR unavailable.<br/>Use UPI ID above.</p>
                 </div>
               </div>
+              <!-- QR Download button -->
+              <button class="m-btn m-btn--sm m-btn--outline-gold" id="m-download-qr-btn" style="margin-top:8px;">Download QR</button>
             </div>
           </div>
           <div class="m-upi-apps">
@@ -459,7 +470,7 @@
   </div>
 </section>
 
-<!-- FAQ (unchanged) -->
+<!-- FAQ -->
 <section class="m-faq" id="faq">
   <div class="m-faq__inner">
     <div class="m-section-header">
@@ -467,14 +478,43 @@
       <p class="m-section-header__sub">Everything you need to know about membership.</p>
     </div>
     <div class="m-faq__list" id="m-faq-list">
-      <!-- FAQ items as before (shortened here, but you have the full list) -->
+      <div class="m-faq__item">
+        <button class="m-faq__question"><span>How long does approval take?</span><span class="m-faq__icon">+</span></button>
+        <div class="m-faq__answer"><p>We typically review and approve applications within 24 hours.</p></div>
+      </div>
+      <div class="m-faq__item">
+        <button class="m-faq__question"><span>What if I enter the wrong Transaction ID?</span><span class="m-faq__icon">+</span></button>
+        <div class="m-faq__answer"><p>Contact us immediately with your correct details.</p></div>
+      </div>
+      <div class="m-faq__item">
+        <button class="m-faq__question"><span>Can I apply for multiple memberships?</span><span class="m-faq__icon">+</span></button>
+        <div class="m-faq__answer"><p>Currently, each person can hold one active membership at a time.</p></div>
+      </div>
+      <div class="m-faq__item">
+        <button class="m-faq__question"><span>What happens after my membership expires?</span><span class="m-faq__icon">+</span></button>
+        <div class="m-faq__answer"><p>You can renew by submitting a new application.</p></div>
+      </div>
+      <div class="m-faq__item">
+        <button class="m-faq__question"><span>Is my payment secure?</span><span class="m-faq__icon">+</span></button>
+        <div class="m-faq__answer"><p>Yes, we use UPI infrastructure; we don't store credentials.</p></div>
+      </div>
+      <div class="m-faq__item">
+        <button class="m-faq__question"><span>How do I check my application status?</span><span class="m-faq__icon">+</span></button>
+        <div class="m-faq__answer"><p>Use the Check Status section above or click "Check Status" in the navigation.</p></div>
+      </div>
+      <div class="m-faq__item">
+        <button class="m-faq__question"><span>I forgot my Application ID. How do I check status?</span><span class="m-faq__icon">+</span></button>
+        <div class="m-faq__answer"><p>You can now use your Membership ID, Phone Number, or Transaction ID along with your email.</p></div>
+      </div>
+      <div class="m-faq__item">
+        <button class="m-faq__question"><span>How do I get my digital membership card?</span><span class="m-faq__icon">+</span></button>
+        <div class="m-faq__answer"><p>After approval, you'll receive an email with the PDF card. You can also download it from the member dashboard after signing in.</p></div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════
-     STATUS CHECKER MODAL (3‑option dropdown)
-     ═══════════════════════════════════════════════════════ -->
+<!-- STATUS CHECKER MODAL (3‑option dropdown) -->
 <div class="m-modal-overlay" id="m-status-modal" style="display:none;">
   <div class="m-modal">
     <div class="m-modal__header">
@@ -502,7 +542,7 @@
         </select>
       </div>
 
-      <!-- Dynamic input field (placeholder/hint changes via JS) -->
+      <!-- Dynamic input field -->
       <div class="m-form__group" id="ms-group-dynamic">
         <label class="m-form__label" for="ms-dynamic-id">Membership ID <span class="m-required">*</span></label>
         <input class="m-form__input" type="text" id="ms-dynamic-id" placeholder="PSS-YYYY-XXXX" maxlength="50" style="font-family:'Courier New',monospace;letter-spacing:0.05em;" />
@@ -525,7 +565,7 @@
       </button>
     </div>
 
-    <!-- Results (unchanged from previous complete version) -->
+    <!-- Results -->
     <div class="m-modal__body" id="m-status-results" style="display:none;">
       <div class="m-status-multi-notice" id="ms-multi-notice" style="display:none;"></div>
       <div class="m-status-banner" id="ms-banner">
