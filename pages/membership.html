@@ -508,13 +508,13 @@
       </div>
       <div class="m-faq__item">
         <button class="m-faq__question"><span>How do I get my digital membership card?</span><span class="m-faq__icon">+</span></button>
-        <div class="m-faq__answer"><p>After approval, you'll receive an email with the PDF card. You can also download it from the member dashboard after signing in.</p></div>
+        <div class="m-faq__answer"><p>After approval, you'll receive an email with the PDF card. You can also download it from the status checker or member dashboard after signing in.</p></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- STATUS CHECKER MODAL (3‑option dropdown) -->
+<!-- STATUS CHECKER MODAL (3‑option dropdown + download button) -->
 <div class="m-modal-overlay" id="m-status-modal" style="display:none;">
   <div class="m-modal">
     <div class="m-modal__header">
@@ -594,6 +594,8 @@
             <div class="m-status-row"><span class="m-status-key">Valid Until</span><span class="m-status-val" id="ms-r-expiry">-</span></div>
             <div class="m-status-row"><span class="m-status-key">Approved On</span><span class="m-status-val" id="ms-r-verified">-</span></div>
           </div>
+          <!-- Download Card button (appears for approved applications) -->
+          <button class="m-btn m-btn--gold m-btn--sm m-status-download-btn" id="ms-download-card-btn" style="display:none;">Download Card</button>
         </div>
         <div id="ms-rejected-details" style="display:none;">
           <div class="m-status-details__title m-status-details__title--error">❌ Rejection Details</div>

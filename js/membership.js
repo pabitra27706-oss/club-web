@@ -1,8 +1,9 @@
 /**
- * membership.js – v6
+ * membership.js – v7
  * + QR download button
  * + Claim modal supports Application ID, Transaction ID, Phone Number
  * + Status checker with 3 options: Membership ID, Phone, Transaction ID
+ * + Download Card button in status results for approved applications
  */
 import { db, auth } from './firebase-config.js';
 import {
@@ -28,6 +29,7 @@ const STATE = {
   user: null,
   memberApps: [],
   guestMode: true,
+  currentStatusApp: null,   // store the app shown in status results
 };
 
 const $ = (id) => document.getElementById(id);
@@ -552,7 +554,6 @@ function showClaimModal(unclaimedApps) {
     } else if (method === 'txnId') {
       match = unclaimedApps.find(a => a.transactionId && a.transactionId.toUpperCase() === val);
     } else {
-      // phone: match exactly against stored phone (numbers only)
       match = unclaimedApps.find(a => a.phone && a.phone.replace(/\D/g, '') === val.replace(/\D/g, ''));
     }
 
@@ -853,7 +854,7 @@ function initMobileMenu() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   STATUS CHECKER (3‑option dropdown: membershipId, phone, transactionId)
+   STATUS CHECKER (3‑option dropdown + download card button)
    ═══════════════════════════════════════════════════════════════════════════ */
 function initStatusChecker() {
   const openBtn = $('m-open-status-btn');
@@ -1007,11 +1008,7 @@ async function searchApplication() {
     let foundDoc = null; let totalMatches = 0;
     const searchField = method;
     let searchValue = dynamicId;
-    if (method === 'phone') {
-      searchValue = dynamicId;
-    }
 
-    // Strategy 1: exact query (field + email)
     const q1 = fbQuery(collection(db, 'membership_applications'), where(searchField, '==', searchValue), where('email', '==', email));
     const snap1 = await getDocs(q1);
     if (!snap1.empty) {
@@ -1020,7 +1017,6 @@ async function searchApplication() {
       foundDoc = docs[0]; totalMatches = docs.length;
     }
 
-    // Strategy 2: field only + client filter email
     if (!foundDoc) {
       const q2 = fbQuery(collection(db, 'membership_applications'), where(searchField, '==', searchValue));
       const snap2 = await getDocs(q2);
@@ -1034,7 +1030,6 @@ async function searchApplication() {
       }
     }
 
-    // Strategy 3: email only + client filter field
     if (!foundDoc) {
       const q3 = fbQuery(collection(db, 'membership_applications'), where('email', '==', email));
       const snap3 = await getDocs(q3);
@@ -1118,17 +1113,33 @@ function showStatusResults(app, totalMatches) {
   set('ms-r-payment', paymentDisplay);
   set('ms-r-submitted', formatDateForStatus(app.submittedAt));
 
-  const approvedBlock = $('ms-approved-details'); if (approvedBlock) approvedBlock.style.display = app.status === 'approved' ? 'block' : 'none';
+  const approvedBlock = $('ms-approved-details');
+  if (approvedBlock) approvedBlock.style.display = app.status === 'approved' ? 'block' : 'none';
   if (app.status === 'approved') {
     set('ms-r-mid', app.membershipId);
     set('ms-r-start', formatDateForStatus(app.startDate));
     set('ms-r-expiry', formatDateForStatus(app.expiryDate));
     set('ms-r-verified', formatDateForStatus(app.verifiedAt));
   }
-  const rejectedBlock = $('ms-rejected-details'); if (rejectedBlock) rejectedBlock.style.display = app.status === 'rejected' ? 'block' : 'none';
+  const rejectedBlock = $('ms-rejected-details');
+  if (rejectedBlock) rejectedBlock.style.display = app.status === 'rejected' ? 'block' : 'none';
   if (app.status === 'rejected') {
     set('ms-r-reason', app.adminNotes || 'No reason provided.');
     set('ms-r-rejected-date', formatDateForStatus(app.verifiedAt));
+  }
+
+  // Show download card button for approved applications
+  const downloadBtn = $('ms-download-card-btn');
+  if (downloadBtn) {
+    if (app.status === 'approved') {
+      downloadBtn.style.display = 'inline-flex';
+      // Remove old listener by cloning and replacing
+      const newBtn = downloadBtn.cloneNode(true);
+      downloadBtn.parentNode.replaceChild(newBtn, downloadBtn);
+      newBtn.addEventListener('click', () => downloadCard(app));
+    } else {
+      downloadBtn.style.display = 'none';
+    }
   }
 }
 

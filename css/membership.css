@@ -561,3 +561,9 @@ body.m-scroll-locked { overflow: hidden; }
   width: 100%;
   text-align: center;
 }
+/* Status checker download button */
+.m-status-download-btn {
+  margin-top: 12px;
+  width: 100%;
+  text-align: center;
+}
